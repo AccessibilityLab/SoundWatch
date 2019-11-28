@@ -1,0 +1,44 @@
+from android.os import Bundle
+from android.support.v7.app import AppCompatActivity
+from com.chaquo.python.hello import R
+from java import jvoid, Override, static_proxy
+import tensorflow as tf
+from tensorflow.python.keras.models import load_model
+import numpy as np
+from src.main.python.vggish_input import wavfile_to_examples
+import src.main.python.homesounds
+
+class MainActivity(static_proxy(AppCompatActivity)):
+
+    @Override(jvoid, [Bundle])
+    def onCreate(self, state):
+        AppCompatActivity.onCreate(self, state)
+        self.setContentView(R.layout.activity_main)
+
+        # contexts
+        context = src.main.python.homesounds.everything
+        active_context = src.main.python.homesounds.everything      # use this to change context -- see homesounds.py
+        model_filename="/storage/emulated/0/DJdev/example_model.hdf5"
+        selected_file ="/storage/emulated/0/DJdev/example.wav"
+
+        # thresholds
+        PREDICTION_THRES = 0.5 # confidence
+
+        # Load Deep Learning Model
+        print("Using deep learning model: %s" % (model_filename))
+        model = load_model(model_filename)
+        graph = tf.get_default_graph()
+
+        # Read Wavfile and Make Predictions
+        x = wavfile_to_examples(selected_file)
+        with graph.as_default():
+
+            x = x.reshape(len(x), 96, 64, 1)
+            predictions = model.predict(x)
+
+            for k in range(len(predictions)):
+                context_prediction = np.take(predictions[k], [src.main.python.homesounds.labels[x] for x in active_context])
+                m = np.argmax(context_prediction)
+                if (context_prediction[m] > PREDICTION_THRES):
+                    self.findViewById(R.id.mainDisplay).setText("Prediction: %s (%0.2f)" % (
+                    src.main.python.homesounds.to_human_labels[active_context[m]], context_prediction[m]))

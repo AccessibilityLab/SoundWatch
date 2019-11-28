@@ -94,7 +94,7 @@ graph = tf.get_default_graph()
 def audio_samples(in_data, frame_count, time_info, status_flags):
     global graph
     np_wav = np.fromstring(in_data, dtype=np.int16) / 32768.0 # Convert to [-1.0, +1.0]
-    print(np_wav)
+
     # Compute RMS and convert to dB
     rms = np.sqrt(np.mean(np_wav**2))
     db = dbFS(rms)
@@ -112,7 +112,8 @@ def audio_samples(in_data, frame_count, time_info, status_flags):
             context_prediction = np.take(prediction[0], [homesounds.labels[x] for x in active_context])
             m = np.argmax(context_prediction)
             if (context_prediction[m] > PREDICTION_THRES and db > DBLEVEL_THRES):
-                print("Prediction: %s (%0.2f)" % (homesounds.to_human_labels[active_context[m]], context_prediction[m]))
+                print("Prediction: %s (%0.2f)" % (
+                    homesounds.to_human_labels[active_context[m]], context_prediction[m]))
             
     return (in_data, pyaudio.paContinue)
 
