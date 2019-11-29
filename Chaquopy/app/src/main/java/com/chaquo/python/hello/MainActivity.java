@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             TextView mainDisplay = findViewById(R.id.mainDisplay);
-                            mainDisplay.append("\n" + returnVal.toString());
                             mainDisplay.setMovementMethod(new ScrollingMovementMethod());
+                            mainDisplay.append("\n" + returnVal.toString());
                         }
                     });
                 }
