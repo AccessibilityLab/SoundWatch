@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wearable.sound"
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -16,13 +16,14 @@ android {
             buildPython "C:/Python36/python3.exe"
 
             pip {
-                install "tensorflow==1.10.1"
                 install "numpy==1.14.2"
-                install "h5py==2.8.0"
-                install "scipy==1.0.1"
+                //install "tensorflow==1.10.1"
+                //install "h5py==2.8.0"
+                //install "scipy==1.0.1"
                 //install "keras"
                 //install "wget"
             }
+
             //staticProxy "hello"
         }
         ndk {
@@ -35,6 +36,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Specify tflite file should not be compressed for the app apk
+    aaptOptions {
+        noCompress "tflite"
+    }
 }
 
 dependencies {
@@ -44,4 +50,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // Import tflite dependencies
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly'
 }

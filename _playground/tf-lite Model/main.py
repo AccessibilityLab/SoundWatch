@@ -26,7 +26,7 @@ CHUNK = RATE
 MICROPHONES_DESCRIPTION = []
 FPS = 60.0
 
-MODEL_PATH = "models/example_model.hdf5"
+model_filename = "models/example_model.hdf5"
 
 ##############################
 # Load Deep Learning Model
@@ -48,6 +48,7 @@ def audio_samples(in_data, frame_count, time_info, status_flags):
 
     # Make predictions
     x = waveform_to_examples(np_wav, RATE)
+    x = np.zeros((1,96,64))
     predictions = []
     with graph.as_default():
         if x.shape[0] != 0:

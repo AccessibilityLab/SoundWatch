@@ -2,7 +2,6 @@
 # https://github.com/tensorflow/models/tree/master/research/audioset
 
 import numpy as np
-from scipy.io import wavfile
 import mel_features
 import vggish_params
 
@@ -33,10 +32,3 @@ def waveform_to_examples(data, sample_rate):
       window_length=example_window_length,
       hop_length=example_hop_length)
   return log_mel_examples
-
-
-def wavfile_to_examples(wav_file):
-  sr, wav_data = wavfile.read(wav_file)
-  assert wav_data.dtype == np.int16, 'Bad sample type: %r' % wav_data.dtype
-  samples = wav_data / 32768.0  # Convert to [-1.0, +1.0]
-  return waveform_to_examples(samples, sr)

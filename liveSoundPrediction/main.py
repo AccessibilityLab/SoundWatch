@@ -17,7 +17,7 @@ active_context = homesounds.everything      # use this to change context -- see 
 
 # thresholds
 PREDICTION_THRES = 0.5 # confidence
-DBLEVEL_THRES = -40 # dB
+DBLEVEL_THRES = -30 # dB
 
 # Variables
 FORMAT = pyaudio.paInt16
@@ -94,7 +94,6 @@ graph = tf.get_default_graph()
 def audio_samples(in_data, frame_count, time_info, status_flags):
     global graph
     np_wav = np.fromstring(in_data, dtype=np.int16) / 32768.0 # Convert to [-1.0, +1.0]
-    print(np_wav)
     # Compute RMS and convert to dB
     rms = np.sqrt(np.mean(np_wav**2))
     db = dbFS(rms)

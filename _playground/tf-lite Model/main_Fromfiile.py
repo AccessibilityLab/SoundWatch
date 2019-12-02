@@ -29,7 +29,7 @@ input_shape = input_details[0]['shape']
 print(input_shape)
 input_data = wavfile_to_examples(selected_file)
 input_data = input_data.reshape(len(input_data), 96, 64, 1)
-print(np.array([input_data[0]], dtype=np.float32).shape)
+print(input_data[0])
 #input_data = np.array(np.random.random_sample([ 19, 96, 64, 1]), dtype=np.float32)
 interpreter.set_tensor(input_details[0]['index'], np.array([input_data[17]], dtype=np.float32))
 
