@@ -1,6 +1,6 @@
 The deep learning system is written in `python3`, specifically `tensorflow` and `keras`.
 
-To begin, first install python 3.6.4. Once python is installed do 
+To begin, first install python 3.6.4 (Important to install this version only, don't use 3.7). Once python is installed do 
 ```bash
 $ pip install numpy==1.14.1 tensorflow==1.5.0 keras==2.1.6 wget
 ```
