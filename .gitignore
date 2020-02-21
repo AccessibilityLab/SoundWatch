@@ -1,4 +1,6 @@
 *.iml
+*.hd5
+*.tflite
 .gradle
 /local.properties
 /.idea/caches

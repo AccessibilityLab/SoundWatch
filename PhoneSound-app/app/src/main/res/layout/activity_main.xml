@@ -5,13 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.chaquo.python.hello.com.phone.python.sound.MainActivity">
+    android:background="#000"
+    tools:context="com.phone.python.sound.MainActivity">
 
     <TextView
         android:id="@+id/mainDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
+        android:text=""
+        android:textColor="#fff"
+        android:fontFamily="sans-serif"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:lineSpacingExtra="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

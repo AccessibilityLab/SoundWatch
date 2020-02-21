@@ -1,4 +1,4 @@
-package com.example.homesound;
+package com.watch.python.sound;
 
 import android.app.Service;
 import android.content.Intent;

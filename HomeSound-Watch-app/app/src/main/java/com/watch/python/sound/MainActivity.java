@@ -1,24 +1,28 @@
-package com.phone.python.sound;
+package com.watch.python.sound;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+import android.os.Vibrator;
+import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
-import com.phone.python.sound.R;
 
-import android.media.MediaRecorder;
+import org.tensorflow.lite.Interpreter;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -29,22 +33,19 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import org.tensorflow.lite.Interpreter;
 
+public class MainActivity extends WearableActivity {
 
-public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "WatchSoundDebug";
 
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final float PREDICTION_THRES = 0.5F;
-    private static final double DBLEVEL_THRES = -35.0;
+    private static final double DBLEVEL_THRES = -33.0;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     private Interpreter tfLite;
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
-
 
     /** Memory-map the model file in Assets. */
     private static MappedByteBuffer loadModelFile(AssetManager assets, String modelFilename)
@@ -73,30 +74,34 @@ public class MainActivity extends AppCompatActivity {
     private float [][][][] input4D = new float [1][96][64][1];
     private float[][] output = new float[1][30];
 
+    Vibrator vib;
+
     String[] permissions = new String[]{
             //Manifest.permission.INTERNET,
             //Manifest.permission.READ_PHONE_STATE,
-            //Manifest.permission.READ_EXTERNAL_STORAGE,
-            //Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            //Manifest.permission.VIBRATE,
+            Manifest.permission.VIBRATE,
             Manifest.permission.RECORD_AUDIO,
     };
 
-    @Override
+@Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        //Ask permissions
+        //Start an always running background service
+        startService(new Intent(this, BackgroundService.class));
+
+        // Set the UI
+        setContentView(R.layout.activity_main);
+        (findViewById(R.id.wearable_list_layout)).setVisibility(View.GONE);
+
+        //Ask permissions for audio recording
         checkPermissions();
 
         //Initialize audio recorder
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 RECORDER_SAMPLERATE, RECORDER_CHANNELS,
                 RECORDER_AUDIO_ENCODING, BufferElements2Rec * BytesPerElement);
-
-        recorder.startRecording();
-        isRecording = true;
 
         //Initialize python module
         py = Python.getInstance();
@@ -124,6 +129,10 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
+        //Start recording
+        recorder.startRecording();
+        isRecording = true;
+
         //Start predicting sounds...
         recordingThread = new Thread(new Runnable() {
             public void run() {
@@ -132,15 +141,40 @@ public class MainActivity extends AppCompatActivity {
         }, "AudioRecorder Thread");
 
         recordingThread.start();
-    }
 
-    private double db(short[] data) {
-        double rms = 0.0;
-        for (int i = 0; i < data.length; i++) {
-            rms += Math.abs(data[i]);
-        }
-        rms = rms/data.length;
-        return 20 * Math.log10(rms/32768.0);
+        //Initialize vibrator
+        vib = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+}
+
+
+    @Override
+    protected void onPause(){   //First indication that user is leaving your activity -- doesn't mean the activity is destroyed
+        Log.d(TAG, "onPause()");
+        super.onPause();
+    }
+    @Override
+    protected void onResume(){   //App comes to the foreground until user focus is taking away, when onPause is called
+
+        Log.d(TAG, "onResume()");
+        super.onResume();
+    }
+    @Override
+    protected void onStart(){   //This method is where the app initializes the code that maintains the UI.
+
+        Log.d(TAG, "onStart()");
+        super.onStart();
+    }
+    @Override
+    protected void onStop(){
+
+        Log.d(TAG, "onStop()");
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy(){
+
+        Log.d(TAG, "onDestroy()");
+        super.onDestroy();
     }
 
     private void predictSounds() {
@@ -192,14 +226,23 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            TextView mainDisplay = findViewById(R.id.mainDisplay);
-                            //mainDisplay.setMovementMethod(new ScrollingMovementMethod());
-                            mainDisplay.append("\n" + prediction + " (" + confidence + ")");
+                            TextView mainDisplay = findViewById(R.id.soundDisplay);
+                            mainDisplay.setText(prediction + " (" + confidence + ")");
+                            vib.vibrate(200);
                         }
                     });
                 }
             }
         }
+    }
+
+    private double db(short[] data) {
+        double rms = 0.0;
+        for (int i = 0; i < data.length; i++) {
+            rms += Math.abs(data[i]);
+        }
+        rms = rms/data.length;
+        return 20 * Math.log10(rms/32768.0);
     }
 
     private void stopRecording() {

@@ -1,14 +1,26 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
     defaultConfig {
-        applicationId "com.example.homesound"
+        applicationId "com.wearable.sound"
         minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        python {
+
+            buildPython "C:/Python36/python3.exe"
+
+            pip {
+                install "numpy==1.14.2"
+            }
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
     buildTypes {
         release {
@@ -16,25 +28,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    // Specify tflite file should not be compressed for the app apk
+    aaptOptions {
+        noCompress "tflite"
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.android.support:wearable:2.4.0'
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
-    implementation 'androidx.percentlayout:percentlayout:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.android.support:wear:28.0.0'
     compileOnly 'com.google.android.wearable:wearable:2.4.0'
-    implementation ('io.socket:socket.io-client:1.0.0') {
-        // excluding org.json which is provided by Android
-        exclude group: 'org.json', module: 'json'
-    }
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
-    implementation "com.android.support:support-compat:28.0.0"
-    implementation 'com.android.support:wear:26.0.0'
-    implementation "com.android.support:support-v4:20.0.+"
+
+    // Import tflite dependencies
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly'
 }
 
-apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
+//apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin

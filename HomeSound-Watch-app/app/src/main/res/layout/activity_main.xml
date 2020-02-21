@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:fontFamily="sans-serif"
-            android:text="Welcome to the"
+            android:text=""
             android:textSize="18sp"
             android:layout_marginBottom="-1sp"/>
         <TextView
@@ -34,8 +34,9 @@
             android:gravity="center"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
-            android:text="HomeSounds app!"
-            android:textSize="18sp" />
+            android:text="Loading..."
+            android:textSize="18sp"
+            android:layout_marginTop="55sp"/> e  <!-- Remove this line for the original layout -->
     </LinearLayout>
 
     <!-- Don't show again display-->
@@ -50,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Press the side button and wait for notifications."
+            android:text=""
             android:textSize="14.1sp" />
     </LinearLayout>
 
