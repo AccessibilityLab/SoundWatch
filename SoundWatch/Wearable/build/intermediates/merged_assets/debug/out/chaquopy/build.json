@@ -1,0 +1,22 @@
+{"assets": {
+    "stdlib-common.zip": "55a9d5f14171c9df17c52c301e7d07a13a287421",
+    "bootstrap-native/x86/select.so": "84650a85a53562c5d93d886b0b59e4130f15c97b",
+    "bootstrap-native/armeabi-v7a/java/chaquopy_android.so": "bc5131a413d21886111cf743f2f16ec3f5c41353",
+    "bootstrap-native/x86/java/chaquopy_android.so": "9059b10e6ef2a71bd4a747f4577f1dfdd7b92b79",
+    "bootstrap-native/armeabi-v7a/_ctypes.so": "c43bd80a2dcf1229d9cbe5aef2e4984890d65d8c",
+    "app.zip": "655ad142692b3c5b22533c813d42ea72f23e52bf",
+    "requirements-common.zip": "f2f7a746fce73b20fd5d5c66071a7f4df4d81595",
+    "requirements-x86.zip": "c778015e3a59ad7e600e63f08a98115607399528",
+    "bootstrap-native/x86/java/chaquopy.so": "0d02d590938f45334c2043d74b515cf24b089b47",
+    "bootstrap-native/armeabi-v7a/select.so": "d520616e4b7b85920e8c3cad02c06cbef3bf048d",
+    "bootstrap-native/x86/_ctypes.so": "3d0bfe4bc9dd5977dc4d91b459db02015f2828a5",
+    "cacert.pem": "40d7ce60393978a29fb0e0b1e849658e48cf7887",
+    "stdlib-x86.zip": "8d693954a17ed9da0937e8b88eebface6798345c",
+    "requirements-armeabi-v7a.zip": "ecf5a769e0cc3237060a0d483ed77c77dcd4a78c",
+    "bootstrap-native/armeabi-v7a/java/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "stdlib-armeabi-v7a.zip": "de76e1b9b989544966a3995f18f0c3b9256e43ec",
+    "bootstrap.zip": "ebe2309179279e67ccb5f73e3df7550bdfa49442",
+    "ticket.txt": "805219f9d77d8d0fd7c39c731b9a262894e38f46",
+    "bootstrap-native/armeabi-v7a/java/chaquopy.so": "ae11bdf40a936ad26a8604014765d5c8c93c846c",
+    "bootstrap-native/x86/java/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+}}

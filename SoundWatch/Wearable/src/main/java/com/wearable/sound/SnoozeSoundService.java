@@ -7,29 +7,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.Wearable;
-
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.Wearable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+//TODO HUNG 1 CONTD: DON'T THINK WE NEED SOME CODE IN THIS FILE. REMOVE
 
 public class SnoozeSoundService extends IntentService {
     public static final String SNOOZE_SOUND = "SNOOZE_SOUND";

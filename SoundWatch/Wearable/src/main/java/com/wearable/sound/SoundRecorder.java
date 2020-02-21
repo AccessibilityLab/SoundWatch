@@ -25,15 +25,16 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.RemoteInput;
 
 import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
@@ -65,10 +66,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.app.RemoteInput;
-
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
  * and to playback the same recorded audio file.
@@ -80,8 +77,7 @@ public class SoundRecorder {
     private static final int CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO;
     private static final int CHANNELS_OUT = AudioFormat.CHANNEL_OUT_MONO;
     private static final int FORMAT = AudioFormat.ENCODING_PCM_16BIT;
-    private static int BUFFER_SIZE = AudioRecord
-            .getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
+    private static int BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
     public static final String AUDIO_MESSAGE_PATH = "/audio_message";
     private static final double DBLEVEL_THRES = -35.0;
     int BufferElements2Rec = 16000;
@@ -102,8 +98,6 @@ public class SoundRecorder {
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final float PREDICTION_THRES = 0.5F;
     private static final String CHANNEL_ID = "SOUNDWATCH";
-//    private final AudioManager mAudioManager;
-//    private final Handler mHandler;
     private final Context mContext;
     private State mState = State.IDLE;
 
@@ -389,6 +383,7 @@ public class SoundRecorder {
 
                         processAudioRecognition(tempBuffer, buffer);
                         soundRecorder.soundBuffer = new ArrayList<>();
+                        //TODO HUNG 9: Is it faster? We do need to speed up watch. If not, delete all below
                         // TODO: Try spawning a thread here to see if it is faster
 ////                        new Thread() {
 ////                            @Override

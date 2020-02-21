@@ -5,25 +5,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
+
+import androidx.annotation.WorkerThread;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
-import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-import androidx.annotation.WorkerThread;
 
 public class BlockSoundsActivity extends Activity {
     private static final String SPEECH = "Speech";
@@ -35,6 +31,7 @@ public class BlockSoundsActivity extends Activity {
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<String, SoundNotification>();
     private static final String TAG = "BlockSoundsActivity";
 
+    //TODO HUNG 6: WHY ONLY 3 SOUNDS HERE?
     {
         SOUNDS_MAP.put(SPEECH, new SoundNotification(SPEECH, true, false));
         SOUNDS_MAP.put(KNOCKING, new SoundNotification(KNOCKING, true, false));

@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\lonewarrior\\Git\\WearableSound\\SoundWatch\\Wearable\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-en-rXC\\values-en-rXC.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\01632b18d9fabe75a4cf668f771f5332\\core-1.0.0\\res\\values-en-rXC\\values-en-rXC.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "202",
+                        "endOffsets": "253"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\27acea5af151251d6a10d6e4170e8f18\\wear-1.0.0\\res\\values-en-rXC\\values-en-rXC.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,264",
+                        "endColumns": "208,218",
+                        "endOffsets": "259,478"
+                    },
+                    "to": {
+                        "startLines": "3,4",
+                        "startColumns": "4,4",
+                        "startOffsets": "258,467",
+                        "endColumns": "208,218",
+                        "endOffsets": "462,681"
+                    }
+                }
+            ]
+        }
+    ]
+}

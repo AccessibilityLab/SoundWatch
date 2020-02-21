@@ -1,12 +1,12 @@
 package com.wearable.sound;
 
 import android.app.Application;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MyApplication extends Application {
+    //TODO HUNG 5 CONTD: THIS SEEMS LIKE A GOOD PLACE WHERE WE SHOULD SPECIFY THE LIST OF SELECTED SOUNDS AND THEN COPY THIS OVER EVERYWHERE ON PHONE/WATCH ETC. THAT IS, IF THE SOUND LIST IS CHANGED HERE, IT SHOULD CHANGE EVERYWHERE.
     public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
         "Dog Bark",
         "Drill",

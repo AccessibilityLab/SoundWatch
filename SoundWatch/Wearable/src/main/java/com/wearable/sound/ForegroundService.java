@@ -10,9 +10,6 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
-
-import com.wearable.sound.R;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,13 +17,10 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.NotificationCompat;
 
-public class ForegroundService extends
-        Service {
+public class ForegroundService extends Service {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     private static final String VOICE_FILE_NAME = "audiorecord.pcm";
     private static final String TAG = "ForegroundService";
-    private static final long COUNT_DOWN_MS = TimeUnit.SECONDS.toMillis(60 * 60 * 3); // 1 hour
-    private static final long MILLIS_IN_SECOND = TimeUnit.SECONDS.toMillis(1);
 
     private SoundRecorder mSoundRecorder;
     private CountDownTimer mCountDownTimer;

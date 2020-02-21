@@ -30,6 +30,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:testOnly="true"
         android:theme="@style/DisableBackSwipe"
         android:usesCleartextTraffic="true" >
 
@@ -47,15 +48,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/wl_blue" />
-
-        <service
-            android:name="com.wearable.sound.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
         <uses-library
             android:name="com.google.android.wearable"

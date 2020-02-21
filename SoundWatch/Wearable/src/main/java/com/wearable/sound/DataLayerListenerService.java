@@ -16,11 +16,9 @@
 
 package com.wearable.sound;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,11 +27,7 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
-
 import java.util.List;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 /** Listens to DataItems and Messages from the local node. */
 public class DataLayerListenerService extends WearableListenerService {
@@ -46,9 +40,6 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     public static final String COUNT_PATH = "/count";
-    public static final String IMAGE_PATH = "/image";
-    public static final String IMAGE_KEY = "photo";
-    private static final String CHANNEL_ID = "SOUNDWATCH";
     public static final String AUDIO_LABEL_FROM_PHONE = "AUDIO_LABEL_FROM_PHONE";
 
     @Override
@@ -126,6 +117,7 @@ public class DataLayerListenerService extends WearableListenerService {
             sendBroadcast(broadcastIntent);
 //            createAudioLabelNotification(audioLabel);
         } else if (messageEvent.getPath().equals(SOUND_ENABLE_FROM_PHONE_PATH)) {
+            //TODO HUNG 7: CHECK IF THIS IS DONE? IF YAY, REMOVE COMMENT. IF NAY, THIS IS IMPORTANT!
             // TODO: Update the list of blocked sounds on Application
             Log.d(TAG, "Received sound enabled from phone: " + new String(messageEvent.getData()));
             handleEnableSoundNotification(new String(messageEvent.getData()));

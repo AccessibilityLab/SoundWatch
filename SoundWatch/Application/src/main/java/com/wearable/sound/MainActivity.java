@@ -38,11 +38,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+
+import androidx.annotation.WorkerThread;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
@@ -63,7 +65,6 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.lite.Interpreter;
@@ -92,11 +93,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.WorkerThread;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 /**
  * Receives its own events using a listener API designed for foreground activities. Updates a data
@@ -142,10 +138,9 @@ public class MainActivity extends Activity
     private ImageView mThumbView;
     private Bitmap mImageBitmap;
     private View mStartActivityBtn;
-
     private DataItemAdapter mDataItemListAdapter;
 
-    // Send DataItems.
+    // Send DataItem
     private ScheduledExecutorService mGeneratorExecutor;
     private ScheduledFuture<?> mDataItemGeneratorFuture;
 
@@ -158,6 +153,7 @@ public class MainActivity extends Activity
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
 
+    //TODO HUNG 5: This is a bad way of mapping. What if we decide not to display all these 30 sounds? Will we have to change this code manually? Can we figure out a way to specify just once what all sounds we want for each context (home, office, outdoors), and it gets synced on phone, watch and server?
     private static final String SPEECH = "Speech";
     private static final String KNOCKING = "Knocking";
     private static final String PHONE_RING = "Phone Ring";

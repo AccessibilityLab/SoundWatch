@@ -14,7 +14,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableListView;
 import android.text.TextUtils;
@@ -22,8 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,14 +70,16 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String PHONE_WATCH_ARCHITECTURE = "PHONE_WATCH_ARCHITECTURE";
     public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
-
-
-
     public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
     public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
 
 
+    /**
+     * Notification configurations
+     */
+
+    //TODO HUNG 1: Remove ListView Completely. That is, (a) Remove all variables below, such as elements, elementsInSec, Snooze Choices, (b) Remove listView code from below (just delete), and (c) Remove all code from other files, such as SnoozeSoundService, and delete the WearableListItemLayout Class entirely
     public static boolean notificationChannelIsCreated = false;
     public static final String TAG = "HomeSoundDebug";
     private String audioLabel = "";
@@ -89,15 +88,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private int wearableListCentralPosition = 1;
     String[] elements = {"1 min", "2 mins", "5 mins", "10 mins", "1 hour", "1 day", "Forever"};
     int[] elementsInSec = {60,      120,        300,        600,    3600,   86400};
-
     private static final String CHANNEL_ID = "SOUNDWATCH";
-
-    private static final String CAPABILITY_1_NAME = "capability_1";
-    private static final String CAPABILITY_2_NAME = "capability_2";
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
-    private Map<String, Long> soundLastTime = new HashMap<>();
-
+    //private Map<String, Long> soundLastTime = new HashMap<>();
     private static final String SNOOZE_LABEL = "Snooze";
     private static final String SNOOZE_TIME_LABEL = "Snooze Time";
     private static final String[] SNOOZE_CHOICES = {"5 mins", "10 mins", "1 hour", "1 day", "Forever"};
@@ -131,7 +125,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
 
     public static boolean IS_RECORDING = false;
-//    private static final String[] SNOOZE_CHOICES = {"10 mins"};
 
     /**
      * SocketIO
@@ -139,8 +132,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
 
     public static Socket mSocket;
-    //    private static final String SERVER_URL = "http://sheltered-dawn-06267.herokuapp.com";
-//    private static final String SERVER_URL = "http://128.208.49.41:8787";
     private static final String SERVER_URL = "http://128.208.49.41:8788";
     {
         try {
@@ -166,6 +157,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy);
             AudioLabel audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db);
             long test = System.currentTimeMillis();
+            //TODO HUNG 2: CHECK IF THIS SHOULD BE THERE IN THE MAIN BRANCH? IF YES, UNCOMMENT IT. LET'S WORRY ABOUT TESTS LATER.
 //            if (soundLastTime.containsKey(audio_label)) {
 //                if (test <= (soundLastTime.get(audio_label) + 15 * 1000)) { //multiply by 1000 to get milliseconds
 //                    Log.i(TAG, "Same sound appear in less than 15 seconds");
@@ -230,7 +222,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             channel.enableVibration(true);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-//            channel.setVibrationPattern(new long[]{2000});
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -240,11 +231,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-
-        // TODO: If not server related, don't need to connect to server
-
         mSocket.on("audio_label", onNewMessage);
-        mSocket.on("echo", onEchoMessage);
+        mSocket.on("echo", onEchoMessage); //TODO HUNG 3: DO WE NEED THIS?
         mSocket.connect();
 
         // Set the UI
@@ -270,6 +258,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             fTextView.setText("Don't notify this sound for:");
         }
 
+        //TODO HUNG 1 CONTD...: Remove this code
+
         // Get the list component from the layout of the activity
         WearableListView listView =
                 (WearableListView) findViewById(R.id.wearable_list);
@@ -286,29 +276,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // Set a central position change listener
         listView.addOnCentralPositionChangedListener(this);
 
-        // Enables Always-on - I don't need the foreground to be always on, I just need network access and the app to generate notification during doze.
+
+        //Enables Always-on - I don't need the foreground to be always on, I just need network access and the app to generate notification during doze.
         //setAmbientEnabled();
         checkPermissions();
-//        createNotificationChannel();
-
-//        /** Debugging check **/
-//        List<Short> buffer = new ArrayList<>();
-//        short num = 0;
-//        buffer.add(num);
-//        num = 1;
-//        buffer.add(num);
-//        num = 2;
-//        buffer.add(num);
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("data", new JSONArray(buffer));
-//            mSocket.emit("audio_data", jsonObject);
-//            Log.i(TAG, "Successfully send data to socket from Watch app");
-//        } catch (JSONException e) {
-//            Log.i(TAG, "Failed sending data to socket from Watch app debugging");
-//            e.printStackTrace();
-//        }
-
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         registerReceiver(mReceiver, mIntentFilter);
@@ -326,9 +297,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         Log.d(TAG, "onResume()");
         ((MyApplication) this.getApplication()).setAppInForeground(true);
         super.onResume();
-//        Wearable.getCapabilityClient(this)
-//                .addListener(this, Uri.parse("wear://"), CapabilityClient.FILTER_REACHABLE);
-
     }
     @Override
     protected void onStart(){   //This method is where the app initializes the code that maintains the UI.
@@ -358,9 +326,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             Intent serviceIntent = new Intent(this, ForegroundService.class);
             serviceIntent.putExtra("connectedHostIds", convertSetToCommaSeparatedList(connectedHostIds));
             ContextCompat.startForegroundService(this, serviceIntent);
-//            Button recordButton = findViewById(R.id.capability_2_btn);
-//            recordButton.setTextColor(getResources().getColor(R.color.blue));
-//            recordButton.setBackgroundColor(getResources().getColor(R.color.dark_blue));
 
             // Change the image to STOP icon
             ImageView imageView = findViewById(R.id.mic);
@@ -402,10 +367,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         return result.toString();
     }
 
+    //TODO HUNG 1 CONTD: Delete (AND OTHER EMPTY FUNCTIONS) THAT CORRESPOND TO LIST VIEW
     @Override
     public void onTopEmptyRegionClick() {
     }
 
+    //TODO HUNG 4: DO WE NEED THIS? IS THE MAIN APP DISPLAYING THE SOUND AS WELL? OR DOES IT ONLY SHOWS THE RECORD/STOP BUTTON?
     @Override
     protected void onNewIntent(Intent intent) {
         Log.d(TAG, "onNewIntent()");
@@ -432,6 +399,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }
     }
 
+    //TODO HUNG 1 CONTD: DO WE NEED THIS? IF NOT, DELETE OUTRIGHT. IF YES, WHY IS THERE A DELAY OF 3000 MS IN TWO PLACES`?
     @Override
     public void onClick(WearableListView.ViewHolder v) {
         Log.i(TAG, "Blocking sounds started");
@@ -520,6 +488,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         wearableListCentralPosition = centralPosition;
     }
 
+    //TODO HUNG 1 CONTD..: DELETE ALL THIS
     private static final class Adapter extends WearableListView.Adapter {
         private String[] mDataset;
         private final Context mContext;
@@ -657,6 +626,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         PendingIntent pendingIntent = PendingIntent.getActivity(this, uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create the RemoteInput.
+        //TODO HUNG 1 CONTD.: Do we need this?
         RemoteInput remoteInput =
                 new RemoteInput.Builder(SnoozeSoundService.SNOOZE_TIME)
                         .setLabel(SNOOZE_TIME_LABEL)
@@ -669,8 +639,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         snoozeIntent.putExtra(SnoozeSoundService.SOUND_LABEL, audioLabel.label);
         snoozeIntent.putExtra(SnoozeSoundService.CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
         snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
-
-//        snoozeIntent.putExtra(SnoozeSoundService.SOUND_ID, Integer.toString(NOTIFICATION_ID));
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
         // Enable action to appear inline on Wear 2.0 (24+). This means it will appear over the
@@ -688,6 +656,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             db = db.substring(0, 2);
         }
 
+        //TODO HUNG 2 CONTD..: CHECK IF WE NEED THIS. AND IF YES PLEASE UNCOMMENT THE CODE BELOW THAT USES "snoozeAction"
         NotificationCompat.Action snoozeAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_full_cancel,
@@ -721,9 +690,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 .addAction(R.drawable.ic_full_cancel,
                         "10 min", snoozeSoundPendingIntent);
 
-        /** Set Choices for Snooze **/
+        // Set Choices for Snooze
 //                .addAction(snoozeAction)
-////                .setCategory(Notification.CATEGORY_SOCIAL)
+//                .setCategory(Notification.CATEGORY_SOCIAL)
 //
 //                .extend(new NotificationCompat.WearableExtender()
 //                        .setHintContentIntentLaunchesActivity(true));
@@ -732,14 +701,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //.addAction(snoozeAction)
         //.addAction(dismissAction);
 
-        //JUGAAD: NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
+        //NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
-        // TODO: not sure if we need this vibration
-//        Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-//        v.vibrate(350);
-//        int notificationId = 001;
 
     }
 }

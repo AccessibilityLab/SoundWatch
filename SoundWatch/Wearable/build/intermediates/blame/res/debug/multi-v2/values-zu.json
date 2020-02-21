@@ -1,0 +1,94 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\lonewarrior\\Git\\WearableSound\\SoundWatch\\Wearable\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zu\\values-zu.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\01632b18d9fabe75a4cf668f771f5332\\core-1.0.0\\res\\values-zu\\values-zu.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "21",
+                        "startColumns": "4",
+                        "startOffsets": "2994",
+                        "endColumns": "100",
+                        "endOffsets": "3090"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\60886acc3069ae54c8a6b7a10b9827f6\\play-services-base-17.0.0\\res\\values-zu\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "245,354,562,695,797,1024,1151,1301,1436,1655,1763,1959,2088,2305,2488,2575,2670",
+                        "endColumns": "108,207,132,101,226,126,149,134,218,107,195,128,216,182,86,94,109",
+                        "endOffsets": "353,561,694,796,1023,1150,1300,1435,1654,1762,1958,2087,2304,2487,2574,2669,2779"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,218,426,563,669,896,1027,1181,1511,1730,1842,2038,2171,2388,2575,2666,2765",
+                        "endColumns": "112,207,136,105,226,130,153,138,218,111,195,132,216,186,90,98,113",
+                        "endOffsets": "213,421,558,664,891,1022,1176,1315,1725,1837,2033,2166,2383,2570,2661,2760,2874"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\dd4157f502642a72575571c82e5f4de3\\jetified-play-services-basement-17.0.0\\res\\values-zu\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "247",
+                        "endColumns": "190",
+                        "endOffsets": "437"
+                    },
+                    "to": {
+                        "startLines": "10",
+                        "startColumns": "4",
+                        "startOffsets": "1320",
+                        "endColumns": "190",
+                        "endOffsets": "1506"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\3f9abc0467dae24695cfb333df4e9c71\\jetified-firebase-messaging-19.0.1\\res\\values-zu\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "205",
+                        "endColumns": "110",
+                        "endOffsets": "315"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "2879",
+                        "endColumns": "114",
+                        "endOffsets": "2989"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\lonewarrior\\.gradle\\caches\\transforms-2\\files-2.1\\27acea5af151251d6a10d6e4170e8f18\\wear-1.0.0\\res\\values-zu\\values-zu.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,168",
+                        "endColumns": "112,121",
+                        "endOffsets": "163,285"
+                    },
+                    "to": {
+                        "startLines": "22,23",
+                        "startColumns": "4,4",
+                        "startOffsets": "3095,3208",
+                        "endColumns": "112,121",
+                        "endOffsets": "3203,3325"
+                    }
+                }
+            ]
+        }
+    ]
+}

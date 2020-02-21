@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Application/Application.iml" filepath="$PROJECT_DIR$/Application/Application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SoundWatch.iml" filepath="$PROJECT_DIR$/SoundWatch.iml" />
       <module fileurl="file://$PROJECT_DIR$/Wearable/Wearable.iml" filepath="$PROJECT_DIR$/Wearable/Wearable.iml" />
-      <module fileurl="file://$PROJECT_DIR$/datalayer-watch.iml" filepath="$PROJECT_DIR$/datalayer-watch.iml" />
     </modules>
   </component>
 </project>

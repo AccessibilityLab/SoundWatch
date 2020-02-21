@@ -3,10 +3,8 @@ package com.wearable.sound;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.Arrays;

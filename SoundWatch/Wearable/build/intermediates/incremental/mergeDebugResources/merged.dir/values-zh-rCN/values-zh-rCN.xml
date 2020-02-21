@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="time_difference_short_days"><item quantity="one">%d天</item>
+<item quantity="other">%d天</item>
+</plurals>
+    <plurals name="time_difference_short_hours"><item quantity="one">%d小时</item>
+<item quantity="other">%d小时</item>
+</plurals>
+    <plurals name="time_difference_short_minutes"><item quantity="one">%d分钟</item>
+<item quantity="other">%d分钟</item>
+</plurals>
+    <plurals name="time_difference_words_days"><item quantity="one">%d 天</item>
+<item quantity="other">%d 天</item>
+</plurals>
+    <plurals name="time_difference_words_hours"><item quantity="one">%d 小时</item>
+<item quantity="other">%d 小时</item>
+</plurals>
+    <plurals name="time_difference_words_minutes"><item quantity="one">%d 分钟</item>
+<item quantity="other">%d 分钟</item>
+</plurals>
+    <string name="a11y_no_data">无数据</string>
+    <string name="a11y_no_permission">无权访问数据</string>
+    <string name="a11y_template_range">%1$f（共 %2$f）</string>
+    <string name="buttons_rect_bottom_center">正下方</string>
+    <string name="buttons_rect_bottom_left">左下方</string>
+    <string name="buttons_rect_bottom_right">右下方</string>
+    <string name="buttons_rect_left_bottom">下方靠左</string>
+    <string name="buttons_rect_left_center">正左方</string>
+    <string name="buttons_rect_left_top">上方靠左</string>
+    <string name="buttons_rect_right_bottom">下方靠右</string>
+    <string name="buttons_rect_right_center">正右方</string>
+    <string name="buttons_rect_right_top">上方靠右</string>
+    <string name="buttons_rect_top_center">正上方</string>
+    <string name="buttons_rect_top_left">左上方</string>
+    <string name="buttons_rect_top_right">右上方</string>
+    <string name="buttons_round_bottom_center">正下方</string>
+    <string name="buttons_round_bottom_left">左下方</string>
+    <string name="buttons_round_bottom_left_lower">左下方靠下的位置</string>
+    <string name="buttons_round_bottom_left_upper">左下方靠上的位置</string>
+    <string name="buttons_round_bottom_right">右下方</string>
+    <string name="buttons_round_bottom_right_lower">右下方靠下的位置</string>
+    <string name="buttons_round_bottom_right_upper">右下方靠上的位置</string>
+    <string name="buttons_round_center_left">正左方</string>
+    <string name="buttons_round_center_right">正右方</string>
+    <string name="buttons_round_top_center">正上方</string>
+    <string name="buttons_round_top_left">左上方</string>
+    <string name="buttons_round_top_left_lower">左上方靠下的位置</string>
+    <string name="buttons_round_top_left_upper">左上方靠上的位置</string>
+    <string name="buttons_round_top_right">右上方</string>
+    <string name="buttons_round_top_right_lower">右上方靠下的位置</string>
+    <string name="buttons_round_top_right_upper">右上方靠上的位置</string>
+    <string msgid="8585111718777012708" name="common_google_play_services_enable_button">"启用"</string>
+    <string msgid="7045129128108380659" name="common_google_play_services_enable_text">"您必须先启用 Google Play 服务，然后才能运行<ns1:g id="APP_NAME">%1$s</ns1:g>。"</string>
+    <string msgid="3147157405986503375" name="common_google_play_services_enable_title">"启用 Google Play 服务"</string>
+    <string msgid="9115728400623041681" name="common_google_play_services_install_button">"安装"</string>
+    <string msgid="8179894293032530091" name="common_google_play_services_install_text">"您的设备没有安装 Google Play 服务，因此无法运行<ns1:g id="APP_NAME">%1$s</ns1:g>。"</string>
+    <string msgid="7442193194585196676" name="common_google_play_services_install_title">"获取 Google Play 服务"</string>
+    <string msgid="4293541511340436975" name="common_google_play_services_notification_channel_name">"Google Play 服务的适用范围"</string>
+    <string msgid="180394615667698242" name="common_google_play_services_notification_ticker">"Google Play服务出错"</string>
+    <string msgid="2518680582564677258" name="common_google_play_services_unknown_issue">"<ns1:g id="APP_NAME">%1$s</ns1:g>无法访问 Google Play 服务，请重试。"</string>
+    <string msgid="5501187292256987189" name="common_google_play_services_unsupported_text">"您的设备不支持 Google Play 服务，因此无法运行<ns1:g id="APP_NAME">%1$s</ns1:g>。"</string>
+    <string msgid="8172070149091615356" name="common_google_play_services_update_button">"更新"</string>
+    <string msgid="7773943415006962566" name="common_google_play_services_update_text">"您必须先更新 Google Play 服务，然后才能运行<ns1:g id="APP_NAME">%1$s</ns1:g>。"</string>
+    <string msgid="8706675115216073244" name="common_google_play_services_update_title">"更新 Google Play 服务"</string>
+    <string msgid="7894275749778928941" name="common_google_play_services_updating_text">"Google Play 服务当前正在更新，因此您无法运行<ns1:g id="APP_NAME">%1$s</ns1:g>。"</string>
+    <string msgid="2804989272736383918" name="common_google_play_services_wear_update_text">"必须使用新版 Google Play 服务。该服务很快就会自行更新。"</string>
+    <string msgid="5201977337835724196" name="common_open_on_phone">"在手机上打开"</string>
+    <string msgid="3441753203274453993" name="common_signin_button_text">"登录"</string>
+    <string msgid="669893613918351210" name="common_signin_button_text_long">"使用 Google 帐号登录"</string>
+    <string name="dismiss_overlay_button_label">退出</string>
+    <string msgid="4133737464567140336" name="fcm_fallback_notification_channel_label">"其他"</string>
+    <string name="generic_cancel">取消</string>
+    <string name="generic_yes">是</string>
+    <string name="navigation_drawer_content_description">抽屉式导航栏</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="time_difference_now">现在</string>
+    <string name="time_difference_short_days_and_hours">%1$s%2$s﻿</string>
+    <string name="time_difference_short_hours_and_minutes">%1$s%2$s﻿</string>
+    <string msgid="1837365417701148489" name="ws_action_drawer_content_description">"操作抽屉式导航栏"</string>
+    <string msgid="7216697245762194759" name="ws_navigation_drawer_content_description">"抽屉式导航栏"</string>
+</resources>

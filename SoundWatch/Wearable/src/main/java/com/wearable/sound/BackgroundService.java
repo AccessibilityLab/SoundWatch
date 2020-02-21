@@ -3,9 +3,9 @@ package com.wearable.sound;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-
 import androidx.annotation.Nullable;
 
+//TODO HUNG 8: DO YOU NEED BACKGROUND SERVICE? IT NOT REMOVE THIS CLASS?
 public class BackgroundService extends Service {
 
     @Nullable
