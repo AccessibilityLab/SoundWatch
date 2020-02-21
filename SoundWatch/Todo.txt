@@ -1,0 +1,59 @@
+Overall:
+1. Change name to "SoundWatch" and not "WearableSound" or "HomeSound"
+2. Disable a soundid for 10 seconds after a notification is sent (snooze list, 10 seconds)
+3. Fix the "open" button.
+4. Test all functionalities after you make any change.
+
+Watch, main app:
+1. Record button should have same font size as the Stop button.
+2. Vertical middle aligned
+3. When recording begins change text font to a lighter color, and when the recording begins, change it to blue. Also beep twice when it stops
+4. "Record" -> "Listen"
+
+Watch, notification window:
+1. Make it: "Speech, 93%" in one line.
+2. In expanded window, don't show "Nearby Sound". Keep the font for "Speech, 93%" same as 1.
+3. Let's do two snooze options, instead of three: maybe we can "10 mins, 1 hour".
+4. Remove the snooze button.
+5. "Foregraound service" -> "Listening..."
+
+
+Phone app:
+1. BLock sounds -> "Sound list"
+2. In the Sound list, left align all sounds, use the same font as on the watch and other parts of the phone.
+3. Organize the sound list in categories, scroll down.
+4. Remove the title bar, and add your own
+5. Use three colors only -> black, white and the standard google blue.
+6. Use the UI mockuped up. Remove all buttons and stuff.
+
+
+7. Don't have an option for "foreground service"
+8. Notification -> "Foreground service" -> "Running..."
+9. Foreground service should start/stop from the watch, exactly the same way as for a watch-only or watch+server setup.
+10. On bluetooth disconnect, stop foreground on both. Then the user would have to connect the bluetooth again AND start the recroding from the watch. And then both phone and watch will start. Note that bT disconnected can be sensed by both devices. But start can only be from watch (for which a message needs to be sent to the phone).
+11. On bluetooth disconnect, the phone/watch should show: "Please pair the watch/phone" on the main app screen.
+
+Phone App (on the design shown at night, 2/11/2020):
+Address in the order of priority:
+1. Title SoundWatch and the button "Favorite Places" should appear in a single line. Use a linearlayout or something
+2. Don't use icons for mute. Use text -> "(snoozed)"
+3. The color of checkmarks should martch the "Favorite Places"
+4. The Context titles, e.g., "Home" should have different boldness than the title "SoundWatch".
+5. Play around with spacing a bit. I think we can make it much more compact vertically and fit more sounds in a single screen. For exampel, reduce space between "Home" and "Dog Bark". Can also try reducing space between each sound.
+
+
+Server
+1. Send the correct label back to a particular socket client id to avoid sending labels to all
+current clients
+
+
+Priority:
+1. UI would be priority
+2. System things are low priority except what relates to the UI (disable soundid for 10 seconds)
+3. When click record, watch should activate phone foreground service
+4. Implement watch only
+5. Fix the server to send all sounds, even if lower db or unrecognized sound
+6. Fix the audio label for watch and phone-watch to have the same notification as watch-server
+
+
+
