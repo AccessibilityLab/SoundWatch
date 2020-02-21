@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"‎‏‎‎‎‎‎‏‎‏‏‏‎‎‎‎‎‏‎‎‏‎‎‎‎‏‏‏‏‏‏‏‏‏‎‏‏‏‎‏‏‎‏‏‏‎‏‏‎‎‎‎‏‎‏‎‎‎‏‏‏‏‏‎‏‏‏‎‏‎‏‎‏‏‏‎‎‏‎‏‏‏‎‏‏‏‏‏‏‏‎‎‎‏‏‎999+‎‏‎‎‏‎"</string>
-    <string msgid="1837365417701148489" name="ws_action_drawer_content_description">"‎‏‎‎‎‎‎‏‎‏‏‏‎‎‎‎‎‏‎‎‏‎‎‎‎‏‏‏‏‏‎‏‏‏‎‎‏‎‏‏‏‏‏‏‏‏‎‏‎‎‎‏‎‎‎‎‏‏‏‎‎‏‏‎‏‎‏‎‎‏‎‏‎‏‎‏‎‎‎‎‎‎‏‏‏‎‏‎‎‏‎‎‏‎Action drawer‎‏‎‎‏‎"</string>
-    <string msgid="7216697245762194759" name="ws_navigation_drawer_content_description">"‎‏‎‎‎‎‎‏‎‏‏‏‎‎‎‎‎‏‎‎‏‎‎‎‎‏‏‏‏‏‏‏‏‏‎‎‏‎‎‎‎‏‎‎‏‏‎‏‏‎‏‏‎‏‏‏‏‏‎‏‎‎‎‏‏‎‎‏‎‎‏‎‎‏‏‎‎‏‎‎‎‎‎‏‏‎‏‎‏‎‎‎‏‏‏‎Navigation drawer‎‏‎‎‏‎"</string>
-</resources>
