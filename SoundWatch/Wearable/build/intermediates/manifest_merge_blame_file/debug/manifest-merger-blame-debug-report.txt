@@ -1,0 +1,381 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.wearable.sound"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="28"
+8-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="28" />
+9-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Not sure if needed but For firebase, but for waveful receiver and alarm manager -->
+11-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:5:5-68
+11-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:5:22-65
+12    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> <!-- For firebase -->
+12-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:6:5-82
+12-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:6:22-79
+13    <uses-permission android:name="android.permission.VIBRATE" />
+13-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:7:5-66
+13-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:7:22-63
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:8:5-67
+14-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:8:22-64
+15
+16    <uses-feature android:name="android.hardware.type.watch" />
+16-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:9:5-64
+16-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:9:19-61
+17
+18    <!-- the following permission is required to record audio using a microphone -->
+19    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+19-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:12:5-71
+19-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:12:22-68
+20    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+20-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:13:5-79
+20-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:13:22-76
+21    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+21-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:14:5-75
+21-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:14:22-72
+22    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+22-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:15:5-76
+22-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:15:22-74
+23
+24    <!-- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> -->
+25    <application
+25-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:18:5-113:19
+26        android:name="com.wearable.sound.MyApplication"
+26-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:19:9-38
+27        android:allowBackup="true"
+27-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:20:9-35
+28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+28-->[androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:22:18-86
+29        android:debuggable="true"
+30        android:icon="@mipmap/ic_launcher"
+30-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:21:9-43
+31        android:label="@string/app_name"
+31-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:22:9-41
+32        android:supportsRtl="true"
+32-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:23:9-35
+33        android:theme="@style/DisableBackSwipe"
+33-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:24:9-48
+34        android:usesCleartextTraffic="true" >
+34-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:25:9-44
+35
+36        <!--
+37        Set custom default icon. This is used when no icon is set for incoming notification messages.
+38        See README(https://goo.gl/l4GJaQ) for more.
+39        -->
+40        <meta-data
+40-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:29:9-31:62
+41            android:name="com.google.firebase.messaging.default_notification_icon"
+41-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:30:13-83
+42            android:resource="@drawable/notification_icon" />
+42-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:31:13-59
+43        <!--
+44             Set color used with incoming notification messages. This is used when no color is set for the incoming
+45             notification message. See README(https://goo.gl/6BKBk7) for more.
+46        -->
+47        <meta-data
+47-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:34:9-36:49
+48            android:name="com.google.firebase.messaging.default_notification_color"
+48-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:35:13-84
+49            android:resource="@color/wl_blue" />
+49-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:36:13-46
+50
+51        <service
+51-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:38:9-45:19
+52            android:name="com.wearable.sound.MyFirebaseMessagingService"
+52-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:39:13-55
+53            android:enabled="true"
+53-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:40:13-35
+54            android:exported="true" >
+54-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:41:13-36
+55            <intent-filter>
+55-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:42:13-44:29
+56                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+56-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:43:17-78
+56-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:43:25-75
+57            </intent-filter>
+58        </service>
+59
+60        <uses-library
+60-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:47:9-49:39
+61            android:name="com.google.android.wearable"
+61-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:48:13-55
+62            android:required="true" />
+62-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:49:13-36
+63        <!--
+64               Set to true if your app is Standalone, that is, it does not require the handheld
+65               app to run.
+66        -->
+67        <meta-data
+67-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:54:9-56:36
+68            android:name="com.google.android.wearable.standalone"
+68-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:55:13-66
+69            android:value="true" />
+69-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:56:13-33
+70        <meta-data
+70-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:58:9-60:73
+71            android:name="com.google.android.gms.version"
+71-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:59:17-62
+72            android:value="@integer/google_play_services_version" />
+72-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:60:17-70
+73
+74        <service android:name="com.wearable.sound.DataLayerListenerService" >
+74-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:62:9-81:19
+74-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:63:17-57
+75            <intent-filter>
+75-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:64:13-68:29
+76
+77                <!-- listeners receive events that match the action and data filters -->
+78                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+78-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:66:17-87
+78-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:66:25-84
+79
+80                <data
+80-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:17-91
+81                    android:host="*"
+81-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:45-61
+82                    android:pathPrefix="/count"
+82-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:62-89
+83                    android:scheme="wear" />
+83-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:23-44
+84            </intent-filter>
+85            <intent-filter>
+85-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:69:13-72:29
+86                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+86-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:17-91
+86-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:25-88
+87
+88                <data
+88-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:17-91
+89                    android:host="*"
+89-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:45-61
+90                    android:pathPrefix="/start-activity"
+90-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:62-89
+91                    android:scheme="wear" />
+91-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:23-44
+92            </intent-filter>
+93            <intent-filter>
+93-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:73:13-76:29
+94                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+94-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:17-91
+94-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:25-88
+95
+96                <data
+96-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:17-91
+97                    android:host="*"
+97-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:45-61
+98                    android:pathPrefix="/audio-prediction"
+98-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:62-89
+99                    android:scheme="wear" />
+99-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:23-44
+100            </intent-filter>
+101            <intent-filter>
+101-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:77:13-80:29
+102                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+102-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:17-91
+102-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:25-88
+103
+104                <data
+104-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:17-91
+105                    android:host="*"
+105-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:45-61
+106                    android:pathPrefix="/SOUND_ENABLE_FROM_PHONE_PATH"
+106-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:62-89
+107                    android:scheme="wear" />
+107-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:23-44
+108            </intent-filter>
+109        </service>
+110        <service
+110-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:83:9-87:19
+111            android:name="com.wearable.sound.ForegroundService"
+111-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:84:13-46
+112            android:enabled="true"
+112-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:85:13-35
+113            android:exported="true" >
+113-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:86:13-36
+114        </service>
+115        <service android:name="com.wearable.sound.BackgroundService" />
+115-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:90:9-54
+115-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:90:18-51
+116        <service
+116-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:92:9-95:19
+117            android:name="com.wearable.sound.SnoozeSoundService"
+117-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:93:13-47
+118            android:exported="false" >
+118-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:94:13-37
+119        </service>
+120
+121        <activity
+121-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:97:9-106:20
+122            android:name="com.wearable.sound.MainActivity"
+122-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:98:13-41
+123            android:label="@string/app_name"
+123-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:99:13-45
+124            android:launchMode="singleTask" >
+124-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:100:13-44
+125            <intent-filter>
+125-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:101:13-105:29
+126                <action android:name="android.intent.action.MAIN" />
+126-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:102:17-69
+126-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:102:25-66
+127
+128                <category android:name="android.intent.category.LAUNCHER" />
+128-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:104:17-77
+128-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:104:27-74
+129            </intent-filter>
+130        </activity>
+131
+132        <receiver android:name="com.wearable.sound.AlarmReceiver" >
+132-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:108:9-112:20
+132-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:108:19-48
+133            <intent-filter>
+133-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:109:13-111:29
+134                <action android:name="com.wearable.sound.almMgr" />
+134-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:110:17-68
+134-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:110:25-65
+135            </intent-filter>
+136        </receiver>
+137        <!--
+138             FirebaseMessagingService performs security checks at runtime,
+139             but set to not exported to explicitly avoid allowing another app to call it.
+140        -->
+141        <service
+141-->[com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:28:9-34:19
+142            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+142-->[com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:29:13-82
+143            android:exported="false" >
+143-->[com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:30:13-37
+144            <intent-filter android:priority="-500" >
+144-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:42:13-44:29
+145                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+145-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:43:17-78
+145-->C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:43:25-75
+146            </intent-filter>
+147        </service>
+148        <service
+148-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:29:9-35:19
+149            android:name="com.google.firebase.components.ComponentDiscoveryService"
+149-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:30:13-84
+150            android:exported="false" >
+150-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:31:13-37
+151            <meta-data
+151-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:32:13-34:85
+152                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+152-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:33:17-96
+153                android:value="com.google.firebase.components.ComponentRegistrar" />
+153-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:34:17-82
+154        </service>
+155
+156        <receiver
+156-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:37:9-44:20
+157            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+157-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:38:13-78
+158            android:exported="true"
+158-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:39:13-36
+159            android:permission="com.google.android.c2dm.permission.SEND" >
+159-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:40:13-73
+160            <intent-filter>
+160-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:41:13-43:29
+161                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+161-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:42:17-81
+161-->[com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:42:25-78
+162            </intent-filter>
+163        </receiver>
+164
+165        <provider
+165-->[com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:12:9-16:39
+166            android:name="com.google.firebase.provider.FirebaseInitProvider"
+166-->[com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:13:13-77
+167            android:authorities="com.wearable.sound.firebaseinitprovider"
+167-->[com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:14:13-72
+168            android:exported="false"
+168-->[com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:15:13-37
+169            android:initOrder="100" />
+169-->[com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:16:13-36
+170
+171        <activity
+171-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+172            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+172-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+173            android:exported="false"
+173-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+174            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+174-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+175    </application>
+176
+177</manifest> <!-- <?xml version="1.0" encoding="utf-8"?> -->
+178<!-- &lt;!&ndash; Copyright (C) 2014 The Android Open Source Project -->
+179<!-- Licensed under the Apache License, Version 2.0 (the "License"); -->
+180<!-- you may not use this file except in compliance with the License. -->
+181<!-- You may obtain a copy of the License at -->
+182<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
+183<!-- Unless required by applicable law or agreed to in writing, software -->
+184<!-- distributed under the License is distributed on an "AS IS" BASIS, -->
+185<!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
+186<!-- See the License for the specific language governing permissions and -->
+187<!-- limitations under the License. -->
+188<!-- &ndash;&gt; -->
+189<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android" -->
+190<!-- package="com.wearable.sound" > -->
+191<!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+192<!-- &lt;!&ndash; the following permission is required to record audio using a microphone &ndash;&gt; -->
+193<!-- <uses-permission android:name="android.permission.RECORD_AUDIO" /> -->
+194<!-- <uses-permission android:name="android.permission.VIBRATE"/> -->
+195<!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+196<!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
+197<!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+198<!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/> -->
+199<!-- <uses-permission android:name="android.permission.VIBRATE"/> -->
+200<!-- <uses-feature android:name="android.hardware.type.watch" /> -->
+201<!-- <application -->
+202<!-- android:name=".MyApplication_old" -->
+203<!-- android:allowBackup="true" -->
+204<!-- android:icon="@drawable/ic_launcher" -->
+205<!-- android:label="@string/app_name" -->
+206<!-- android:theme="@android:style/Theme.DeviceDefault" -->
+207<!-- android:usesCleartextTraffic="true" -->
+208<!-- > -->
+209<!-- <meta-data -->
+210<!-- android:name="com.google.android.wearable.standalone" -->
+211<!-- android:value="false" /> -->
+212<!-- <meta-data -->
+213<!-- android:name="com.google.android.gms.version" -->
+214<!-- android:value="@integer/google_play_services_version" /> -->
+215<!-- <service -->
+216<!-- android:name=".DataLayerListenerService" > -->
+217<!-- <intent-filter> -->
+218<!-- &lt;!&ndash; listeners receive events that match the action and data filters &ndash;&gt; -->
+219<!-- <action android:name="com.google.android.gms.wearable.DATA_CHANGED" /> -->
+220<!-- <data android:scheme="wear" android:host="*" android:pathPrefix="/count"/> -->
+221<!-- </intent-filter> -->
+222<!-- <intent-filter> -->
+223<!-- <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" /> -->
+224<!-- <data android:scheme="wear" android:host="*" android:pathPrefix="/start-activity"/> -->
+225<!-- </intent-filter> -->
+226<!-- <intent-filter> -->
+227<!-- <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" /> -->
+228<!-- <data android:scheme="wear" android:host="*" android:pathPrefix="/audio-prediction"/> -->
+229<!-- </intent-filter> -->
+230<!-- </service> -->
+231<!-- <service -->
+232<!-- android:name=".ForegroundService" -->
+233<!-- android:enabled="true" -->
+234<!-- android:exported="true"> -->
+235<!-- </service> -->
+236<!-- <activity -->
+237<!-- android:name=".MainActivity_old" -->
+238<!-- android:label="@string/app_name"> -->
+239<!-- <intent-filter> -->
+240<!-- <action android:name="android.intent.action.MAIN"/> -->
+241<!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+242<!-- </intent-filter> -->
+243<!-- <intent-filter> -->
+244<!-- <action android:name="com.wearable.sound.EXAMPLE"/> -->
+245<!-- <category android:name="android.intent.category.DEFAULT"/> -->
+246<!-- </intent-filter> -->
+247<!-- </activity> -->
+248<!-- </application> -->
+249<!-- </manifest> -->

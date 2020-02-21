@@ -1,0 +1,437 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+MERGED from [androidx.wear:wear:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\27acea5af151251d6a10d6e4170e8f18\wear-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:2:1-15:12
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f09725d8790812e2c4273bfd051ca0e3\recyclerview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.percentlayout:percentlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\6825b203610b6ea2e5aede0cef7a0d0d\percentlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\1ae0788e9437974b6c85363cfbc845d9\legacy-support-v13-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:17:1-37:12
+MERGED from [com.google.android.gms:play-services-wearable:16.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\fe36b2b4e7a423ca8a47a3ef36ded805\jetified-play-services-wearable-16.0.1\AndroidManifest.xml:17:1-24:12
+MERGED from [org.tensorflow:tensorflow-lite:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0fe7911710ee304b076b05123cb0da2f\tensorflow-lite-0.0.0-nightly\AndroidManifest.xml:2:1-10:12
+MERGED from [org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d4b304642d8827052da9817aa0e10d\tensorflow-lite-gpu-0.0.0-nightly\AndroidManifest.xml:2:1-10:12
+MERGED from [org.tensorflow:tensorflow-lite-support:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\798aad60d18986220b4f65633223b6a7\tensorflow-lite-support-0.0.0-nightly\AndroidManifest.xml:2:1-5:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\da18b1f4e2453989db306cb3f1c109b8\legacy-support-v4-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:17:1-47:12
+MERGED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:2:1-19:12
+MERGED from [com.google.firebase:firebase-iid-interop:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2cd6438a769fb743906ca79950eaefe5\firebase-iid-interop-17.0.0\AndroidManifest.xml:2:1-10:12
+MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:17:1-29:12
+MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\cbf9a34bfc92c75f3afa78ccb4ba7066\play-services-tasks-17.0.0\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.firebase:firebase-measurement-connector:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d398c686657f8add79de02475e419cf0\firebase-measurement-connector-18.0.0\AndroidManifest.xml:17:1-25:12
+MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c843bdcb853338d68a8f5b3246848fd7\play-services-stats-17.0.0\AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:17:1-28:12
+MERGED from [androidx.fragment:fragment:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\50bddaedb1c620f251b71f664f6c0c2c\fragment-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\941a77c281efbb522be12f19196e9289\legacy-support-core-ui-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\a90df82b4c368b328c0dc7fb5dd3f37a\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\9e3b86d3545671a843bcf393256c2784\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0abd824a181dcfd24b5927cb5ca71168\coordinatorlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f479f66f0ead291ab864ebbdab694a5e\drawerlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\45d6c8277ef4adc8938ea3ca02003d05\slidingpanelayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\27280832bb25982430a1413f549c2fe1\customview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\170daa54b1c60a5b9fda5797cfaff833\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01414345bc0322494200dbc90d12a8a2\asynclayoutinflater-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\583e8b0c28803beef722a138752f15b6\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3dc7da8619751aa4f75b6f7d1df61716\media-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\00e0d66f504ad162af353f689fde140d\versionedparcelable-1.0.0\AndroidManifest.xml:17:1-25:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d424132a15f0eef6c43c33cbe1c77364\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\761813c5bea98c4b02bd5d42e690c7f5\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0c5b150e7fd3a5c852c396f80aad9b3e\lifecycle-viewmodel-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\6336d27582a7f63149b2a9c36f693cb0\lifecycle-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2e415b69b48503d3245f749d148e1be2\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\7f2dc6de5834c166e25fb6ddb9e7048f\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\155f2189e963e3193e8d0e16381dc80b\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d6c9f56a45acf029128d277e175ee3\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d149f7e340ad2d301a8b9ea710ea3289\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f05c08b739b4017ed9d9bd0f5005b978\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c688ef57a4162e0be03da31e0521a460\constraintlayout-1.1.0\AndroidManifest.xml:2:1-11:12
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+	package
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:3:5-33
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:1-115:12
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.WAKE_LOCK
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:5:5-68
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:24:5-68
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:24:5-68
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:5:22-65
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:6:5-82
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:26:5-82
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:26:5-82
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:6:22-79
+uses-permission#android.permission.VIBRATE
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:7:5-66
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:7:22-63
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:8:5-67
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:23:5-67
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:23:5-67
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:8:22-64
+uses-feature#android.hardware.type.watch
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:9:5-64
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:9:19-61
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:12:5-71
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:12:22-68
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:13:5-79
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:22:5-79
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:13:22-76
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:14:5-75
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:14:22-72
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:15:5-76
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:15:22-74
+application
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:18:5-113:19
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:9:5-13:19
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:9:5-13:19
+MERGED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:22:5-35:19
+MERGED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:22:5-35:19
+MERGED from [com.google.android.gms:play-services-wearable:16.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\fe36b2b4e7a423ca8a47a3ef36ded805\jetified-play-services-wearable-16.0.1\AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-wearable:16.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\fe36b2b4e7a423ca8a47a3ef36ded805\jetified-play-services-wearable-16.0.1\AndroidManifest.xml:22:5-20
+MERGED from [org.tensorflow:tensorflow-lite:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0fe7911710ee304b076b05123cb0da2f\tensorflow-lite-0.0.0-nightly\AndroidManifest.xml:8:5-20
+MERGED from [org.tensorflow:tensorflow-lite:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0fe7911710ee304b076b05123cb0da2f\tensorflow-lite-0.0.0-nightly\AndroidManifest.xml:8:5-20
+MERGED from [org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d4b304642d8827052da9817aa0e10d\tensorflow-lite-gpu-0.0.0-nightly\AndroidManifest.xml:8:5-20
+MERGED from [org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d4b304642d8827052da9817aa0e10d\tensorflow-lite-gpu-0.0.0-nightly\AndroidManifest.xml:8:5-20
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:28:5-45:19
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:28:5-45:19
+MERGED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:11:5-17:19
+MERGED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:11:5-17:19
+MERGED from [com.google.firebase:firebase-iid-interop:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2cd6438a769fb743906ca79950eaefe5\firebase-iid-interop-17.0.0\AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.firebase:firebase-iid-interop:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2cd6438a769fb743906ca79950eaefe5\firebase-iid-interop-17.0.0\AndroidManifest.xml:7:5-8:19
+MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\cbf9a34bfc92c75f3afa78ccb4ba7066\play-services-tasks-17.0.0\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\cbf9a34bfc92c75f3afa78ccb4ba7066\play-services-tasks-17.0.0\AndroidManifest.xml:7:5-20
+MERGED from [com.google.firebase:firebase-measurement-connector:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d398c686657f8add79de02475e419cf0\firebase-measurement-connector-18.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.firebase:firebase-measurement-connector:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d398c686657f8add79de02475e419cf0\firebase-measurement-connector-18.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c843bdcb853338d68a8f5b3246848fd7\play-services-stats-17.0.0\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c843bdcb853338d68a8f5b3246848fd7\play-services-stats-17.0.0\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:22:5-26:19
+MERGED from [androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:22:5-89
+MERGED from [androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:22:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\00e0d66f504ad162af353f689fde140d\versionedparcelable-1.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\00e0d66f504ad162af353f689fde140d\versionedparcelable-1.0.0\AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c688ef57a4162e0be03da31e0521a460\constraintlayout-1.1.0\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c688ef57a4162e0be03da31e0521a460\constraintlayout-1.1.0\AndroidManifest.xml:9:5-20
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:22:18-86
+	android:supportsRtl
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:23:9-35
+	android:label
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:22:9-41
+	android:icon
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:21:9-43
+	android:allowBackup
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:20:9-35
+	android:theme
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:24:9-48
+	android:usesCleartextTraffic
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:25:9-44
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:19:9-38
+meta-data#com.google.firebase.messaging.default_notification_icon
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:29:9-31:62
+	android:resource
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:31:13-59
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:30:13-83
+meta-data#com.google.firebase.messaging.default_notification_color
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:34:9-36:49
+	android:resource
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:36:13-46
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:35:13-84
+service#com.wearable.sound.MyFirebaseMessagingService
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:38:9-45:19
+	android:enabled
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:40:13-35
+	android:exported
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:41:13-36
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:39:13-55
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:42:13-44:29
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:43:17-78
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:43:25-75
+uses-library#com.google.android.wearable
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:47:9-49:39
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:10:9-12:40
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:10:9-12:40
+	android:required
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:49:13-36
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:48:13-55
+meta-data#com.google.android.wearable.standalone
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:54:9-56:36
+	android:value
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:56:13-33
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:55:13-66
+meta-data#com.google.android.gms.version
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:58:9-60:73
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+	android:value
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:60:17-70
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:59:17-62
+service#com.wearable.sound.DataLayerListenerService
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:62:9-81:19
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:63:17-57
+intent-filter#action:name:com.google.android.gms.wearable.DATA_CHANGED+data:host:*+data:pathPrefix:/count+data:scheme:wear
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:64:13-68:29
+action#com.google.android.gms.wearable.DATA_CHANGED
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:66:17-87
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:66:25-84
+data
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:17-91
+	android:host
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:45-61
+	android:scheme
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:23-44
+	android:pathPrefix
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:67:62-89
+intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/start-activity+data:scheme:wear
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:69:13-72:29
+action#com.google.android.gms.wearable.MESSAGE_RECEIVED
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:17-91
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:70:25-88
+intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/audio-prediction+data:scheme:wear
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:73:13-76:29
+intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/SOUND_ENABLE_FROM_PHONE_PATH+data:scheme:wear
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:77:13-80:29
+service#com.wearable.sound.ForegroundService
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:83:9-87:19
+	android:enabled
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:85:13-35
+	android:exported
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:86:13-36
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:84:13-46
+service#com.wearable.sound.BackgroundService
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:90:9-54
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:90:18-51
+service#com.wearable.sound.SnoozeSoundService
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:92:9-95:19
+	android:exported
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:94:13-37
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:93:13-47
+activity#com.wearable.sound.MainActivity
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:97:9-106:20
+	android:label
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:99:13-45
+	android:launchMode
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:100:13-44
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:98:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:101:13-105:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:102:17-69
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:102:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:104:17-77
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:104:27-74
+receiver#com.wearable.sound.AlarmReceiver
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:108:9-112:20
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:108:19-48
+intent-filter#action:name:com.wearable.sound.almMgr
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:109:13-111:29
+action#com.wearable.sound.almMgr
+ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:110:17-68
+	android:name
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml:110:25-65
+uses-sdk
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+MERGED from [androidx.wear:wear:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\27acea5af151251d6a10d6e4170e8f18\wear-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.wear:wear:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\27acea5af151251d6a10d6e4170e8f18\wear-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.android.support:wearable:2.4.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\e29d1d98042d13fe4e1011eca56db6c1\jetified-wearable-2.4.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f09725d8790812e2c4273bfd051ca0e3\recyclerview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f09725d8790812e2c4273bfd051ca0e3\recyclerview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.percentlayout:percentlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\6825b203610b6ea2e5aede0cef7a0d0d\percentlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.percentlayout:percentlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\6825b203610b6ea2e5aede0cef7a0d0d\percentlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\1ae0788e9437974b6c85363cfbc845d9\legacy-support-v13-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v13:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\1ae0788e9437974b6c85363cfbc845d9\legacy-support-v13-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wearable:16.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\fe36b2b4e7a423ca8a47a3ef36ded805\jetified-play-services-wearable-16.0.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-wearable:16.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\fe36b2b4e7a423ca8a47a3ef36ded805\jetified-play-services-wearable-16.0.1\AndroidManifest.xml:20:5-44
+MERGED from [org.tensorflow:tensorflow-lite:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0fe7911710ee304b076b05123cb0da2f\tensorflow-lite-0.0.0-nightly\AndroidManifest.xml:5:5-6:41
+MERGED from [org.tensorflow:tensorflow-lite:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0fe7911710ee304b076b05123cb0da2f\tensorflow-lite-0.0.0-nightly\AndroidManifest.xml:5:5-6:41
+MERGED from [org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d4b304642d8827052da9817aa0e10d\tensorflow-lite-gpu-0.0.0-nightly\AndroidManifest.xml:5:5-6:41
+MERGED from [org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d4b304642d8827052da9817aa0e10d\tensorflow-lite-gpu-0.0.0-nightly\AndroidManifest.xml:5:5-6:41
+MERGED from [org.tensorflow:tensorflow-lite-support:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\798aad60d18986220b4f65633223b6a7\tensorflow-lite-support-0.0.0-nightly\AndroidManifest.xml:4:5-44
+MERGED from [org.tensorflow:tensorflow-lite-support:0.0.0-nightly] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\798aad60d18986220b4f65633223b6a7\tensorflow-lite-support-0.0.0-nightly\AndroidManifest.xml:4:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\da18b1f4e2453989db306cb3f1c109b8\legacy-support-v4-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\da18b1f4e2453989db306cb3f1c109b8\legacy-support-v4-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:6:5-8:41
+MERGED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:6:5-8:41
+MERGED from [com.google.firebase:firebase-iid-interop:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2cd6438a769fb743906ca79950eaefe5\firebase-iid-interop-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-iid-interop:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2cd6438a769fb743906ca79950eaefe5\firebase-iid-interop-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\cbf9a34bfc92c75f3afa78ccb4ba7066\play-services-tasks-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-tasks:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\cbf9a34bfc92c75f3afa78ccb4ba7066\play-services-tasks-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.firebase:firebase-measurement-connector:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d398c686657f8add79de02475e419cf0\firebase-measurement-connector-18.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.firebase:firebase-measurement-connector:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d398c686657f8add79de02475e419cf0\firebase-measurement-connector-18.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c843bdcb853338d68a8f5b3246848fd7\play-services-stats-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-stats:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c843bdcb853338d68a8f5b3246848fd7\play-services-stats-17.0.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\dd4157f502642a72575571c82e5f4de3\jetified-play-services-basement-17.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\50bddaedb1c620f251b71f664f6c0c2c\fragment-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\50bddaedb1c620f251b71f664f6c0c2c\fragment-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\941a77c281efbb522be12f19196e9289\legacy-support-core-ui-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\941a77c281efbb522be12f19196e9289\legacy-support-core-ui-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\a90df82b4c368b328c0dc7fb5dd3f37a\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\a90df82b4c368b328c0dc7fb5dd3f37a\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\9e3b86d3545671a843bcf393256c2784\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\9e3b86d3545671a843bcf393256c2784\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0abd824a181dcfd24b5927cb5ca71168\coordinatorlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0abd824a181dcfd24b5927cb5ca71168\coordinatorlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f479f66f0ead291ab864ebbdab694a5e\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f479f66f0ead291ab864ebbdab694a5e\drawerlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\45d6c8277ef4adc8938ea3ca02003d05\slidingpanelayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\45d6c8277ef4adc8938ea3ca02003d05\slidingpanelayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\27280832bb25982430a1413f549c2fe1\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\27280832bb25982430a1413f549c2fe1\customview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\170daa54b1c60a5b9fda5797cfaff833\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\170daa54b1c60a5b9fda5797cfaff833\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01414345bc0322494200dbc90d12a8a2\asynclayoutinflater-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01414345bc0322494200dbc90d12a8a2\asynclayoutinflater-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\583e8b0c28803beef722a138752f15b6\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\583e8b0c28803beef722a138752f15b6\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3dc7da8619751aa4f75b6f7d1df61716\media-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3dc7da8619751aa4f75b6f7d1df61716\media-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\01632b18d9fabe75a4cf668f771f5332\core-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\00e0d66f504ad162af353f689fde140d\versionedparcelable-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\00e0d66f504ad162af353f689fde140d\versionedparcelable-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d424132a15f0eef6c43c33cbe1c77364\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d424132a15f0eef6c43c33cbe1c77364\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\761813c5bea98c4b02bd5d42e690c7f5\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\761813c5bea98c4b02bd5d42e690c7f5\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0c5b150e7fd3a5c852c396f80aad9b3e\lifecycle-viewmodel-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\0c5b150e7fd3a5c852c396f80aad9b3e\lifecycle-viewmodel-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\6336d27582a7f63149b2a9c36f693cb0\lifecycle-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\6336d27582a7f63149b2a9c36f693cb0\lifecycle-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2e415b69b48503d3245f749d148e1be2\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\2e415b69b48503d3245f749d148e1be2\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\7f2dc6de5834c166e25fb6ddb9e7048f\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\7f2dc6de5834c166e25fb6ddb9e7048f\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\155f2189e963e3193e8d0e16381dc80b\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\155f2189e963e3193e8d0e16381dc80b\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d6c9f56a45acf029128d277e175ee3\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\63d6c9f56a45acf029128d277e175ee3\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d149f7e340ad2d301a8b9ea710ea3289\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\d149f7e340ad2d301a8b9ea710ea3289\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f05c08b739b4017ed9d9bd0f5005b978\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\f05c08b739b4017ed9d9bd0f5005b978\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c688ef57a4162e0be03da31e0521a460\constraintlayout-1.1.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:1.1.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\c688ef57a4162e0be03da31e0521a460\constraintlayout-1.1.0\AndroidManifest.xml:5:5-7:41
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		MERGED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		MERGED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\lonewarrior\Git\datalayer-watch\Wearable\src\main\AndroidManifest.xml
+service#com.google.firebase.messaging.FirebaseMessagingService
+ADDED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:28:9-34:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:30:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-messaging:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\3f9abc0467dae24695cfb333df4e9c71\jetified-firebase-messaging-19.0.1\AndroidManifest.xml:29:13-82
+service#com.google.firebase.components.ComponentDiscoveryService
+ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:29:9-35:19
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:30:13-84
+meta-data#com.google.firebase.components:com.google.firebase.iid.Registrar
+ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:32:13-34:85
+	android:value
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:34:17-82
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:33:17-96
+receiver#com.google.firebase.iid.FirebaseInstanceIdReceiver
+ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:37:9-44:20
+	android:exported
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:39:13-36
+	android:permission
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:40:13-73
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:38:13-78
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE
+ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:41:13-43:29
+action#com.google.android.c2dm.intent.RECEIVE
+ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:42:17-81
+	android:name
+		ADDED from [com.google.firebase:firebase-iid:19.0.1] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\73f9f01f26e946a22a7ab6543aac44c9\firebase-iid-19.0.1\AndroidManifest.xml:42:25-78
+provider#com.google.firebase.provider.FirebaseInitProvider
+ADDED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:12:9-16:39
+	android:authorities
+		ADDED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:14:13-72
+	android:exported
+		ADDED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:15:13-37
+	android:initOrder
+		ADDED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:16:13-36
+	android:name
+		ADDED from [com.google.firebase:firebase-common:18.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\41b1041e07b5bee85754334519dfd4e4\firebase-common-18.0.0\AndroidManifest.xml:13:13-77
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:17.0.0] C:\Users\lonewarrior\.gradle\caches\transforms-2\files-2.1\60886acc3069ae54c8a6b7a10b9827f6\play-services-base-17.0.0\AndroidManifest.xml:24:13-79

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:padding="1dp">
+
+    <!-- Sound Display family -->
+    <LinearLayout
+        android:id="@+id/text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80sp"
+        android:layout_marginTop="40sp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/locationDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:text="Welcome"
+            android:textSize="18sp"
+            android:layout_marginBottom="-1sp"/>
+        <TextView
+            android:id="@+id/soundDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:text="SoundWatch"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/mic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="13dp"
+            android:src="@drawable/ic_mic_32dp"
+            android:onClick="onRecordClick"
+            android:background="@drawable/rounded_background_blue"
+            />
+    </LinearLayout>
+
+    <!-- Don't show again display-->
+    <LinearLayout
+        android:id="@+id/dontshowDisplay_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80sp"
+        android:paddingTop="20sp">
+        <TextView
+            android:id="@+id/dontshowDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Click the button above \n to begin listening"
+            android:textSize="14.1sp" />
+    </LinearLayout>
+
+    <!-- Items layout -->
+    <LinearLayout
+        android:id="@+id/wearable_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="93sp"
+        android:layout_weight="1"
+        android:layout_marginTop="140sp"
+        android:paddingTop="-10sp">
+        <android.support.wearable.view.WearableListView
+            android:id="@+id/wearable_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             />
+    </LinearLayout>
+</FrameLayout>
