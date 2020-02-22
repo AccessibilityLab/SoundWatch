@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -39,15 +40,18 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -64,23 +68,16 @@ import static com.wearable.sound.MainActivity.AUDIO_LABEL;
 /** Listens to DataItems and Messages from the local node. */
 public class DataLayerListenerService extends WearableListenerService {
 
+    private static final boolean TEST_MODEL_LATENCY = false;
     private static final String TAG = "Phone/DataLayerService";
 
-    private static final String START_ACTIVITY_PATH = "/start-activity";
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
-    public static final String AUDIO_MESSAGE_PATH = "/audio_message";
     public static final String COUNT_PATH = "/count";
-    public static final String IMAGE_PATH = "/image";
-    public static final String IMAGE_KEY = "photo";
     private static final String CHANNEL_ID = "SOUNDWATCH";
-    public static final String CONNECTED_HOST_IDS = "CONNECTED_HOST_IDS";
 
-    private static final int RECORDER_SAMPLERATE = 16000;
     private static final float PREDICTION_THRES = 0.5F;
     private static final double DBLEVEL_THRES = -35.0;
-    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_UNSNOOZE_FROM_WATCH_PATH = "/SOUND_UNSNOOZE_FROM_WATCH_PATH";
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
@@ -240,28 +237,6 @@ public class DataLayerListenerService extends WearableListenerService {
 
         /** Parsing data array from watch **/
         processAudioRecognition(messageEvent.getData());
-//        short[] shorts = convertByteArrayToShortArray(messageEvent.getData());
-//        if (soundBuffer.size() == 16000) {
-////            sendSoundToServer();
-//            predictSoundsFromRawAudio();
-//        }
-//        if (soundBuffer.size() < 16000) {
-////            Log.i(TAG, "Adding data to buffer");
-//            for (short num : shorts) {
-//                if (soundBuffer.size() == 16000) {
-////                    sendSoundToServer();
-//                    String prediction = predictSoundsFromRawAudio();
-//                }
-//                soundBuffer.add(num);
-//            }
-//        }
-
-
-//        /** Display history of sounds on phone **/
-//        Intent broadcastIntent = new Intent();
-//        broadcastIntent.setAction(MainActivity.mBroadcastSoundPrediction);
-//        broadcastIntent.putExtra("Sound prediction", prediction);
-//        sendBroadcast(broadcastIntent);
     }
 
     public void processAudioRecognition(byte[] data) {
@@ -552,8 +527,28 @@ public class DataLayerListenerService extends WearableListenerService {
                 count++;
             }
         }
+        long startTime = 0;
+        if(TEST_MODEL_LATENCY)
+            startTime = System.currentTimeMillis();
+
         //Run inference
         tfLite.run(input4D, output);
+
+        if(TEST_MODEL_LATENCY) {
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            String timeStamp = simpleDateFormat.format(date);
+
+            try {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("watch_model.txt", Context.MODE_APPEND));
+                outputStreamWriter.write("Time: " + timeStamp + " " + "Latency: " +  Long.toString(elapsedTime) + "\n");
+                outputStreamWriter.close();
+            }
+            catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+            }
+        }
 
         //Find max and argmax
         float max = output[0][0];

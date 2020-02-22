@@ -9,12 +9,9 @@ import android.widget.TextView;
 public class WearableListItemLayout extends LinearLayout
         implements WearableListView.OnCenterProximityListener {
 
-    //private ImageView mCircle;
     private TextView mName;
 
     private final float mFadedTextAlpha;
-    //private final int mFadedCircleColor;
-    //private final int mChosenCircleColor;
 
     public WearableListItemLayout(Context context) {
         this(context, null);
@@ -29,10 +26,6 @@ public class WearableListItemLayout extends LinearLayout
         super(context, attrs, defStyle);
 
         mFadedTextAlpha = 0.40f;
-        //mFadedTextAlpha = getResources().getInteger(R.integer.action_text_faded_alpha) / 100f;
-
-        //mFadedCircleColor = getResources().getColor(R.color.grey);
-        //mChosenCircleColor = getResources().getColor(R.color.blue);
     }
 
 

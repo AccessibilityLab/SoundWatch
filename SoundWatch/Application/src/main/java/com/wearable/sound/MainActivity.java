@@ -144,11 +144,13 @@ public class MainActivity extends Activity
     private ScheduledExecutorService mGeneratorExecutor;
     private ScheduledFuture<?> mDataItemGeneratorFuture;
 
-    private static final int RECORDER_SAMPLERATE = 16000;
+    //If recording from phone...
+    //private static final int RECORDER_SAMPLERATE = 16000;
+    //private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+    //private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+
     private static final float PREDICTION_THRES = 0.5F;
     private static final double DBLEVEL_THRES = -35.0;
-    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     private Interpreter tfLite;
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
@@ -731,39 +733,13 @@ public class MainActivity extends Activity
         mDataItemListAdapter.add(new Event("onCapabilityChanged", capabilityInfo.toString()));
     }
 
-    /** Sets up UI components and their callback handlers. */
-    private void setupViews() {
-//        mSendPhotoBtn = findViewById(R.id.sendPhoto);
-//        mThumbView = findViewById(R.id.imageView);
-//        mDataItemList = findViewById(R.id.data_item_list);
-//        mStartActivityBtn = findViewById(R.id.start_wearable_activity);
-    }
-
-    public void onStopForegroundService(View view) {
-        Intent serviceIntent = new Intent(this, DataLayerListenerService.class);
-        stopService(serviceIntent);
-    }
-
-    public void startForegroundService(View view) {
-        Intent serviceIntent = new Intent(this, DataLayerListenerService.class);
-        startService(serviceIntent);
-    }
-
     /** Sends an RPC to start a fullscreen Activity on the wearable. */
     public void onStartWearableActivityClick(View view) {
         LOGD(TAG, "Generating RPC");
-
-        // Trigger an AsyncTask that will query for a list of connected nodes and send a
         // Trigger an AsyncTask that will query for a list of connected nodes and send a
         // "start-activity" message to each connected node.
         new StartWearableActivityTask().execute();
     }
-
-    public void onBlockSoundsClick(View view) {
-        Intent intent = new Intent(this, BlockSoundsActivity.class);
-        startActivity(intent);
-    }
-
     public void onLocationAwarenessClick(View view) {
 
     }

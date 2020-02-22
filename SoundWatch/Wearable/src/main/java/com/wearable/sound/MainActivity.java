@@ -58,6 +58,11 @@ import androidx.core.app.RemoteInput;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
+
+    private static final boolean TEST_E2E_LATENCY = false;
+    private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
+    private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
+
     /**
      * Sound or sound features send configuration
      */
@@ -92,10 +97,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
     //private Map<String, Long> soundLastTime = new HashMap<>();
-    private static final String SNOOZE_LABEL = "Snooze";
-    private static final String SNOOZE_TIME_LABEL = "Snooze Time";
-    private static final String[] SNOOZE_CHOICES = {"5 mins", "10 mins", "1 hour", "1 day", "Forever"};
+
+    //Notification snooze configurations
     private Map<String, Long> soundLastTime = new HashMap<>();
+    // More notification snooze choices
+    //private static final String SNOOZE_LABEL = "Snooze";
+    //private static final String SNOOZE_TIME_LABEL = "Snooze Time";
+    //private static final String[] SNOOZE_CHOICES = {"5 mins", "10 mins", "1 hour", "1 day", "Forever"};
 
     /**
      * Broadcast services
@@ -133,8 +141,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
 
     public static Socket mSocket;
-    private static final String SERVER_URL = "http://128.208.49.41:8788";
     {
+        String SERVER_URL = DEFAULT_SERVER;
+        if(TEST_E2E_LATENCY)
+            SERVER_URL = TEST_E2E_LATENCY_SERVER;
+
         try {
             mSocket = IO.socket(SERVER_URL);
         } catch (URISyntaxException e) {}
@@ -631,7 +642,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         snoozeIntent.putExtra(SnoozeSoundService.SOUND_ID, NOTIFICATION_ID);
         snoozeIntent.putExtra(SnoozeSoundService.SOUND_LABEL, audioLabel.label);
         snoozeIntent.putExtra(SnoozeSoundService.CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
-        snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
+        //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
 

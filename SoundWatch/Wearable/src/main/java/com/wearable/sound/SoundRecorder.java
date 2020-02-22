@@ -55,14 +55,17 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -72,6 +75,8 @@ import java.util.Set;
  */
 public class SoundRecorder {
 
+    private static final boolean TEST_MODEL_LATENCY = false;
+    private static final boolean TEST_E2E_LATENCY = false;
     private static final String TAG = "SoundRecorder";
     private static final int RECORDING_RATE = 16000; // can go up to 44K, if needed
     private static final int CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO;
@@ -256,8 +261,28 @@ public class SoundRecorder {
                     }
                 }
 
+                long startTime = 0;
+                if(TEST_MODEL_LATENCY)
+                    startTime = System.currentTimeMillis();
+
                 //Run inference
                 tfLite.run(input4D, output);
+
+                if(TEST_MODEL_LATENCY) {
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+                    Date date = new Date(System.currentTimeMillis());
+                    String timeStamp = simpleDateFormat.format(date);
+
+                    try {
+                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(mContext.openFileOutput("watch_model.txt", Context.MODE_APPEND));
+                        outputStreamWriter.write("Time: " + timeStamp + " " + "Latency: " +  Long.toString(elapsedTime) + "\n");
+                        outputStreamWriter.close();
+                    }
+                    catch (IOException e) {
+                        Log.e("Exception", "File write failed: " + e.toString());
+                    }
+                }
 
                 //Find max and argmax
                 float max = output[0][0];
@@ -505,9 +530,20 @@ public class SoundRecorder {
                 byte[] dbData = toByteArray(db);
                 Log.i(TAG, "Loudness db sent from watch: " + db);
 
-                byte[] data = new byte[dbData.length + featuresData.length];
-                System.arraycopy(dbData, 0, data, 0, dbData.length);
-                System.arraycopy(featuresData, 0, data, dbData.length, featuresData.length);
+                byte [] data = null;
+
+                if(TEST_E2E_LATENCY) {
+                    byte [] currentTimeData = soundRecorder.longToBytes(System.currentTimeMillis());
+                    data = new byte[currentTimeData.length + dbData.length + featuresData.length];
+                    System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
+                    System.arraycopy(dbData, 0, data, currentTimeData.length, dbData.length);
+                    System.arraycopy(featuresData, 0, data, currentTimeData.length + dbData.length, featuresData.length);
+                }
+                else {
+                    data = new byte[dbData.length + featuresData.length];
+                    System.arraycopy(dbData, 0, data, 0, dbData.length);
+                    System.arraycopy(featuresData, 0, data, dbData.length, featuresData.length);
+                }
 
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
                     Log.d(TAG, "Sending audio data to phone");
@@ -519,6 +555,8 @@ public class SoundRecorder {
                 Log.i(TAG, "ERROR occured while parsing float features to bytes");
             }
         }
+
+
 
         private void sendRawAudioToPhone(byte[] buffer) {
             SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
@@ -541,8 +579,13 @@ public class SoundRecorder {
                 }
                 jsonObject.put("data", new JSONArray(features));
                 jsonObject.put("db", Math.abs(db(soundBuffer)));
+
+                if(TEST_E2E_LATENCY)
+                    jsonObject.put("record_time", Long.toString(System.currentTimeMillis()));
+
                 Log.i(TAG, "Data sent to server: "  + features.length);
                 MainActivity.mSocket.emit("audio_feature_data", jsonObject);
+
             } catch (JSONException e) {
                 Log.i(TAG, "Failed sending sound features to server");
                 e.printStackTrace();
@@ -742,10 +785,19 @@ public class SoundRecorder {
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
-        // TODO: not sure if we need this vibration
-//        Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-//        v.vibrate(350);
-//        int notificationId = 001;
+    }
 
+    // For Latency Tests
+    public byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+
+    public long bytesToLong(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();//need flip
+        return buffer.getLong();
     }
 }

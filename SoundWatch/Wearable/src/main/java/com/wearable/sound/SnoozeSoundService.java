@@ -4,13 +4,11 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.app.RemoteInput;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
@@ -18,9 +16,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -32,40 +28,17 @@ public class SnoozeSoundService extends IntentService {
     public static final String SNOOZE_TIME = "SNOOZE_TIME";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String CONNECTED_HOST_IDS = "CONNECTED_HOST_IDS";
-    private static final Map<String, Integer> SNOOZE_TIME_MAP = new HashMap<>();
     private Set<String> connectedHostIds;
-
-    {
-        SNOOZE_TIME_MAP.put("5 mins", 5 * 60 * 1000);
-        SNOOZE_TIME_MAP.put("10 mins", 10 * 60 * 1000);
-        SNOOZE_TIME_MAP.put("1 hour", 60 * 60 * 1000);
-        SNOOZE_TIME_MAP.put("1 day", 24 * 60 * 60 * 1000);
-        SNOOZE_TIME_MAP.put("Forever", -1);
-
-    }
 
     public SnoozeSoundService() {
         super("SnoozeSoundService");
-    }
-
-    /*
-     * Extracts CharSequence created from the RemoteInput associated with the Notification.
-     */
-    private String getMessage(Intent intent) {
-        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
-        if (remoteInput != null) {
-            return remoteInput.getCharSequence(SNOOZE_TIME).toString();
-        }
-        return "10 mins";
     }
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Log.d(TAG, "onHandleIntent(): " + intent);
 
         if (intent != null) {
-            String snoozeTime = getMessage(intent);
-//            final int snoozeTime = intent.getIntExtra(SNOOZE_TIME, 0);
-            Log.i(TAG, "Snooze time: "+ snoozeTime);
+            String snoozeTime = "10 mins";
             if (snoozeTime == null) {
                 return;
             }
@@ -93,7 +66,7 @@ public class SnoozeSoundService extends IntentService {
                 int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, uniqueInt, alarmIntent, 0);
                 AlarmManager alarmMgr = (AlarmManager)this.getSystemService(ALARM_SERVICE);
-                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + SNOOZE_TIME_MAP.getOrDefault(snoozeTime, 0), pendingIntent);
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 60 * 1000, pendingIntent);
             }
 
             //Remove all notifications of this sound in the list
@@ -104,7 +77,6 @@ public class SnoozeSoundService extends IntentService {
 
             // Send a message to Phone to indicate this sound is blocked
             sendSnoozeSoundMessageToPhone(soundLabel);
-
 
         }
     }

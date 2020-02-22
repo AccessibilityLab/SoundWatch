@@ -44,16 +44,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".BlockSoundsActivity"
-            android:label="Block Sound Notifications"
-            android:launchMode="singleTask" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <service
             android:name=".DataLayerListenerService" >
             <intent-filter>
