@@ -41,8 +41,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +62,7 @@ import androidx.core.app.RemoteInput;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
-
+    // TODO: It is better to make TEST_E2E_LATENCY is a common variable used in both MainActivity and SoundRecorder
     private static final boolean TEST_E2E_LATENCY = false;
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
     private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
@@ -117,12 +121,24 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 String data = intent.getStringExtra(DataLayerListenerService.AUDIO_LABEL_FROM_PHONE);
                 Log.i(TAG, "Received audio data from phone: " + data);
                 String[] parts = data.split(",");
-                if (parts.length == 4) {
-                    String prediction = parts[0];
-                    String confidence = parts[1];
-                    String time = parts[2];
-                    String db = parts[3];
-                    createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db));
+                // TODO: Ask DJ again, this looks really ugly
+                if (TEST_E2E_LATENCY) {
+                    if (parts.length == 5) {
+                        String prediction = parts[0];
+                        String confidence = parts[1];
+                        String time = parts[2];
+                        String db = parts[3];
+                        String recordTime = parts[4];
+                        createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, recordTime));
+                    }
+                } else {
+                    if (parts.length == 4) {
+                        String prediction = parts[0];
+                        String confidence = parts[1];
+                        String time = parts[2];
+                        String db = parts[3];
+                        createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, null));
+                    }
                 }
             }
         }
@@ -159,15 +175,25 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             String db;
             String audio_label;
             String accuracy;
+            String record_time;
             try {
                 audio_label = data.getString("label");
                 accuracy = data.getString("accuracy");
                 db = data.getString("db");
+                record_time = data.getString("record_time");
             } catch (JSONException e) {
                 return;
             }
             Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy);
-            AudioLabel audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db);
+            AudioLabel audioLabel;
+            if (TEST_E2E_LATENCY) {
+                audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db,
+                        record_time);
+            } else {
+                audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db,
+                        null);
+
+            }
             long test = System.currentTimeMillis();
             if (soundLastTime.containsKey(audio_label)) {
                 if (test <= (soundLastTime.get(audio_label) + 15 * 1000)) { //multiply by 1000 to get milliseconds
@@ -606,11 +632,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         double confidence;
         String time;
         String db;
-        public AudioLabel(String label, String confidence, String time, String db) {
+        String recordTime;
+        public AudioLabel(String label, String confidence, String time, String db, String recordTime) {
             this.label = label;
             this.confidence = Double.parseDouble(confidence);
             this.time = time;
             this.db = db;
+            this.recordTime = recordTime;
         }
     }
 
@@ -675,6 +703,23 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
+        long startTime = 0;
+
+        if(TEST_E2E_LATENCY) {
+            long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            String timeStamp = simpleDateFormat.format(date);
+
+            try {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + ".txt", Context.MODE_APPEND));
+                outputStreamWriter.write("Time: " + timeStamp + " " + "Latency: " +  Long.toString(elapsedTime) + "\n");
+                outputStreamWriter.close();
+            }
+            catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
+            }
+        }
 
     }
 }

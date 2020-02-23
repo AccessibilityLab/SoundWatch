@@ -64,6 +64,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import static com.wearable.sound.MainActivity.AUDIO_LABEL;
+import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
 
 /** Listens to DataItems and Messages from the local node. */
 public class DataLayerListenerService extends WearableListenerService {
@@ -245,6 +246,8 @@ public class DataLayerListenerService extends WearableListenerService {
         double db;
         byte[] dbData;
         byte[] featuresData;
+        byte[] currentTimeData;
+        long recordTime;
         String prediction;
         switch (MainActivity.ARCHITECTURE) {
             case MainActivity.WATCH_ONLY_ARCHITECTURE:
@@ -257,14 +260,17 @@ public class DataLayerListenerService extends WearableListenerService {
                 switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
                     case MainActivity.AUDIO_FEATURES_TRANSMISSION:
                         /** Predict sound with audio features **/
+                        currentTimeData = new byte[Long.BYTES];
                         dbData = new byte[8];
-                        featuresData = new byte[data.length - 8];
-                        System.arraycopy(data, 0, dbData, 0, 8);
-                        System.arraycopy(data, 8, featuresData, 0, featuresData.length);
+                        featuresData = new byte[data.length - 8 - 8];
+                        System.arraycopy(data, 0, currentTimeData, 0, Long.BYTES);
+                        System.arraycopy(data, Long.BYTES, dbData, 0, 8);
+                        System.arraycopy(data, Long.BYTES + 8, featuresData, 0, featuresData.length);
                         db = toDouble(dbData);
-                        Log.i(TAG, "Phone received loudness db: " + db);
+                        recordTime = bytesToLong(currentTimeData);
+                        Log.i(TAG, "Record time received from watch: " + recordTime);
                         features = convertByteArrayToFloatArray(featuresData);
-                        prediction = predictSoundsFromAudioFeatures(features, db);
+                        prediction = predictSoundsFromAudioFeatures(features, db, recordTime);
                         Log.i(TAG, prediction);
                         break;
                     case MainActivity.RAW_AUDIO_TRANSMISSION:
@@ -282,16 +288,7 @@ public class DataLayerListenerService extends WearableListenerService {
                         }
                         break;
                     default:
-                        /** Predict sound with audio features **/
-                        dbData = new byte[8];
-                        featuresData = new byte[data.length - 8];
-                        System.arraycopy(data, 0, dbData, 0, 8);
-                        System.arraycopy(data, 8, featuresData, 0, featuresData.length);
-                        db = toDouble(dbData);
-                        Log.i(TAG, "Phone received loudness db: " + db);
-                        features = convertByteArrayToFloatArray(featuresData);
-                        prediction = predictSoundsFromAudioFeatures(features, db);
-                        Log.i(TAG, prediction);
+                        Log.i(TAG, "Bad architecture");
                         break;
                 }
                 break;
@@ -299,14 +296,18 @@ public class DataLayerListenerService extends WearableListenerService {
                 switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
                     case MainActivity.AUDIO_FEATURES_TRANSMISSION:
                         /** Predict sound with audio features **/
+                        currentTimeData = new byte[Long.BYTES];
                         dbData = new byte[8];
-                        featuresData = new byte[data.length - 8];
-                        System.arraycopy(data, 0, dbData, 0, 8);
-                        System.arraycopy(data, 8, featuresData, 0, featuresData.length);
+                        featuresData = new byte[data.length - 8 - 8];
+                        System.arraycopy(data, 0, currentTimeData, 0, Long.BYTES);
+                        System.arraycopy(data, Long.BYTES, dbData, 0, 8);
+                        System.arraycopy(data, Long.BYTES + 8, featuresData, 0, featuresData.length);
                         db = toDouble(dbData);
-                        Log.i(TAG, "Phone received loudness db: " + db);
+                        recordTime = bytesToLong(currentTimeData);
+                        Log.i(TAG, "Record time received from watch: " + recordTime);
                         features = convertByteArrayToFloatArray(featuresData);
-                        sendSoundFeaturesToServer(features, db);
+                        prediction = predictSoundsFromAudioFeatures(features, db, recordTime);
+                        Log.i(TAG, prediction);
                         break;
                     case MainActivity.RAW_AUDIO_TRANSMISSION:
                         shorts = convertByteArrayToShortArray(data);
@@ -516,7 +517,7 @@ public class DataLayerListenerService extends WearableListenerService {
      *  ---- From features
      * **/
 
-    private String predictSoundsFromAudioFeatures(float[] input1D, double db) {
+    private String predictSoundsFromAudioFeatures(float[] input1D, double db, long recordTime) {
         Log.i(TAG, "Predicting sounds from audio features");
         // Resize to dimensions of model input
         float [][][][] input4D = new float [1][96][64][1];
@@ -533,6 +534,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
         //Run inference
         tfLite.run(input4D, output);
+
 
         if(TEST_MODEL_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - startTime;
@@ -564,7 +566,12 @@ public class DataLayerListenerService extends WearableListenerService {
             //Get label and confidence
             final String prediction = labels.get(argmax);
             final String confidence = String.format("%,.2f", max);
-            new SendAudioLabelToWearTask(prediction, confidence, db).execute();
+
+            if (TEST_E2E_LATENCY) {
+                new SendAudioLabelToWearTask(prediction, confidence, db, recordTime).execute();
+            } else {
+                new SendAudioLabelToWearTask(prediction, confidence, db, null).execute();
+            }
             return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
         }
         return "Unrecognized sound" + "                           " + LocalTime.now();
@@ -634,7 +641,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     //Get label and confidence
                     final String prediction = labels.get(argmax);
                     final String confidence = String.format("%,.2f", max);
-                    new SendAudioLabelToWearTask(prediction, confidence, Math.abs(db(sData))).execute();
+                    new SendAudioLabelToWearTask(prediction, confidence, Math.abs(db(sData)), null).execute();
                     return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
                 }
             }
@@ -650,16 +657,25 @@ public class DataLayerListenerService extends WearableListenerService {
         private String prediction;
         private String confidence;
         private String db;
+        private String recordTime;
 
-        public SendAudioLabelToWearTask(String prediction, String confidence, double db) {
+        public SendAudioLabelToWearTask(String prediction, String confidence, double db, Long recordTime) {
             this.prediction = prediction;
             this.confidence = confidence;
             this.db = Double.toString(db);
+            if (recordTime == null) {
+                this.recordTime = null;
+            }
         }
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
-            String result = prediction + "," + confidence + "," + LocalTime.now() + "," + db;
+            String result;
+            if (TEST_E2E_LATENCY) {
+                result = prediction + "," + confidence + "," + LocalTime.now() + "," + db + "," + recordTime;
+            } else {
+                result = prediction + "," + confidence + "," + LocalTime.now() + "," + db;
+            }
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
@@ -712,6 +728,19 @@ public class DataLayerListenerService extends WearableListenerService {
         } catch (InterruptedException exception) {
             Log.e(TAG, "Interrupt occurred: " + exception);
         }
+    }
+
+    public byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+
+    public long bytesToLong(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();//need flip
+        return buffer.getLong();
     }
 
 }

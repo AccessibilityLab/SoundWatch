@@ -104,6 +104,8 @@ public class MainActivity extends Activity
             CapabilityClient.OnCapabilityChangedListener {
 
     private static final String TAG = "MainActivity";
+
+    public static final boolean TEST_E2E_LATENCY = false;
     /**
      * Sound or sound features send configuration
      */
