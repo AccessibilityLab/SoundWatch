@@ -69,14 +69,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
+import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
+
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
  * and to playback the same recorded audio file.
  */
 public class SoundRecorder {
 
-    private static final boolean TEST_MODEL_LATENCY = false;
-    private static final boolean TEST_E2E_LATENCY = false;
     private static final String TAG = "SoundRecorder";
     private static final int RECORDING_RATE = 16000; // can go up to 44K, if needed
     private static final int CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO;
@@ -276,7 +277,7 @@ public class SoundRecorder {
 
                     try {
                         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(mContext.openFileOutput("watch_model.txt", Context.MODE_APPEND));
-                        outputStreamWriter.write("Time: " + timeStamp + " " + "Latency: " +  Long.toString(elapsedTime) + "\n");
+                        outputStreamWriter.write(timeStamp + "," +  Long.toString(elapsedTime) + "\n");
                         outputStreamWriter.close();
                     }
                     catch (IOException e) {

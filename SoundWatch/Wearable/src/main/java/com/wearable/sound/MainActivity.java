@@ -62,8 +62,8 @@ import androidx.core.app.RemoteInput;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
-    // TODO: It is better to make TEST_E2E_LATENCY is a common variable used in both MainActivity and SoundRecorder
-    private static final boolean TEST_E2E_LATENCY = false;
+    public static final boolean TEST_MODEL_LATENCY = false;
+    public static final boolean TEST_E2E_LATENCY = false;
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
     private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
 
@@ -713,7 +713,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             try {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + ".txt", Context.MODE_APPEND));
-                outputStreamWriter.write("Time: " + timeStamp + " " + "Latency: " +  Long.toString(elapsedTime) + "\n");
+                outputStreamWriter.write(timeStamp + "," +  Long.toString(elapsedTime) + "\n");
                 outputStreamWriter.close();
             }
             catch (IOException e) {

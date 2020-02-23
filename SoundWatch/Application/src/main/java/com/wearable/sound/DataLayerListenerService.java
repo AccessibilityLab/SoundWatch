@@ -65,11 +65,14 @@ import com.github.nkzawa.socketio.client.Socket;
 
 import static com.wearable.sound.MainActivity.AUDIO_LABEL;
 import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
+import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
+
+
 
 /** Listens to DataItems and Messages from the local node. */
 public class DataLayerListenerService extends WearableListenerService {
 
-    private static final boolean TEST_MODEL_LATENCY = false;
+
     private static final String TAG = "Phone/DataLayerService";
 
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
@@ -544,7 +547,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
             try {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("watch_model.txt", Context.MODE_APPEND));
-                outputStreamWriter.write("Time: " + timeStamp + " " + "Latency: " +  Long.toString(elapsedTime) + "\n");
+                outputStreamWriter.write(timeStamp + "," +  Long.toString(elapsedTime) + "\n");
                 outputStreamWriter.close();
             }
             catch (IOException e) {

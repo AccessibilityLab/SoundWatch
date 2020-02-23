@@ -25,8 +25,8 @@ Getting Started
 Tests
 -------
 
-- For Model Latency, enable "TEST_MODEL_LATENCY" in SoundRecorder for Watch and DataLayerListenerService for Phone
-- For E2E Latency, enable "TEST_E2E_LATENCY" in SoundRecorder, MainActivity for Watch and ... for Phone
+- For Model Latency, enable "TEST_MODEL_LATENCY" in MainActivity for both Watch and Phone 
+- For E2E Latency, enable "TEST_E2E_LATENCY" in MainActivity for both Watcha and Phone
 
 Support
 -------
