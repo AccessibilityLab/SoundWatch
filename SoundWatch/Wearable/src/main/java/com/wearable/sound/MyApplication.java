@@ -12,7 +12,9 @@ public class MyApplication extends Application {
             "Speech",
             "Knocking",
             "Microwave",
-            "Vehicle",
+            "Door In-Use",
+            //"Water Running",
+            //"Vehicle",
     }));
 
 //    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {

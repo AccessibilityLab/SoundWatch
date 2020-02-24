@@ -455,7 +455,7 @@ public class SoundRecorder {
 
         private void processAudioRecognition(List<Short> soundBuffer, byte[] buffer) {
             long recordTime = System.currentTimeMillis();
-            Log.i(TAG, "Record time from watch is: " + recordTime);
+            //Log.i(TAG, "Record time from watch is: " + recordTime);
             switch (MainActivity.ARCHITECTURE) {
                 case MainActivity.WATCH_ONLY_ARCHITECTURE:
                     predictSoundsFromRawAudio(soundBuffer, recordTime);
@@ -556,7 +556,7 @@ public class SoundRecorder {
                 }
 
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
-                    Log.d(TAG, "Sending audio data to phone");
+                    //Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data);
@@ -576,14 +576,14 @@ public class SoundRecorder {
                 System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
                 System.arraycopy(buffer, 0, data, currentTimeData.length, buffer.length);
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
-                    Log.d(TAG, "Sending audio data to phone");
+                    //Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data);
                 }
             } else {
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
-                    Log.d(TAG, "Sending audio data to phone");
+                    //Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, buffer);

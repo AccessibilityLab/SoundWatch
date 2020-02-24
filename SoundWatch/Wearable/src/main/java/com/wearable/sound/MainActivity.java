@@ -71,7 +71,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String NORMAL_MODE = "NORMAL_MODE";
     public static final String LOW_ACCURACY_FAST_MODE = "LOW_ACCURACY_FAST_MODE";
     public static final String HIGH_ACCURACY_SLOW_MODE = "HIGH_ACCURACY_SLOW_MODE";
-    public static final String MODE = LOW_ACCURACY_FAST_MODE;
+    public static final String MODE = HIGH_ACCURACY_SLOW_MODE;
 
 
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
@@ -646,13 +646,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     public void createAudioLabelNotification(AudioLabel audioLabel) {
 
-
+        /* J AREA */
         switch (MODE) {
             case NORMAL_MODE:
                 break;
             case HIGH_ACCURACY_SLOW_MODE:
                 try {
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.SECONDS.sleep(6);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -661,7 +661,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 int number_of_labels = ((MyApplication) getApplicationContext()).enabledSounds.size();
                 // Generate random label
                 double probToGiveCorrectOutput = Math.random();
-                if (probToGiveCorrectOutput > 0.5) {
+                if (probToGiveCorrectOutput < 0.4) {
                     // Correct output
                     break;
                 } else {
@@ -671,19 +671,34 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                     break;
                 }
         }
-        // Unique notification for each kind of sound
-        final int NOTIFICATION_ID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
 
-        //ALl notifications are separate
+        Log.i(TAG, "Sound on watch: " + audioLabel.label + "d");
+
+        /* J AREA ENDS */
+
+        // One notification id for the app
+        final int NOTIFICATION_ID = 7234231;
+        // Unique notification for each kind of sound
+        //final int NOTIFICATION_ID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
+        // Unique notification for all sounds
         // final int NOTIFICATION_ID = (int) (System.currentTimeMillis() & 0xfffffff);
 
-        // Disable same sound for 10 seconds
-        if (soundLastTime.containsKey(audioLabel.label)) {
-            if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
-                Log.i(TAG, "Same sound appear in less than 5 seconds");
-                return; // stop sending noti if less than 10 seconds
+        // Disable same sound for 5 seconds
+
+        if (MODE == HIGH_ACCURACY_SLOW_MODE)
+            if (soundLastTime.containsKey(audioLabel.label)) {
+                if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 12 * 1000)) { //multiply by 1000 to get milliseconds
+                    Log.i(TAG, "Same sound appear in less than 5 seconds");
+                    return; // stop sending noti if less than 10 seconds
+                }
             }
-        }
+        else
+            if (soundLastTime.containsKey(audioLabel.label)) {
+                if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
+                    Log.i(TAG, "Same sound appear in less than 5 seconds");
+                    return; // stop sending noti if less than 10 seconds
+                }
+            }
         soundLastTime.put(audioLabel.label, System.currentTimeMillis());
 
         //If it's blocked or app in foreground (to not irritate user), return
