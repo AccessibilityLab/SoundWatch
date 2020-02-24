@@ -69,8 +69,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static com.wearable.sound.DataLayerListenerService.AUDIO_LABEL;
+import static com.wearable.sound.MainActivity.AUDIO_FEATURES_TRANSMISSION;
+import static com.wearable.sound.MainActivity.AUDIO_TRANMISSION_STYLE;
+import static com.wearable.sound.MainActivity.RAW_AUDIO_TRANSMISSION;
 import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
 import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
+import static com.wearable.sound.MainActivity.MODEL_FILENAME;
+import static com.wearable.sound.MainActivity.LABEL_FILENAME;
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
@@ -99,8 +105,7 @@ public class SoundRecorder {
     private final String mOutputFileName;
     private List<String> labels = new ArrayList<String>();
     private Interpreter tfLite;
-    private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
-    private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
+
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final float PREDICTION_THRES = 0.5F;
     private static final String CHANNEL_ID = "SOUNDWATCH";
@@ -111,6 +116,7 @@ public class SoundRecorder {
     private AsyncTask<Void, Void, Void> mPlayingAsyncTask;
 
     private Set<String> connectedHostIds;
+    private int ONE_SECOND_SOUND_COUNTER = 0;
 
     protected Python py;
     PyObject pythonModule;
@@ -216,7 +222,7 @@ public class SoundRecorder {
         return 20 * Math.log10(rms/32768.0);
     }
 
-    private String predictSoundsFromRawAudio(List<Short> soundBuffer) {
+    private String predictSoundsFromRawAudio(List<Short> soundBuffer, long recordTime) {
         if (soundBuffer.size() != 16000) {
             soundBuffer = new ArrayList<>();
             return "Invalid audio size";
@@ -299,7 +305,18 @@ public class SoundRecorder {
                     //Get label and confidence
                     final String prediction = labels.get(argmax);
                     final String confidence = String.format("%,.2f", max);
-                    createAudioLabelNotification(new AudioLabel(prediction, confidence, java.time.LocalTime.now().toString(), Double.toString(db(sData))));
+                    // Send prediction back to MainActivity
+
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(MainActivity.mBroadcastSoundPrediction);
+                    if (TEST_E2E_LATENCY) {
+                        String data = prediction + "," + confidence + "," + LocalTime.now() + "," + db(sData) + "," + recordTime;
+                        broadcastIntent.putExtra(AUDIO_LABEL, data);
+                    } else {
+                        String data = prediction + "," + confidence + "," + LocalTime.now() + "," + db(sData);
+                        broadcastIntent.putExtra(AUDIO_LABEL, data);
+                    }
+                    mContext.sendBroadcast(broadcastIntent);
                     return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
                 }
             }
@@ -308,8 +325,7 @@ public class SoundRecorder {
             return "Something went wrong parsing to MFCC feature";
         }
         Log.i(TAG, "Sending Mocked Sound");
-        createAudioLabelNotification(new AudioLabel("Speech", "0.9", java.time.LocalTime.now().toString(), Double.toString(db(sData))));
-//        Log.i(TAG, "Unrecognized Sound");
+        //        Log.i(TAG, "Unrecognized Sound");
         return "Unrecognized sound" + "                           " + LocalTime.now();
     }
 
@@ -404,21 +420,12 @@ public class SoundRecorder {
                 while (!isCancelled()) {
                     int read = mAudioRecord.read(buffer, 0, buffer.length);
                     short[] shorts = convertByteArrayToShortArray(buffer);
-                    if (soundRecorder.soundBuffer.size() == 16000) {
-                        final List<Short> tempBuffer = soundRecorder.soundBuffer;
-//                        processAudioRecognition(tempBuffer, buffer);
-
-                        soundRecorder.soundBuffer = new ArrayList<>();
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                processAudioRecognition(tempBuffer, buffer);
-
-                            }
-                        }.start();
-
+                    if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION)) {
+                        // For raw audio tranmission, we need to send the buffer all the time
+                        // Not waiting for the short buffer to build up
+                        processAudioRecognition(null, buffer);
                     }
-                    if (soundRecorder.soundBuffer.size() < 16000) {
+                    if (soundRecorder.soundBuffer.size() <= 16000) {
                         for (short num : shorts) {
                             if (soundRecorder.soundBuffer.size() == 16000) {
                                 final List<Short> tempBuffer = soundRecorder.soundBuffer;
@@ -447,33 +454,35 @@ public class SoundRecorder {
         }
 
         private void processAudioRecognition(List<Short> soundBuffer, byte[] buffer) {
+            long recordTime = System.currentTimeMillis();
+            Log.i(TAG, "Record time from watch is: " + recordTime);
             switch (MainActivity.ARCHITECTURE) {
                 case MainActivity.WATCH_ONLY_ARCHITECTURE:
-                    predictSoundsFromRawAudio(soundBuffer);
+                    predictSoundsFromRawAudio(soundBuffer, recordTime);
                     break;
                 case MainActivity.WATCH_SERVER_ARCHITECTURE:
                     switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
                         case MainActivity.AUDIO_FEATURES_TRANSMISSION:
-                            sendSoundFeaturesToServer(soundBuffer);
+                            sendSoundFeaturesToServer(soundBuffer, recordTime);
                             break;
                         case MainActivity.RAW_AUDIO_TRANSMISSION:
-                            sendRawAudioToServer(soundBuffer);
+                            sendRawAudioToServer(soundBuffer, recordTime);
                             break;
                         default:
-                            sendSoundFeaturesToServer(soundBuffer);
+                            Log.i(TAG, "Invalid architecture");
                             break;
                     }
                     break;
                 case MainActivity.PHONE_WATCH_ARCHITECTURE:
                     switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
                         case MainActivity.AUDIO_FEATURES_TRANSMISSION:
-                            sendSoundFeaturesToPhone(soundBuffer);
+                            sendSoundFeaturesToPhone(soundBuffer, recordTime);
                             break;
                         case MainActivity.RAW_AUDIO_TRANSMISSION:
-                            sendRawAudioToPhone(buffer);
+                            sendRawAudioToPhone(buffer, recordTime);
                             break;
                         default:
-                            sendSoundFeaturesToServer(soundBuffer);
+                            Log.i(TAG, "Invalid tranmission style");
                             break;
                     }
                     break;
@@ -484,13 +493,13 @@ public class SoundRecorder {
                      */
                     switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
                         case MainActivity.AUDIO_FEATURES_TRANSMISSION:
-                            sendSoundFeaturesToPhone(soundBuffer);
+                            sendSoundFeaturesToPhone(soundBuffer, recordTime);
                             break;
                         case MainActivity.RAW_AUDIO_TRANSMISSION:
-                            sendRawAudioToPhone(buffer);
+                            sendRawAudioToPhone(buffer, recordTime);
                             break;
                         default:
-                            sendSoundFeaturesToServer(soundBuffer);
+                            Log.i(TAG, "Invalid tranmission style");
                             break;
                     }
                     break;
@@ -500,15 +509,15 @@ public class SoundRecorder {
             }
         }
 
-        private String predictSoundsFromRawAudio(List<Short> soundBuffer) {
+        private String predictSoundsFromRawAudio(List<Short> soundBuffer, long recordTime) {
             if (soundBuffer.size() != 16000) {
                 return "Invalid audio size";
             }
             SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
-            return soundRecorder.predictSoundsFromRawAudio(soundBuffer);
+            return soundRecorder.predictSoundsFromRawAudio(soundBuffer, recordTime);
         }
 
-        private void sendSoundFeaturesToPhone(List<Short> soundBuffer) {
+        private void sendSoundFeaturesToPhone(List<Short> soundBuffer, long recordTime) {
             try {
                 JSONObject jsonObject = new JSONObject();
                 SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
@@ -534,7 +543,7 @@ public class SoundRecorder {
                 byte [] data = null;
 
                 if(TEST_E2E_LATENCY) {
-                    byte [] currentTimeData = soundRecorder.longToBytes(System.currentTimeMillis());
+                    byte [] currentTimeData = soundRecorder.longToBytes(recordTime);
                     data = new byte[currentTimeData.length + dbData.length + featuresData.length];
                     System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
                     System.arraycopy(dbData, 0, data, currentTimeData.length, dbData.length);
@@ -559,17 +568,30 @@ public class SoundRecorder {
 
 
 
-        private void sendRawAudioToPhone(byte[] buffer) {
+        private void sendRawAudioToPhone(byte[] buffer, long recordTime) {
             SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
-            for (String connectedHostId: soundRecorder.connectedHostIds) {
+            if (TEST_E2E_LATENCY) {
+                byte[] currentTimeData = soundRecorder.longToBytes(recordTime);
+                byte[] data = new byte[currentTimeData.length + buffer.length];
+                System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
+                System.arraycopy(buffer, 0, data, currentTimeData.length, buffer.length);
+                for (String connectedHostId : soundRecorder.connectedHostIds) {
+                    Log.d(TAG, "Sending audio data to phone");
+                    Task<Integer> sendMessageTask =
+                            Wearable.getMessageClient(soundRecorder.mContext)
+                                    .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data);
+                }
+            } else {
+                for (String connectedHostId : soundRecorder.connectedHostIds) {
                     Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, buffer);
+                }
             }
         }
 
-        private void sendSoundFeaturesToServer(List<Short> soundBuffer) {
+        private void sendSoundFeaturesToServer(List<Short> soundBuffer, long recordTime) {
             try {
                 JSONObject jsonObject = new JSONObject();
                 SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
@@ -582,7 +604,7 @@ public class SoundRecorder {
                 jsonObject.put("db", Math.abs(db(soundBuffer)));
 
                 if(TEST_E2E_LATENCY)
-                    jsonObject.put("record_time", Long.toString(System.currentTimeMillis()));
+                    jsonObject.put("record_time", Long.toString(recordTime));
 
                 Log.i(TAG, "Data sent to server: "  + features.length);
                 MainActivity.mSocket.emit("audio_feature_data", jsonObject);
@@ -593,10 +615,13 @@ public class SoundRecorder {
             }
         }
 
-        private void sendRawAudioToServer(List<Short> soundBuffer) {
+        private void sendRawAudioToServer(List<Short> soundBuffer, long recordTime) {
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("data", new JSONArray(soundBuffer));
+                if (TEST_E2E_LATENCY) {
+                    jsonObject.put("record_time", recordTime);
+                }
                 MainActivity.mSocket.emit("audio_data", jsonObject);
                 Log.i(TAG, "Successfully send audio data from background");
             } catch (JSONException e) {
@@ -636,37 +661,6 @@ public class SoundRecorder {
         }
     }
 
-    public class AudioLabel {
-        String label;
-        double confidence;
-        String time;
-        String db;
-        public AudioLabel(String label, String confidence, String time, String db) {
-            this.label = label;
-            this.confidence = Double.parseDouble(confidence);
-            this.time = time;
-            this.db = db;
-        }
-    }
-
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID, importance);
-            channel.setDescription(CHANNEL_ID);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
-            channel.enableVibration(true);
-            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-//            channel.setVibrationPattern(new long[]{2000});
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
     private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
         StringBuilder result = new StringBuilder();
         for (String connectedHostId: connectedHostIds) {
@@ -679,114 +673,6 @@ public class SoundRecorder {
         return result.toString();
     }
 
-    public void createAudioLabelNotification(AudioLabel audioLabel) {
-
-        final int NOTIFICATION_ID = ((MyApplication) mContext.getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
-
-        //If it's blocked or app in foreground (to not irritate user), return
-        if ((((MyApplication) mContext.getApplicationContext()).getBlockedSounds()).contains(NOTIFICATION_ID)
-                || !(((MyApplication) mContext.getApplicationContext()).enabledSounds.contains(audioLabel.label))
-                || (((MyApplication) mContext.getApplicationContext()).isAppInForeground()))
-            return;
-
-        Log.d(TAG, "generateBigTextStyleNotification()");
-        if (!MainActivity.notificationChannelIsCreated) {
-            createNotificationChannel();
-            MainActivity.notificationChannelIsCreated = true;
-        }
-
-        Intent intent = new Intent(mContext, MainActivity.class);       //Just go the MainActivity for now. Replace with other activity if you want more actions.
-        String[] dataPassed = {audioLabel.label, Double.toString(audioLabel.confidence), audioLabel.time};         //Adding data to be passed back to the main activity
-        intent.putExtra("audio_label", dataPassed);
-        intent.setAction(Long.toString(System.currentTimeMillis()));
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Create the RemoteInput.
-        RemoteInput remoteInput =
-                new RemoteInput.Builder(SnoozeSoundService.SNOOZE_TIME)
-                        .setLabel(SNOOZE_TIME_LABEL)
-                        // List of quick response choices for any wearables paired with the phone.
-                        .setChoices(SNOOZE_CHOICES)
-                        .build();
-
-        Intent snoozeIntent = new Intent(mContext, SnoozeSoundService.class);
-        snoozeIntent.putExtra(SnoozeSoundService.SOUND_ID, NOTIFICATION_ID);
-        snoozeIntent.putExtra(SnoozeSoundService.SOUND_LABEL, audioLabel.label);
-        snoozeIntent.putExtra(SnoozeSoundService.CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
-        snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
-
-
-        Log.i(TAG, "Main pass sound id to block " + NOTIFICATION_ID);
-//        snoozeIntent.putExtra(SnoozeSoundService.SOUND_ID, Integer.toString(NOTIFICATION_ID));
-        PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(mContext, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
-
-        // Enable action to appear inline on Wear 2.0 (24+). This means it will appear over the
-        // lower portion of the Notification for easy action (only possible for one action).
-        final NotificationCompat.Action.WearableExtender inlineActionForWear2 =
-                new NotificationCompat.Action.WearableExtender()
-                        .setHintDisplayActionInline(true)
-                        .setHintLaunchesActivity(false);
-
-        String db = audioLabel.db;
-        if (db.contains("\\.")) {
-            String[] parts = db.split("\\.");
-            db = parts[0];
-        } else {
-            db = db.substring(0, 2);
-        }
-
-        NotificationCompat.Action snoozeAction =
-                new NotificationCompat.Action.Builder(
-                        R.drawable.ic_full_cancel,
-                        SNOOZE_LABEL,
-                        snoozeSoundPendingIntent)
-                        .addRemoteInput(remoteInput)
-                        // Informs system we aren't bringing up our own custom UI for a reply
-                        // action.
-                        .setShowsUserInterface(false)
-                        // Allows system to generate replies by context of conversation.
-                        .setAllowGeneratedReplies(true)
-                        // Add WearableExtender to enable inline actions.
-//                        .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
-//                        .extend(inlineActionForWear2)
-                        .build();
-
-        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(mContext.getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
-                .setContentText("(" + db + " dB)")
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("")
-//                        .bigText(audioLabel.label+ ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
-//                        .setBigContentTitle("Nearby Sound")
-                        .setSummaryText(""))
-                .setAutoCancel(true) //Remove notification from the list after the user has tapped it
-                .setContentIntent(pendingIntent)
-                .addAction(R.drawable.ic_full_cancel,
-                        "10 min", snoozeSoundPendingIntent);
-
-        /** Set Choices for Snooze **/
-//                .addAction(snoozeAction)
-////                .setCategory(Notification.CATEGORY_SOCIAL)
-//
-//                .extend(new NotificationCompat.WearableExtender()
-//                        .setHintContentIntentLaunchesActivity(true));
-        ;
-        //.setOnlyAlertOnce(true);     //Only notify once (see notification ID below)
-        //.addAction(snoozeAction)
-        //.addAction(dismissAction);
-
-        //JUGAAD: NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
-        Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
-        notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
-    }
 
     // For Latency Tests
     public byte[] longToBytes(long x) {

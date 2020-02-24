@@ -113,7 +113,7 @@ public class MainActivity extends Activity
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -383,16 +383,18 @@ public class MainActivity extends Activity
             String db;
             String audio_label;
             String accuracy;
+            String recordTime;
             try {
                 audio_label = data.getString("label");
                 accuracy = data.getString("accuracy");
                 db = data.getString("db");
+                recordTime = data.getString("record_time");
             } catch (JSONException e) {
                 Log.i(TAG, "JSON Exception failed: " + data.toString());
                 return;
             }
-            Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db);
-            new SendAudioLabelToWearTask(audio_label, accuracy, db).execute();
+            Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db + "," + recordTime);
+            new SendAudioLabelToWearTask(audio_label, accuracy, db, recordTime).execute();
         }
     };
 
@@ -518,7 +520,6 @@ public class MainActivity extends Activity
         return 20 * Math.log10(rms/32768.0);
     }
 
-    //TODO: Take a look at this on how to predict sounds
     private short[] convertByteArrayToShortArray(byte[] bytes) {
         short[] result = new short[bytes.length / 2];
         ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(result);
@@ -587,7 +588,7 @@ public class MainActivity extends Activity
                     //Get label and confidence
                     final String prediction = labels.get(argmax);
                     final String confidence = String.format("%,.2f", max);
-                    new SendAudioLabelToWearTask(prediction, confidence, Double.toString(db(sData))).execute();
+                    new SendAudioLabelToWearTask(prediction, confidence, Double.toString(db(sData)), null).execute();
                     return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
                 }
             }
@@ -601,19 +602,6 @@ public class MainActivity extends Activity
     public void onResume() {
         super.onResume();
         registerReceiver(mReceiver, mIntentFilter);
-//        mDataItemGeneratorFuture =
-//                mGeneratorExecutor.scheduleWithFixedDelay(
-//                        new DataItemGenerator(), 1, 5, TimeUnit.SECONDS);
-//
-//        mStartActivityBtn.setEnabled(true);
-//        mSendPhotoBtn.setEnabled(mCameraSupported);
-
-        // Instantiates clients without member variables, as clients are inexpensive to create and
-        // won't lose their listeners. (They are cached and shared between GoogleApi instances.)
-//        Wearable.getDataClient(this).addListener(this);
-//        Wearable.getMessageClient(this).addListener(this);
-//        Wearable.getCapabilityClient(this)
-//                .addListener(this, Uri.parse("wear://"), CapabilityClient.FILTER_REACHABLE);
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -707,11 +695,6 @@ public class MainActivity extends Activity
         @Override
     public void onPause() {
         super.onPause();
-//        mDataItemGeneratorFuture.cancel(true /* mayInterruptIfRunning */);
-//
-//        Wearable.getDataClient(this).removeListener(this);
-//        Wearable.getMessageClient(this).removeListener(this);
-//        Wearable.getCapabilityClient(this).removeListener(this);
     }
 
     @Override
@@ -939,16 +922,18 @@ public class MainActivity extends Activity
         private String prediction;
         private String confidence;
         private String db;
+        private String recordTime;
 
-        public SendAudioLabelToWearTask(String prediction, String confidence, String db) {
+        public SendAudioLabelToWearTask(String prediction, String confidence, String db, String recordTime) {
             this.prediction = prediction;
             this.confidence = confidence;
-            this.db = db; // TODO: Fix this hard code number
+            this.recordTime = recordTime;
+            this.db = db;
         }
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
-            String result = prediction + "," + confidence + "," + LocalTime.now() + "," + db;
+            String result = prediction + "," + confidence + "," + LocalTime.now() + "," + db + "," + recordTime;
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());

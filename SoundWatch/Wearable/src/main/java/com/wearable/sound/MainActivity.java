@@ -36,10 +36,8 @@ import com.google.android.gms.wearable.Wearable;
 
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -51,19 +49,31 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.app.RemoteInput;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
+    public static final String MODEL_1 = "file:///android_asset/example_model.tflite";
+    public static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
+
+    public static final String MODEL_FILENAME = MODEL_1;
     public static final boolean TEST_MODEL_LATENCY = false;
     public static final boolean TEST_E2E_LATENCY = false;
+
+    public static final String NORMAL_MODE = "NORMAL_MODE";
+    public static final String LOW_ACCURACY_FAST_MODE = "LOW_ACCURACY_FAST_MODE";
+    public static final String HIGH_ACCURACY_SLOW_MODE = "HIGH_ACCURACY_SLOW_MODE";
+    public static final String MODE = LOW_ACCURACY_FAST_MODE;
+
+
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
     private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
 
@@ -72,7 +82,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -118,10 +128,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(mBroadcastSoundPrediction)) {
-                String data = intent.getStringExtra(DataLayerListenerService.AUDIO_LABEL_FROM_PHONE);
+                String data = intent.getStringExtra(DataLayerListenerService.AUDIO_LABEL);
                 Log.i(TAG, "Received audio data from phone: " + data);
                 String[] parts = data.split(",");
-                // TODO: Ask DJ again, this looks really ugly
                 if (TEST_E2E_LATENCY) {
                     if (parts.length == 5) {
                         String prediction = parts[0];
@@ -194,14 +203,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         null);
 
             }
-            long test = System.currentTimeMillis();
-            if (soundLastTime.containsKey(audio_label)) {
-                if (test <= (soundLastTime.get(audio_label) + 15 * 1000)) { //multiply by 1000 to get milliseconds
-                    Log.i(TAG, "Same sound appear in less than 15 seconds");
-                    return; // stop sending noti if less than 10 seconds
-                }
-            }
-            soundLastTime.put(audio_label, test);
+
             createAudioLabelNotification(audioLabel);
         }
     };
@@ -644,7 +646,45 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     public void createAudioLabelNotification(AudioLabel audioLabel) {
 
+
+        switch (MODE) {
+            case NORMAL_MODE:
+                break;
+            case HIGH_ACCURACY_SLOW_MODE:
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case LOW_ACCURACY_FAST_MODE:
+                int number_of_labels = ((MyApplication) getApplicationContext()).enabledSounds.size();
+                // Generate random label
+                double probToGiveCorrectOutput = Math.random();
+                if (probToGiveCorrectOutput > 0.5) {
+                    // Correct output
+                    break;
+                } else {
+                    // Random label
+                    int labelIndex = new Random().nextInt(number_of_labels);
+                    audioLabel.label = ((MyApplication) getApplicationContext()).enabledSounds.get(labelIndex);
+                    break;
+                }
+        }
+        // Unique notification for each kind of sound
         final int NOTIFICATION_ID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
+
+        //ALl notifications are separate
+        // final int NOTIFICATION_ID = (int) (System.currentTimeMillis() & 0xfffffff);
+
+        // Disable same sound for 10 seconds
+        if (soundLastTime.containsKey(audioLabel.label)) {
+            if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
+                Log.i(TAG, "Same sound appear in less than 5 seconds");
+                return; // stop sending noti if less than 10 seconds
+            }
+        }
+        soundLastTime.put(audioLabel.label, System.currentTimeMillis());
 
         //If it's blocked or app in foreground (to not irritate user), return
         if ((((MyApplication) this.getApplication()).getBlockedSounds()).contains(NOTIFICATION_ID)
@@ -703,9 +743,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
-        long startTime = 0;
 
         if(TEST_E2E_LATENCY) {
+            Log.i(TAG, "Record time received back to watch is: " + audioLabel.recordTime);
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
             Date date = new Date(System.currentTimeMillis());

@@ -40,7 +40,7 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     public static final String COUNT_PATH = "/count";
-    public static final String AUDIO_LABEL_FROM_PHONE = "AUDIO_LABEL_FROM_PHONE";
+    public static final String AUDIO_LABEL = "AUDIO_LABEL";
 
     @Override
     public void onPeerConnected(Node node) {
@@ -113,7 +113,7 @@ public class DataLayerListenerService extends WearableListenerService {
             Log.i(TAG, "Sending label broadcast to MainActivity");
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MainActivity.mBroadcastSoundPrediction);
-            broadcastIntent.putExtra(AUDIO_LABEL_FROM_PHONE, new String(messageEvent.getData()));
+            broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
             sendBroadcast(broadcastIntent);
 //            createAudioLabelNotification(audioLabel);
         } else if (messageEvent.getPath().equals(SOUND_ENABLE_FROM_PHONE_PATH)) {
