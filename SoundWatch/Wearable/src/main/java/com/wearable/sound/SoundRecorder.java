@@ -344,6 +344,7 @@ public class SoundRecorder {
         if (soundBuffer.size() != 16000) {
             // Sanity check, because sound has to be exactly 16000 elements
             soundBuffer = new ArrayList<>();
+            Log.i(TAG, "Empty sound buffer to extract features");
             return null;
         }
         short[] sData = new short[16000];
@@ -369,18 +370,21 @@ public class SoundRecorder {
                 //Parse features into a float array
                 String inputString = mfccFeatures.toString();
                 if (inputString.isEmpty()) {
+                    Log.i(TAG, "Empty features from Python");
                     return null;
                 }
                 inputString = inputString.replace("jarray('F')([", "").replace("])", "");
                 String[] inputStringArr = inputString.split(", ");
                 for (int i = 0; i < 6144; i++) {
                     if (inputStringArr[i].isEmpty()) {
+                        Log.i(TAG, "Empty feature element from Python");
                         return null;
                     }
                     input1D[i] = Float.parseFloat(inputStringArr[i]);
                 }
                 return input1D;
             }
+            Log.i(TAG, "Null features because db is not enough" + db(sData));
             return null;
         } catch (PyException e) {
             Log.i(TAG, "Something went wrong parsing to MFCC feature");
@@ -403,6 +407,7 @@ public class SoundRecorder {
                 soundRecorder.mState = State.RECORDING;
             }
         }
+
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -593,15 +598,18 @@ public class SoundRecorder {
 
         private void sendSoundFeaturesToServer(List<Short> soundBuffer, long recordTime) {
             try {
+                Log.i(TAG, "sendSoundFeaturesToServer()");
                 JSONObject jsonObject = new JSONObject();
                 SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
 
                 float[] features = soundRecorder.extractAudioFeatures(soundBuffer);
                 if (features == null) {
+                    Log.i(TAG, "Received Null Features");
                     return;
                 }
                 jsonObject.put("data", new JSONArray(features));
                 jsonObject.put("db", Math.abs(db(soundBuffer)));
+                jsonObject.put("time", "" + System.currentTimeMillis());
 
                 if(TEST_E2E_LATENCY)
                     jsonObject.put("record_time", Long.toString(recordTime));
@@ -623,7 +631,6 @@ public class SoundRecorder {
                     jsonObject.put("record_time", recordTime);
                 }
                 MainActivity.mSocket.emit("audio_data", jsonObject);
-                Log.i(TAG, "Successfully send audio data from background");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

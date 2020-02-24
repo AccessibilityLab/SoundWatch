@@ -113,7 +113,7 @@ public class MainActivity extends Activity
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -122,7 +122,7 @@ public class MainActivity extends Activity
     public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
     public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
-    public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
+    public static final String ARCHITECTURE = PHONE_WATCH_SERVER_ARCHITECTURE;
 
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -383,17 +383,19 @@ public class MainActivity extends Activity
             String db;
             String audio_label;
             String accuracy;
-            String recordTime;
+            String recordTime = "";
             try {
                 audio_label = data.getString("label");
                 accuracy = data.getString("accuracy");
                 db = data.getString("db");
-                recordTime = data.getString("record_time");
+                if (TEST_E2E_LATENCY) {
+                    recordTime = data.getString("record_time");
+                }
             } catch (JSONException e) {
                 Log.i(TAG, "JSON Exception failed: " + data.toString());
                 return;
             }
-            Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db + "," + recordTime);
+            Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db);
             new SendAudioLabelToWearTask(audio_label, accuracy, db, recordTime).execute();
         }
     };

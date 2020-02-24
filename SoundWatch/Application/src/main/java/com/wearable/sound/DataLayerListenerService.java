@@ -368,12 +368,12 @@ public class DataLayerListenerService extends WearableListenerService {
                             Log.i(TAG, "Record time received from watch: " + recordTime);
                             shorts = convertByteArrayToShortArray(data);
                             if (soundBuffer.size() == 16000) {
-                                sendRawAudioToServer(soundBuffer);
+                                sendRawAudioToServer();
                             }
                             if (soundBuffer.size() < 16000) {
                                 for (short num : shorts) {
                                     if (soundBuffer.size() == 16000) {
-                                        sendRawAudioToServer(soundBuffer);
+                                        sendRawAudioToServer();
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -381,12 +381,12 @@ public class DataLayerListenerService extends WearableListenerService {
                         } else {
                             shorts = convertByteArrayToShortArray(data);
                             if (soundBuffer.size() == 16000) {
-                                sendRawAudioToServer(soundBuffer);
+                                sendRawAudioToServer();
                             }
                             if (soundBuffer.size() < 16000) {
                                 for (short num : shorts) {
                                     if (soundBuffer.size() == 16000) {
-                                        sendRawAudioToServer(soundBuffer);
+                                        sendRawAudioToServer();
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -461,6 +461,7 @@ public class DataLayerListenerService extends WearableListenerService {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("data", new JSONArray(features));
             jsonObject.put("db", Math.abs(db));
+            jsonObject.put("time", "" + System.currentTimeMillis());
             if (TEST_E2E_LATENCY) {
                 jsonObject.put("record_time", Long.toString(recordTime));
             }
@@ -472,15 +473,17 @@ public class DataLayerListenerService extends WearableListenerService {
         }
     }
 
-    private void sendRawAudioToServer(List<Short> soundBuffer) {
+    private void sendRawAudioToServer() {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("data", new JSONArray(soundBuffer));
+            soundBuffer = new ArrayList<>();
             if (TEST_E2E_LATENCY) {
                 jsonObject.put("data", recordTime);
             }
+            Log.i(TAG, "Send raw audio to server");
+            Log.i(TAG, "Connected: " + MainActivity.mSocket.connected());
             MainActivity.mSocket.emit("audio_data", jsonObject);
-            Log.i(TAG, "Successfully send audio data from background");
         } catch (JSONException e) {
             e.printStackTrace();
         }

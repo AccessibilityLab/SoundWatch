@@ -71,7 +71,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String NORMAL_MODE = "NORMAL_MODE";
     public static final String LOW_ACCURACY_FAST_MODE = "LOW_ACCURACY_FAST_MODE";
     public static final String HIGH_ACCURACY_SLOW_MODE = "HIGH_ACCURACY_SLOW_MODE";
-    public static final String MODE = HIGH_ACCURACY_SLOW_MODE;
+    public static final String MODE = NORMAL_MODE;
 
 
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
@@ -82,7 +82,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -184,12 +184,14 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             String db;
             String audio_label;
             String accuracy;
-            String record_time;
+            String record_time = "";
             try {
                 audio_label = data.getString("label");
                 accuracy = data.getString("accuracy");
                 db = data.getString("db");
-                record_time = data.getString("record_time");
+                if (TEST_E2E_LATENCY) {
+                    record_time = data.getString("record_time");
+                }
             } catch (JSONException e) {
                 return;
             }
@@ -728,14 +730,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
+        String db = Integer.toString(Math.abs((int) Double.parseDouble(audioLabel.db)));
 
-        String db = audioLabel.db;
-        if (db.contains("\\.")) {
-            String[] parts = db.split("\\.");
-            db = parts[0];
-        } else {
-            db = db.substring(0, 2);
-        }
+//        String db = audioLabel.db;
+//        if (db.contains("\\.")) {
+//            String[] parts = db.split("\\.");
+//            db = parts[0];
+//        } else {
+//            db = db.substring(0, 2);
+//        }
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
