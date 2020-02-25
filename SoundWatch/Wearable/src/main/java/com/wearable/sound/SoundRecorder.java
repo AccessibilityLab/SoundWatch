@@ -460,7 +460,7 @@ public class SoundRecorder {
 
         private void processAudioRecognition(List<Short> soundBuffer, byte[] buffer) {
             long recordTime = System.currentTimeMillis();
-            //Log.i(TAG, "Record time from watch is: " + recordTime);
+//            Log.i(TAG, "Record time from watch is: " + recordTime);
             switch (MainActivity.ARCHITECTURE) {
                 case MainActivity.WATCH_ONLY_ARCHITECTURE:
                     predictSoundsFromRawAudio(soundBuffer, recordTime);
@@ -549,6 +549,7 @@ public class SoundRecorder {
 
                 if(TEST_E2E_LATENCY) {
                     byte [] currentTimeData = soundRecorder.longToBytes(recordTime);
+                    Log.i(TAG, "Current time sent from watch: " + recordTime);
                     data = new byte[currentTimeData.length + dbData.length + featuresData.length];
                     System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
                     System.arraycopy(dbData, 0, data, currentTimeData.length, dbData.length);
@@ -580,6 +581,9 @@ public class SoundRecorder {
                 byte[] data = new byte[currentTimeData.length + buffer.length];
                 System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
                 System.arraycopy(buffer, 0, data, currentTimeData.length, buffer.length);
+//                Log.i(TAG, "Amount of raw audio sent " + data.length);
+//                Log.i(TAG, "Elapsed time from recording to before sending data to watch: " +
+//                        (System.currentTimeMillis() - recordTime));
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
                     //Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =

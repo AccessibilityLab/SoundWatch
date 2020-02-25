@@ -71,10 +71,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String NORMAL_MODE = "NORMAL_MODE";
     public static final String LOW_ACCURACY_FAST_MODE = "LOW_ACCURACY_FAST_MODE";
     public static final String HIGH_ACCURACY_SLOW_MODE = "HIGH_ACCURACY_SLOW_MODE";
-    public static final String MODE = NORMAL_MODE;
+    public static final String MODE = LOW_ACCURACY_FAST_MODE;
 
 
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
+    private static final String TEST_MODEL_LATENCY_SERVER = "http://128.208.49.41:8790";
     private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
 
     /**
@@ -82,7 +83,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -91,7 +92,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
     public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
-    public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
+    public static final String ARCHITECTURE = WATCH_SERVER_ARCHITECTURE;
 
 
     /**
@@ -110,6 +111,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final String CHANNEL_ID = "SOUNDWATCH";
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
+    private long absolutelastTime = 0;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -170,6 +172,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         String SERVER_URL = DEFAULT_SERVER;
         if(TEST_E2E_LATENCY)
             SERVER_URL = TEST_E2E_LATENCY_SERVER;
+        else if(TEST_MODEL_LATENCY)
+            SERVER_URL = TEST_MODEL_LATENCY_SERVER;
 
         try {
             mSocket = IO.socket(SERVER_URL);
@@ -649,6 +653,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public void createAudioLabelNotification(AudioLabel audioLabel) {
 
         /* J AREA */
+        if (MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
+            if (System.currentTimeMillis() <= absolutelastTime + 7 * 1000) { //multiply by 1000 to get milliseconds
+                Log.i(TAG, "A sound appear in less than 7 seconds of previous sound");
+                return;
+            }
+            absolutelastTime = System.currentTimeMillis();
+        }
         switch (MODE) {
             case NORMAL_MODE:
                 break;
@@ -674,7 +685,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 }
         }
 
-        Log.i(TAG, "Sound on watch: " + audioLabel.label + "d");
+        Log.i(TAG, "Sound on watch: " + audioLabel.label);
+
+        if((audioLabel.label).equals("Chopping") || (audioLabel.label).equals("Utensils and Cutlery")){
+            audioLabel.label = "Knocking";
+            Log.i(TAG, "Converted to " + audioLabel.label);
+        }
 
         /* J AREA ENDS */
 
@@ -686,28 +702,23 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // final int NOTIFICATION_ID = (int) (System.currentTimeMillis() & 0xfffffff);
 
         // Disable same sound for 5 seconds
-
-        if (MODE == HIGH_ACCURACY_SLOW_MODE)
-            if (soundLastTime.containsKey(audioLabel.label)) {
-                if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 12 * 1000)) { //multiply by 1000 to get milliseconds
-                    Log.i(TAG, "Same sound appear in less than 5 seconds");
-                    return; // stop sending noti if less than 10 seconds
-                }
-            }
-        else
-            if (soundLastTime.containsKey(audioLabel.label)) {
+        if (soundLastTime.containsKey(audioLabel.label) && !MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
                 if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
                     Log.i(TAG, "Same sound appear in less than 5 seconds");
-                    return; // stop sending noti if less than 10 seconds
+                    return; // stop sending noti if less than 10 second
                 }
-            }
+        }
         soundLastTime.put(audioLabel.label, System.currentTimeMillis());
 
         //If it's blocked or app in foreground (to not irritate user), return
         if ((((MyApplication) this.getApplication()).getBlockedSounds()).contains(NOTIFICATION_ID)
                 || !((MyApplication) this.getApplication()).enabledSounds.contains(audioLabel.label)
-                || ((MyApplication) this.getApplication()).isAppInForeground())
+                || ((MyApplication) this.getApplication()).isAppInForeground()) {
+            Log.i(TAG, "Sound noti is blocked for current sound" + (((MyApplication) this.getApplication()).getBlockedSounds()).contains(NOTIFICATION_ID)
+             + !((MyApplication) this.getApplication()).enabledSounds.contains(audioLabel.label)
+             + ((MyApplication) this.getApplication()).isAppInForeground());
             return;
+        }
 
         Log.d(TAG, "generateBigTextStyleNotification()");
         if (!notificationChannelIsCreated) {
@@ -763,14 +774,14 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
 
         if(TEST_E2E_LATENCY) {
-            Log.i(TAG, "Record time received back to watch is: " + audioLabel.recordTime);
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
+            Log.i(TAG, "Elapsed time: " + elapsedTime);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
             Date date = new Date(System.currentTimeMillis());
             String timeStamp = simpleDateFormat.format(date);
 
             try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + ".txt", Context.MODE_APPEND));
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + "_" + AUDIO_TRANMISSION_STYLE +  ".txt", Context.MODE_APPEND));
                 outputStreamWriter.write(timeStamp + "," +  Long.toString(elapsedTime) + "\n");
                 outputStreamWriter.close();
             }

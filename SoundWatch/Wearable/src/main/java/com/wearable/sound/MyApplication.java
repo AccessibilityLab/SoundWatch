@@ -13,8 +13,11 @@ public class MyApplication extends Application {
             "Knocking",
             "Microwave",
             "Door In-Use",
+            "Utensils and Cutlery",
+            "Chopping"
             //"Water Running",
             //"Vehicle",
+            //"Unidentified Sound",
     }));
 
 //    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {

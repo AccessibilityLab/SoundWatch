@@ -99,7 +99,6 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d(TAG, "onMessageReceived: " + messageEvent);
         Log.d(TAG, "messagePath: " + messageEvent.getPath());
         // Check to see if the message is to start an activity
         if (messageEvent.getPath().equals(START_ACTIVITY_PATH)) {
@@ -107,8 +106,6 @@ public class DataLayerListenerService extends WearableListenerService {
             startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startIntent);
         } else if (messageEvent.getPath().equals(AUDIO_PREDICTION_PATH)) {
-            Log.d(TAG, "Audio received from phone: " + new String(messageEvent.getData()));
-            AudioLabel audioLabel = new AudioLabel(messageEvent.getData());
             /** Display Snooze on Phone**/
             Log.i(TAG, "Sending label broadcast to MainActivity");
             Intent broadcastIntent = new Intent();

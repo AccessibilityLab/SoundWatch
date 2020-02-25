@@ -113,7 +113,7 @@ public class MainActivity extends Activity
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -122,7 +122,7 @@ public class MainActivity extends Activity
     public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
     public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
-    public static final String ARCHITECTURE = PHONE_WATCH_SERVER_ARCHITECTURE;
+    public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
 
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -368,8 +368,19 @@ public class MainActivity extends Activity
 
     public static Socket mSocket;
     //    private static final String SERVER_URL = "http://128.208.49.41:8787";
-    private static final String SERVER_URL = "http://128.208.49.41:8788";
+    private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
+    private static final String MODEL_LATENCY_SERVER = "http://128.208.49.41:8790";
+    private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
+
     {
+        String SERVER_URL;
+        if (TEST_E2E_LATENCY) {
+            SERVER_URL = TEST_E2E_LATENCY_SERVER;
+        } else if (TEST_MODEL_LATENCY) {
+            SERVER_URL = MODEL_LATENCY_SERVER;
+        } else {
+            SERVER_URL = DEFAULT_SERVER;
+        }
         try {
             mSocket = IO.socket(SERVER_URL);
         } catch (URISyntaxException e) {}
