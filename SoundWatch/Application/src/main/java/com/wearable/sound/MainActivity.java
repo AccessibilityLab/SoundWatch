@@ -106,14 +106,14 @@ public class MainActivity extends Activity
     private static final String TAG = "MainActivity";
 
     public static final boolean TEST_MODEL_LATENCY = false;
-    public static final boolean TEST_E2E_LATENCY = false;
+    public static final boolean TEST_E2E_LATENCY = true;
 
     /**
      * Sound or sound features send configuration
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
+    public static final String AUDIO_TRANMISSION_STYLE = AUDIO_FEATURES_TRANSMISSION;
 
     /**
      * Architecture configurations
@@ -122,7 +122,7 @@ public class MainActivity extends Activity
     public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
     public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
-    public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
+    public static final String ARCHITECTURE = PHONE_WATCH_SERVER_ARCHITECTURE;
 
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;

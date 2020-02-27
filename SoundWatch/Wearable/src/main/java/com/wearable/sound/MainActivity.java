@@ -66,12 +66,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     public static final String MODEL_FILENAME = MODEL_1;
     public static final boolean TEST_MODEL_LATENCY = false;
-    public static final boolean TEST_E2E_LATENCY = false;
+    public static final boolean TEST_E2E_LATENCY = true;
 
     public static final String NORMAL_MODE = "NORMAL_MODE";
     public static final String LOW_ACCURACY_FAST_MODE = "LOW_ACCURACY_FAST_MODE";
     public static final String HIGH_ACCURACY_SLOW_MODE = "HIGH_ACCURACY_SLOW_MODE";
-    public static final String MODE = LOW_ACCURACY_FAST_MODE;
+    public static final String MODE = NORMAL_MODE;
 
 
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
@@ -741,7 +741,17 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        String db = Integer.toString(Math.abs((int) Double.parseDouble(audioLabel.db)));
+        int loudness = (int) Double.parseDouble(audioLabel.db) + 90;
+
+        db = Integer.toString(loudness);
+
+        if(loudness > 70)
+            db = "Loud, " + db;
+        else if(loudness > 65)
+            db = "Med, " + db;
+        else
+            db = "Soft, " + db;
+
 
 //        String db = audioLabel.db;
 //        if (db.contains("\\.")) {

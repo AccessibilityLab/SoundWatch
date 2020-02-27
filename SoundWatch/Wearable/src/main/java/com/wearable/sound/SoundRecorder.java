@@ -70,13 +70,17 @@ import java.util.List;
 import java.util.Set;
 
 import static com.wearable.sound.DataLayerListenerService.AUDIO_LABEL;
+import static com.wearable.sound.MainActivity.ARCHITECTURE;
 import static com.wearable.sound.MainActivity.AUDIO_FEATURES_TRANSMISSION;
 import static com.wearable.sound.MainActivity.AUDIO_TRANMISSION_STYLE;
+import static com.wearable.sound.MainActivity.PHONE_WATCH_ARCHITECTURE;
+import static com.wearable.sound.MainActivity.PHONE_WATCH_SERVER_ARCHITECTURE;
 import static com.wearable.sound.MainActivity.RAW_AUDIO_TRANSMISSION;
 import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
 import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.MainActivity.MODEL_FILENAME;
 import static com.wearable.sound.MainActivity.LABEL_FILENAME;
+import static com.wearable.sound.MainActivity.mSocket;
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
@@ -91,7 +95,7 @@ public class SoundRecorder {
     private static final int FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static int BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
     public static final String AUDIO_MESSAGE_PATH = "/audio_message";
-    private static final double DBLEVEL_THRES = -35.0;
+    private static final double DBLEVEL_THRES = -40.0;
     int BufferElements2Rec = 16000;
     private static final String SNOOZE_LABEL = "Snooze";
     private static final String SNOOZE_TIME_LABEL = "Snooze Time";
@@ -220,7 +224,7 @@ public class SoundRecorder {
         }
         rms = rms/soundBuffer.size();
         return 20 * Math.log10(rms/32768.0);
-    }
+}
 
     private String predictSoundsFromRawAudio(List<Short> soundBuffer, long recordTime) {
         if (soundBuffer.size() != 16000) {
@@ -425,7 +429,8 @@ public class SoundRecorder {
                 while (!isCancelled()) {
                     int read = mAudioRecord.read(buffer, 0, buffer.length);
                     short[] shorts = convertByteArrayToShortArray(buffer);
-                    if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION)) {
+                    if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION)
+                        && (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE) || ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE))) {
                         // For raw audio tranmission, we need to send the buffer all the time
                         // Not waiting for the short buffer to build up
                         processAudioRecognition(null, buffer);
@@ -631,9 +636,11 @@ public class SoundRecorder {
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("data", new JSONArray(soundBuffer));
+                jsonObject.put("time", "" + System.currentTimeMillis());
                 if (TEST_E2E_LATENCY) {
                     jsonObject.put("record_time", recordTime);
                 }
+                Log.i(TAG, "Sending audio data: " + soundBuffer.size());
                 MainActivity.mSocket.emit("audio_data", jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
