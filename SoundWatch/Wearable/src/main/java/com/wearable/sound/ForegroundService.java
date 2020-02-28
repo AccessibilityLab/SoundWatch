@@ -45,7 +45,6 @@ public class ForegroundService extends Service {
                 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Listening...")
-                .setContentText(input)
                 .setSmallIcon(R.drawable.ic_cc_checkmark)
                 .setContentIntent(pendingIntent)
                 .build();
