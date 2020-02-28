@@ -52,12 +52,13 @@ public class ForegroundService extends Service {
         startForeground(2, notification);
         //do heavy work on a background thread
         //stopSelf();
-        new Thread() {
-            @Override
-            public void run() {
-                mSoundRecorder.startRecording(connectedHostIds);
-            }
-        }.start();
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                mSoundRecorder.startRecording(connectedHostIds);
+//            }
+//        }.start();
+        mSoundRecorder.startRecording(connectedHostIds);
         Log.d(TAG, "Start Recording...");
         return START_NOT_STICKY;
     }

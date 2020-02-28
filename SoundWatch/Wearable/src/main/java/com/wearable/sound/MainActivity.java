@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
@@ -55,6 +56,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -66,7 +68,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     public static final String MODEL_FILENAME = MODEL_1;
     public static final boolean TEST_MODEL_LATENCY = false;
-    public static final boolean TEST_E2E_LATENCY = true;
+    public static final boolean TEST_E2E_LATENCY = false;
 
     public static final String NORMAL_MODE = "NORMAL_MODE";
     public static final String LOW_ACCURACY_FAST_MODE = "LOW_ACCURACY_FAST_MODE";
@@ -92,7 +94,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
     public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
-    public static final String ARCHITECTURE = WATCH_SERVER_ARCHITECTURE;
+    public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
 
 
     /**
@@ -365,12 +367,46 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mSocket.off("audio_label", onNewMessage);
     }
 
+    private void startRecording(final Context main) {
+        // Refresh list of connected nodes
+        final String CAPABILITY = "capability_1";
+        Task<Map<String, CapabilityInfo>> capabilitiesTask =
+                Wearable.getCapabilityClient(this)
+                        .getAllCapabilities(CapabilityClient.FILTER_REACHABLE);
+
+        capabilitiesTask.addOnSuccessListener(
+                new OnSuccessListener<Map<String, CapabilityInfo>>() {
+                    @Override
+                    public void onSuccess(Map<String, CapabilityInfo> capabilityInfoMap) {
+                        Set<Node> nodes = new HashSet<>();
+
+                        if (capabilityInfoMap.isEmpty()) {
+                            showDiscoveredNodes(nodes);
+                            return;
+                        }
+                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY);
+                        if (capabilityInfo != null) {
+                            nodes.addAll(capabilityInfo.getNodes());
+                        }
+
+                        showDiscoveredNodes(nodes);
+                        Intent serviceIntent = new Intent(main, ForegroundService.class);
+                        serviceIntent.putExtra("connectedHostIds", convertSetToCommaSeparatedList(connectedHostIds));
+                        ContextCompat.startForegroundService(main, serviceIntent);
+                    }
+                });
+
+        capabilitiesTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     public void onRecordClick(View view) {
         if (!IS_RECORDING) {
-            Intent serviceIntent = new Intent(this, ForegroundService.class);
-            serviceIntent.putExtra("connectedHostIds", convertSetToCommaSeparatedList(connectedHostIds));
-            ContextCompat.startForegroundService(this, serviceIntent);
-
+            startRecording(this);
             // Change the image to STOP icon
             ImageView imageView = findViewById(R.id.mic);
             imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red));
@@ -629,6 +665,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         String msg;
         if (!nodesList.isEmpty()) {
             msg = getString(R.string.connected_nodes, TextUtils.join(", ", nodesList));
+            Log.i(TAG, "Connect phones names: " + nodesList);
         } else {
             msg = getString(R.string.no_device);
         }
@@ -741,9 +778,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        int loudness = (int) Double.parseDouble(audioLabel.db) + 90;
+        int loudness = 90 - (int) Double.parseDouble(audioLabel.db);
+
 
         db = Integer.toString(loudness);
+        //Log.i(TAG, "level" + audioLabel.db + " " + db);
 
         if(loudness > 70)
             db = "Loud, " + db;

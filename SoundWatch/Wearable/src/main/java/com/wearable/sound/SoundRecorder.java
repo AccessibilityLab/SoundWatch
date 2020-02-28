@@ -32,6 +32,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
@@ -40,6 +41,8 @@ import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
 
@@ -590,14 +593,14 @@ public class SoundRecorder {
 //                Log.i(TAG, "Elapsed time from recording to before sending data to watch: " +
 //                        (System.currentTimeMillis() - recordTime));
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
-                    //Log.d(TAG, "Sending audio data to phone");
+//                    Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
-                                    .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data);
+                                    .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data)
+                                    ;
                 }
             } else {
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
-                    //Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, buffer);
