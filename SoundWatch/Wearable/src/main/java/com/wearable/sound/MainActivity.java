@@ -295,15 +295,26 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             confidence = dataPassed[1];
             audioTime = dataPassed[2];
             db = dataPassed[3];
+            if (db.contains("\\.")) {
+                String[] parts = db.split("\\.");
+                db = parts[0];
+            } else {
+                db = db.substring(0, 2);
+            }
+
+            String[] times = audioTime.split(":");
 
             TextView soundDisplay = findViewById(R.id.soundDisplay);
             TextView locationDisplay = findViewById(R.id.locationDisplay);
-            locationDisplay.setText(audioLabel + "(" + db + " dB");
-            soundDisplay.setText(confidence + ", " + (int) Math.round(Float.parseFloat(audioTime)*100));
+            locationDisplay.setText("");
+            //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
+            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
+            soundDisplay.setVisibility(View.VISIBLE);
+            soundDisplay.setVisibility(View.VISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.VISIBLE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
             TextView fTextView = (findViewById(R.id.dontshowDisplay));
-            fTextView.setText("Don't notify this sound for:");
+            fTextView.setText("");
         }
 
         // Get the list component from the layout of the activity
@@ -474,14 +485,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             TextView soundDisplay = findViewById(R.id.soundDisplay);
             TextView locationDisplay = findViewById(R.id.locationDisplay);
-            locationDisplay.setText(audioLabel + "(" + db + "dB)");
-            soundDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
+            locationDisplay.setText("");
+            //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
+            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
             soundDisplay.setVisibility(View.VISIBLE);
             soundDisplay.setVisibility(View.VISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.VISIBLE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
             TextView fTextView = (findViewById(R.id.dontshowDisplay));
-            fTextView.setText("Don't notify this sound for:");
+            fTextView.setText("");
         }
     }
 
@@ -722,7 +734,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 }
         }
 
-        Log.i(TAG, "Sound on watch: " + audioLabel.label);
+        //Log.i(TAG, "Sound on watch: " + audioLabel.label);
 
         if((audioLabel.label).equals("Chopping") || (audioLabel.label).equals("Utensils and Cutlery")){
             audioLabel.label = "Knocking";
@@ -730,13 +742,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }
 
         /* J AREA ENDS */
-
-        // One notification id for the app
-        final int NOTIFICATION_ID = 7234231;
+        
         // Unique notification for each kind of sound
-        //final int NOTIFICATION_ID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
-        // Unique notification for all sounds
-        // final int NOTIFICATION_ID = (int) (System.currentTimeMillis() & 0xfffffff);
+        final int NOTIFICATION_ID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
 
         // Disable same sound for 5 seconds
         if (soundLastTime.containsKey(audioLabel.label) && !MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
@@ -763,6 +771,29 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             notificationChannelIsCreated = true;
         }
 
+        int loudness = 90 - (int) Double.parseDouble(audioLabel.db);
+
+
+        db = Integer.toString(loudness);
+        //Log.i(TAG, "level" + audioLabel.db + " " + db);
+
+        if(loudness > 70)
+            db = "Loud, " + db;
+        else if(loudness > 60)
+            db = "Med, " + db;
+        else
+            db = "Soft, " + db;
+
+
+//        String db = audioLabel.db;
+//        if (db.contains("\\.")) {
+//            String[] parts = db.split("\\.");
+//            db = parts[0];
+//        } else {
+//            db = db.substring(0, 2);
+//        }
+
+
         Intent intent = new Intent(this, MainActivity.class);       //Just go the MainActivity for now. Replace with other activity if you want more actions.
         String[] dataPassed = {audioLabel.label, Double.toString(audioLabel.confidence), audioLabel.time, audioLabel.db};         //Adding data to be passed back to the main activity
         intent.putExtra("audio_label", dataPassed);
@@ -777,28 +808,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         snoozeIntent.putExtra(SnoozeSoundService.CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
         //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
-
-        int loudness = 90 - (int) Double.parseDouble(audioLabel.db);
-
-
-        db = Integer.toString(loudness);
-        //Log.i(TAG, "level" + audioLabel.db + " " + db);
-
-        if(loudness > 70)
-            db = "Loud, " + db;
-        else if(loudness > 65)
-            db = "Med, " + db;
-        else
-            db = "Soft, " + db;
-
-
-//        String db = audioLabel.db;
-//        if (db.contains("\\.")) {
-//            String[] parts = db.split("\\.");
-//            db = parts[0];
-//        } else {
-//            db = db.substring(0, 2);
-//        }
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)

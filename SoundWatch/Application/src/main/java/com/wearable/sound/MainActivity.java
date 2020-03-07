@@ -26,7 +26,6 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -218,29 +217,11 @@ public class MainActivity extends Activity
             case R.id.phone_ring:
                 currentSound = SOUNDS_MAP.get(PHONE_RING);
                 break;
-            case R.id.utensils_and_cutlery:
-                currentSound = SOUNDS_MAP.get(UTENSILS_AND_CUTLERY);
-                break;
-            case R.id.alarm_clock:
-                currentSound = SOUNDS_MAP.get(ALARM_CLOCK);
-                break;
-            case R.id.cat_meow:
-                currentSound = SOUNDS_MAP.get(CAT_MEOW);
-                break;
-            case R.id.saw:
-                currentSound = SOUNDS_MAP.get(SAW);
-                break;
             case R.id.vehicle:
                 currentSound = SOUNDS_MAP.get(VEHICLE);
                 break;
             case R.id.car_honk:
                 currentSound = SOUNDS_MAP.get(CAR_HONK);
-                break;
-            case R.id.vacuum:
-                currentSound = SOUNDS_MAP.get(VACUUM);
-                break;
-            case R.id.drill:
-                currentSound = SOUNDS_MAP.get(DRILL);
                 break;
             case R.id.fire_smoke_alarm:
                 currentSound = SOUNDS_MAP.get(FIRE_SMOKE_ALARM);
@@ -254,38 +235,8 @@ public class MainActivity extends Activity
             case R.id.door_in_use:
                 currentSound = SOUNDS_MAP.get(DOOR_IN_USE);
                 break;
-            case R.id.shaver:
-                currentSound = SOUNDS_MAP.get(SHAVER);
-                break;
-            case R.id.baby_cry:
-                currentSound = SOUNDS_MAP.get(BABY_CRY);
-                break;
-            case R.id.chopping:
-                currentSound = SOUNDS_MAP.get(CHOPPING);
-                break;
-            case R.id.hair_dryer:
-                currentSound = SOUNDS_MAP.get(HAIR_DRYER);
-                break;
-            case R.id.toilet_flush:
-                currentSound = SOUNDS_MAP.get(TOILET_FLUSH);
-                break;
-            case R.id.doorbell:
-                currentSound = SOUNDS_MAP.get(DOORBELL);
-                break;
             case R.id.dishwasher:
                 currentSound = SOUNDS_MAP.get(DISHWASHER);
-                break;
-            case R.id.toothbrush:
-                currentSound = SOUNDS_MAP.get(TOOTHBRUSH);
-                break;
-            case R.id.dog_bark:
-                currentSound = SOUNDS_MAP.get(UTENSILS_AND_CUTLERY);
-                break;
-            case R.id.hammering:
-                currentSound = SOUNDS_MAP.get(HAMMERING);
-                break;
-            case R.id.snoring:
-                currentSound = SOUNDS_MAP.get(SNORING);
                 break;
             case R.id.laughing:
                 currentSound = SOUNDS_MAP.get(LAUGHING);
@@ -653,21 +604,12 @@ public class MainActivity extends Activity
                 return (CheckBox) findViewById(R.id.phone_ring);
             case UTENSILS_AND_CUTLERY:
                 return (CheckBox) findViewById(R.id.knocking);
-            case ALARM_CLOCK:
-                return (CheckBox) findViewById(R.id.alarm_clock);
-
-            case CAT_MEOW:
-                return (CheckBox) findViewById(R.id.cat_meow);
-            case SAW:
-                return (CheckBox) findViewById(R.id.saw);
+            case CHOPPING:
+                return (CheckBox) findViewById(R.id.knocking);
             case VEHICLE:
                 return (CheckBox) findViewById(R.id.vehicle);
             case CAR_HONK:
                 return (CheckBox) findViewById(R.id.car_honk);
-            case VACUUM:
-                return (CheckBox) findViewById(R.id.vacuum);
-            case DRILL:
-                return (CheckBox) findViewById(R.id.drill);
             case FIRE_SMOKE_ALARM:
                 return (CheckBox) findViewById(R.id.fire_smoke_alarm);
             case MICROWAVE:
@@ -676,28 +618,8 @@ public class MainActivity extends Activity
                 return (CheckBox) findViewById(R.id.water_running);
             case DOOR_IN_USE:
                 return (CheckBox) findViewById(R.id.door_in_use);
-            case SHAVER:
-                return (CheckBox) findViewById(R.id.shaver);
-            case BABY_CRY:
-                return (CheckBox) findViewById(R.id.baby_cry);
-            case CHOPPING:
-                return (CheckBox) findViewById(R.id.chopping);
-            case HAIR_DRYER:
-                return (CheckBox) findViewById(R.id.hair_dryer);
-            case TOILET_FLUSH:
-                return (CheckBox) findViewById(R.id.toilet_flush);
-            case DOORBELL:
-                return (CheckBox) findViewById(R.id.doorbell);
             case DISHWASHER:
                 return (CheckBox) findViewById(R.id.dishwasher);
-            case TOOTHBRUSH:
-                return (CheckBox) findViewById(R.id.toothbrush);
-            case DOG_BARK:
-                return (CheckBox) findViewById(R.id.dog_bark);
-            case HAMMERING:
-                return (CheckBox) findViewById(R.id.hammering);
-            case SNORING:
-                return (CheckBox) findViewById(R.id.snoring);
             case LAUGHING:
                 return (CheckBox) findViewById(R.id.laughing);
             default:

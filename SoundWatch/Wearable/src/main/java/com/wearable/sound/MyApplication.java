@@ -6,18 +6,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MyApplication extends Application {
-    //TODO HUNG 5 CONTD: THIS SEEMS LIKE A GOOD PLACE WHERE WE SHOULD SPECIFY THE LIST OF SELECTED SOUNDS AND THEN COPY THIS OVER EVERYWHERE ON PHONE/WATCH ETC. THAT IS, IF THE SOUND LIST IS CHANGED HERE, IT SHOULD CHANGE EVERYWHERE.
     public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
-            "Fire/Smoke Alarm",
-            "Speech",
-            "Knocking",
-            "Microwave",
-            "Door In-Use",
-            "Utensils and Cutlery",
-            "Chopping"
-            //"Water Running",
-            //"Vehicle",
-            //"Unidentified Sound",
+        "Fire/Smoke Alarm",
+        "Speech",
+        "Door In-Use",
+        "Water Running",
+        "Knocking",
+        "Microwave",
+        "Dishwasher",
+        "Laughing",
+        "Phone Ring",
+        "Car Honk",
+        "Vehicle",
+
+        "Chopping",
+        "Utensils and Cutlery"
     }));
 
 //    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
