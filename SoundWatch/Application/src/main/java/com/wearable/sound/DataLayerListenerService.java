@@ -224,7 +224,6 @@ public class DataLayerListenerService extends WearableListenerService {
                 broadcastIntent.setAction(MainActivity.mBroadcastUnsnoozeSound);
                 broadcastIntent.putExtra(AUDIO_LABEL, soundLabel);
                 sendBroadcast(broadcastIntent);
-                MainActivity.SOUNDS_MAP.get(soundLabel).isSnoozed = false;
             }
             return;
         }

@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.wearable.sound.MainActivity.convertSetToCommaSeparatedList;
+
 
 public class SnoozeSoundService extends IntentService {
     public static final String SNOOZE_SOUND = "SNOOZE_SOUND";
@@ -63,6 +65,8 @@ public class SnoozeSoundService extends IntentService {
                 Intent alarmIntent = new Intent(this,  AlarmReceiver.class);
                 alarmIntent.setAction("com.wearable.sound.almMgr");
                 alarmIntent.putExtra("blockedSoundId", blockedNotificationID);
+                alarmIntent.putExtra(SnoozeSoundService.SOUND_LABEL, soundLabel);
+                alarmIntent.putExtra(SnoozeSoundService.CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
                 int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, uniqueInt, alarmIntent, 0);
                 AlarmManager alarmMgr = (AlarmManager)this.getSystemService(ALARM_SERVICE);

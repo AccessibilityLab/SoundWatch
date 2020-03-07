@@ -576,20 +576,21 @@ public class MainActivity extends Activity
             } else if (intent.getAction().equals(mBroadcastSnoozeSound)) {
                 CheckBox checkBox = getCheckboxFromAudioLabel(intent.getStringExtra(AUDIO_LABEL));
                 Log.i(TAG, "Getting checkbox main" + checkBox);
-
+                SoundNotification soundNotification = SOUNDS_MAP.get(intent.getStringExtra(AUDIO_LABEL));
+                soundNotification.isSnoozed = true;
                 if (checkBox == null) {
                     return;
                 }
-                Log.i(TAG, "Redrawing main");
                 checkBox.setText(checkBox.getText() + " (Snoozed) ");
 //                checkBox.setCompoundDrawablesWithIntrinsicBounds(0,0 , android.R.drawable.ic_lock_silent_mode, 0);
             } else if (intent.getAction().equals(mBroadcastUnsnoozeSound)) {
                 CheckBox checkBox = getCheckboxFromAudioLabel(intent.getStringExtra(AUDIO_LABEL));
+                SoundNotification soundNotification = SOUNDS_MAP.get(intent.getStringExtra(AUDIO_LABEL));
+                soundNotification.isSnoozed = false;
                 if (checkBox == null) {
                     return;
                 }
                 checkBox.setText(checkBox.getText());
-//                checkBox.setCompoundDrawablesWithIntrinsicBounds(0,0 , android.R.drawable.ic_lock_silent_mode_off, 0);
             }
         }
     };

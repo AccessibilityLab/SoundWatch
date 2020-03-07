@@ -129,10 +129,15 @@ public class DataLayerListenerService extends WearableListenerService {
         boolean isSnoozed = Boolean.parseBoolean(parts[2]);
         List<String> enabledSounds = ((MyApplication) this.getApplication()).enabledSounds;
 
+
         Log.i(TAG, "handleEnableSoundNotificatioN()");
 
         if (isEnabled) {
             Log.i(TAG, "Enabling sound ");
+
+            // If it is currently snoozed, unsnooze it
+            final int blockedNotificationID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(soundLabel);
+            ((MyApplication) this.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
             if (!enabledSounds.contains(soundLabel)) {
                 Log.i(TAG, "Remove from list of blocked sounds " + soundLabel);
                 ((MyApplication) this.getApplication()).addEnabledSound(soundLabel);

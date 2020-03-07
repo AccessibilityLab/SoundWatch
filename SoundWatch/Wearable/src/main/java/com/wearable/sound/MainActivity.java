@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
@@ -61,6 +63,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+
+import static com.wearable.sound.SnoozeSoundService.SOUND_SNOOZE_FROM_WATCH_PATH;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
     public static final String MODEL_1 = "file:///android_asset/example_model.tflite";
@@ -446,7 +450,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         stopService(serviceIntent);
     }
 
-    private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
+    public static String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
         StringBuilder result = new StringBuilder();
         for (String connectedHostId: connectedHostIds) {
             result.append(connectedHostId);
@@ -497,6 +501,21 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }
     }
 
+    private void sendSnoozeSoundMessageToPhone(String soundLabel) {
+        ByteArrayOutputStream bas = new ByteArrayOutputStream();
+        DataOutputStream ds = new DataOutputStream(bas);
+        if (connectedHostIds == null) {
+            // No phone connected to send the message right now
+            return;
+        }
+        for (String connectedHostId : connectedHostIds) {
+            Log.d(TAG, "Sending snooze sound data to phone:" + soundLabel);
+            Task<Integer> sendMessageTask =
+                    Wearable.getMessageClient(this.getApplicationContext())
+                            .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
+        }
+    }
+
     @Override
     public void onClick(WearableListView.ViewHolder v) {
         Log.i(TAG, "Blocking sounds started");
@@ -535,6 +554,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 return;
             }
             ((MyApplication) this.getApplication()).addBlockedSounds(blockedNotificationID);
+            sendSnoozeSoundMessageToPhone(audioLabel);
             Log.i(TAG, "Add to list of blocked sounds");
 
             if (tag < elementsInSec.length)     //If not forever, start an alarm manager to remove sounds from blocked list. AlarmManager because Doze mode..

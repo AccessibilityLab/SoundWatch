@@ -67,7 +67,9 @@ public class MyApplication extends Application {
     }
 
     public void removeBlockedSounds(int soundId) {
-        this.blockedSounds.remove(new Integer(soundId));
+        if (blockedSounds.contains(soundId)) {
+            this.blockedSounds.remove(new Integer(soundId));
+        }
     }
 
     public boolean isAppInForeground() {
