@@ -117,6 +117,16 @@ public class DataLayerListenerService extends WearableListenerService {
             Log.d(TAG, "Received sound enabled from phone: " + new String(messageEvent.getData()));
             handleEnableSoundNotification(new String(messageEvent.getData()));
         }
+
+        // TODO Top 5: Add a new route here to listen to top 5 message from phone
+        // TODO top 5: Parse sounds string to a sounds map
+        // TODO top 5: Make filtering logic here (so that maybe we can reuse for other architectures?)
+        /**
+         * TODO top 5: Filtering logic: traverse sorted sound map, if this current sound is not blocked
+         * and not disabled, then display by sending the sound to main
+         */
+
+        //
     }
 
     public void handleEnableSoundNotification(String message) {

@@ -115,6 +115,12 @@ public class MainActivity extends Activity
     public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
 
     /**
+     * Phone Watch Architecture configuration ONLY!!!
+     * [ EXPERIMENTAL ]
+     */
+    public static final boolean PREDICT_MULTIPLE_SOUNDS = true;
+
+    /**
      * Architecture configurations
      */
     public static final String PHONE_WATCH_ARCHITECTURE = "PHONE_WATCH_ARCHITECTURE";

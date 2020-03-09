@@ -54,6 +54,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.WorkerThread;
@@ -64,6 +65,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
 import static com.wearable.sound.MainActivity.AUDIO_LABEL;
+import static com.wearable.sound.MainActivity.PREDICT_MULTIPLE_SOUNDS;
 import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
 
@@ -634,6 +636,15 @@ public class DataLayerListenerService extends WearableListenerService {
         //Find max and argmax
         float max = output[0][0];
         int argmax = 0;
+        if (PREDICT_MULTIPLE_SOUNDS) {
+            TreeMap<Float, String> predictionsMap = new TreeMap<>();
+            for (int i = 0; i < 30; i++) {
+                predictionsMap.put(output[0][i], labels.get(i));
+            }
+            // TODO TOP5: Convert this map into a shape of sound=value, sound=value
+            // TODO TOP5: Make a method that sends this new string (with db and other params) to watch (Make a new Route path also)
+
+        }
         for (int i = 0; i < 30; i++) {
             if (max < output[0][i]) {
                 max = output[0][i];
