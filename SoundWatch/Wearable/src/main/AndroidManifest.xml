@@ -70,6 +70,10 @@
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data android:scheme="wear" android:host="*" android:pathPrefix="/SOUND_ENABLE_FROM_PHONE_PATH"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH"/>
+            </intent-filter>
         </service>
 
         <service
@@ -101,88 +105,3 @@
     </application>
 
 </manifest>
-
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--&lt;!&ndash; Copyright (C) 2014 The Android Open Source Project-->
-
-<!--     Licensed under the Apache License, Version 2.0 (the "License");-->
-<!--     you may not use this file except in compliance with the License.-->
-<!--     You may obtain a copy of the License at-->
-
-<!--          http://www.apache.org/licenses/LICENSE-2.0-->
-
-<!--     Unless required by applicable law or agreed to in writing, software-->
-<!--     distributed under the License is distributed on an "AS IS" BASIS,-->
-<!--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.-->
-<!--     See the License for the specific language governing permissions and-->
-<!--     limitations under the License.-->
-<!--&ndash;&gt;-->
-
-<!--<manifest xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--        package="com.wearable.sound" >-->
-
-<!--    <uses-permission android:name="android.permission.WAKE_LOCK" />-->
-<!--    &lt;!&ndash; the following permission is required to record audio using a microphone &ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.RECORD_AUDIO" />-->
-<!--    <uses-permission android:name="android.permission.VIBRATE"/>-->
-<!--    <uses-permission android:name="android.permission.INTERNET" />-->
-<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
-<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
-<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>-->
-<!--    <uses-permission android:name="android.permission.VIBRATE"/>-->
-<!--    <uses-feature android:name="android.hardware.type.watch" />-->
-
-<!--    <application-->
-<!--            android:name=".MyApplication_old"-->
-<!--            android:allowBackup="true"-->
-<!--            android:icon="@drawable/ic_launcher"-->
-<!--            android:label="@string/app_name"-->
-<!--            android:theme="@android:style/Theme.DeviceDefault"-->
-<!--            android:usesCleartextTraffic="true"-->
-<!--        >-->
-
-<!--        <meta-data-->
-<!--            android:name="com.google.android.wearable.standalone"-->
-<!--            android:value="false" />-->
-
-<!--        <meta-data-->
-<!--                android:name="com.google.android.gms.version"-->
-<!--                android:value="@integer/google_play_services_version" />-->
-
-<!--        <service-->
-<!--                android:name=".DataLayerListenerService" >-->
-<!--            <intent-filter>-->
-<!--                &lt;!&ndash; listeners receive events that match the action and data filters &ndash;&gt;-->
-<!--                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />-->
-<!--                <data android:scheme="wear" android:host="*" android:pathPrefix="/count"/>-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />-->
-<!--                <data android:scheme="wear" android:host="*" android:pathPrefix="/start-activity"/>-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />-->
-<!--                <data android:scheme="wear" android:host="*" android:pathPrefix="/audio-prediction"/>-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-
-<!--        <service-->
-<!--            android:name=".ForegroundService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true">-->
-<!--        </service>-->
-
-<!--        <activity-->
-<!--            android:name=".MainActivity_old"-->
-<!--            android:label="@string/app_name">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN"/>-->
-<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.wearable.sound.EXAMPLE"/>-->
-<!--                <category android:name="android.intent.category.DEFAULT"/>-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-<!--    </application>-->
-<!--</manifest>-->

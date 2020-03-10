@@ -131,6 +131,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      * Broadcast services
      */
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
+    public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
     private IntentFilter mIntentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -157,9 +158,50 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, null));
                     }
                 }
+            } else if (intent.getAction().equals(mBroadcastAllSoundPredictions)) {
+                String data = intent.getStringExtra(DataLayerListenerService.AUDIO_LABEL);
+                Log.i(TAG, "Received audio data from phone: " + data);
+                String[] parts = data.split(",");
+                String soundPredictions = parts[0];
+                String time = parts[1];
+                String db = parts[2];
+                List<SoundPrediction> predictions = parsePredictions(soundPredictions);
+                AudioLabel audioLabel = filterTopSoundLabel(predictions, time, db);
+                createAudioLabelNotification(audioLabel);
             }
         }
     };
+
+    public List<SoundPrediction> parsePredictions(String soundPredictions) {
+        List<SoundPrediction> result = new ArrayList<>();
+        // Split by _
+        String[] soundsKvPairs = soundPredictions.split("_");
+        for (String soundKvPair : soundsKvPairs) {
+            // Split by "_"
+            String[] parts = soundKvPair.split("_");
+            String label = parts[0];
+            String accuracy = parts[1];
+            result.add(new SoundPrediction(label, Float.parseFloat(accuracy)));
+        }
+        return result;
+    }
+
+    private AudioLabel filterTopSoundLabel(List<SoundPrediction> soundPredictions, String time, String db) {
+        ArrayList<String> enabledSounds = ((MyApplication) getApplicationContext()).enabledSounds;
+        // Traverse list in decreasing order, so the first one found should be the one in notification
+        for (SoundPrediction soundPrediction: soundPredictions) {
+            // Check if sound is not currently blocked and isEnabled
+            if (!enabledSounds.contains(soundPrediction.getLabel())) {
+                continue;
+            }
+            if (((MyApplication) getApplicationContext()).getBlockedSounds().contains(soundPrediction.getLabel())) {
+                continue;
+            }
+
+            return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getAccuracy()), time, db, null);
+        }
+        return new AudioLabel("Unrecognized Sound", Float.toString(1.0f), time, db, null);
+    }
 
 
     /**

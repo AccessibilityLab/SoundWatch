@@ -41,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -51,11 +52,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
@@ -80,6 +86,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
+    private static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
     public static final String COUNT_PATH = "/count";
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
@@ -637,13 +644,21 @@ public class DataLayerListenerService extends WearableListenerService {
         float max = output[0][0];
         int argmax = 0;
         if (PREDICT_MULTIPLE_SOUNDS) {
-            TreeMap<Float, String> predictionsMap = new TreeMap<>();
+            List<SoundPrediction> predictions = new ArrayList<>();
             for (int i = 0; i < 30; i++) {
-                predictionsMap.put(output[0][i], labels.get(i));
+                predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
             }
-            // TODO TOP5: Convert this map into a shape of sound=value, sound=value
-            // TODO TOP5: Make a method that sends this new string (with db and other params) to watch (Make a new Route path also)
-
+            // Sort the predictions by value in decreasing order
+            Collections.sort(predictions, Collections.reverseOrder());
+            // Convert this map into a shape of sound=value_sound=value
+            String result = "";
+            for (SoundPrediction soundPrediction: predictions) {
+                result += soundPrediction.getLabel() + "_" + soundPrediction.getAccuracy() + ",";
+            }
+            // Strip the last ","
+            result = result.substring(0, result.length() - 1);
+            new SendAllAudioPredictionsToWearTask(result, db, recordTime).execute();
+            return result;
         }
         for (int i = 0; i < 30; i++) {
             if (max < output[0][i]) {
@@ -814,6 +829,38 @@ public class DataLayerListenerService extends WearableListenerService {
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
+            }
+            return null;
+        }
+    }
+
+    public class SendAllAudioPredictionsToWearTask extends AsyncTask<Void, Void, Void> {
+        private String result;
+        private String db;
+        private Long recordTime;
+
+        public SendAllAudioPredictionsToWearTask(String result, double db, Long recordTime) {
+            this.db = Double.toString(db);
+            this.result = result;
+            if (recordTime == null) {
+                this.recordTime = null;
+            } else {
+                this.recordTime = recordTime;
+            }
+        }
+        @Override
+        protected Void doInBackground(Void... args) {
+            Collection<String> nodes = getNodes();
+            String result;
+            if (TEST_E2E_LATENCY) {
+                result = this.result + "," + LocalTime.now() + "," + db + "," + recordTime;
+            } else {
+                result = this.result + "," + LocalTime.now() + "," + db;
+            }
+            Log.i(TAG, "Number of connnected devices:" + nodes.size());
+            for (String node : nodes) {
+                Log.i(TAG, "Sending sound prediction: " + result);
+                sendMessageWithData(node, SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH, result.getBytes());
             }
             return null;
         }

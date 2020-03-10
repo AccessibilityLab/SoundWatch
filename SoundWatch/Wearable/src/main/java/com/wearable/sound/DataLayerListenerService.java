@@ -39,6 +39,8 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
+    private static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
+
     public static final String COUNT_PATH = "/count";
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
 
@@ -116,17 +118,15 @@ public class DataLayerListenerService extends WearableListenerService {
         } else if (messageEvent.getPath().equals(SOUND_ENABLE_FROM_PHONE_PATH)) {
             Log.d(TAG, "Received sound enabled from phone: " + new String(messageEvent.getData()));
             handleEnableSoundNotification(new String(messageEvent.getData()));
+        } else if (messageEvent.getPath().equals(SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH)) {
+            Log.i(TAG, "Sending All sounds label to MainActivity");
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(MainActivity.mBroadcastAllSoundPredictions);
+            broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
+            sendBroadcast(broadcastIntent);
+        } else {
+            Log.d(TAG, "Unrecognized message from phone. Check if this message is registered in AndroidManifest");
         }
-
-        // TODO Top 5: Add a new route here to listen to top 5 message from phone
-        // TODO top 5: Parse sounds string to a sounds map
-        // TODO top 5: Make filtering logic here (so that maybe we can reuse for other architectures?)
-        /**
-         * TODO top 5: Filtering logic: traverse sorted sound map, if this current sound is not blocked
-         * and not disabled, then display by sending the sound to main
-         */
-
-        //
     }
 
     public void handleEnableSoundNotification(String message) {
