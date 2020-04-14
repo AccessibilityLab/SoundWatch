@@ -118,6 +118,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
     private long absolutelastTime = 0;
+    public static final double PREDICTION_THRESHOLD = 0.4;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -136,9 +137,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Received intent"  + intent.getAction());
             if (intent.getAction().equals(mBroadcastSoundPrediction)) {
                 String data = intent.getStringExtra(DataLayerListenerService.AUDIO_LABEL);
-                Log.i(TAG, "Received audio data from phone: " + data);
                 String[] parts = data.split(",");
                 if (TEST_E2E_LATENCY) {
                     if (parts.length == 5) {
@@ -161,7 +162,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             } else if (intent.getAction().equals(mBroadcastAllSoundPredictions)) {
                 String data = intent.getStringExtra(DataLayerListenerService.AUDIO_LABEL);
                 Log.i(TAG, "Received audio data from phone: " + data);
-                String[] parts = data.split(",");
+                String[] parts = data.split(";");
                 String soundPredictions = parts[0];
                 String time = parts[1];
                 String db = parts[2];
@@ -175,12 +176,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public List<SoundPrediction> parsePredictions(String soundPredictions) {
         List<SoundPrediction> result = new ArrayList<>();
         // Split by _
-        String[] soundsKvPairs = soundPredictions.split("_");
+        String[] soundsKvPairs = soundPredictions.split(",");
         for (String soundKvPair : soundsKvPairs) {
             // Split by "_"
             String[] parts = soundKvPair.split("_");
             String label = parts[0];
             String accuracy = parts[1];
+            Log.i(TAG, "Label: " + label + ", Acc: " + accuracy);
             result.add(new SoundPrediction(label, Float.parseFloat(accuracy)));
         }
         return result;
@@ -188,6 +190,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     private AudioLabel filterTopSoundLabel(List<SoundPrediction> soundPredictions, String time, String db) {
         ArrayList<String> enabledSounds = ((MyApplication) getApplicationContext()).enabledSounds;
+
+        Log.i(TAG, "Filtering top list sounds");
         // Traverse list in decreasing order, so the first one found should be the one in notification
         for (SoundPrediction soundPrediction: soundPredictions) {
             // Check if sound is not currently blocked and isEnabled
@@ -197,6 +201,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (((MyApplication) getApplicationContext()).getBlockedSounds().contains(soundPrediction.getLabel())) {
                 continue;
             }
+
+            if (soundPrediction.getAccuracy() < PREDICTION_THRESHOLD) {
+                continue;
+            }
+
+            Log.i(TAG, "Chosen sound for filtering: " + soundPrediction.getLabel() + ", " + soundPrediction.getAccuracy());
 
             return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getAccuracy()), time, db, null);
         }
@@ -385,6 +395,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         checkPermissions();
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
+        mIntentFilter.addAction(mBroadcastAllSoundPredictions);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -447,6 +458,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         }
 
                         showDiscoveredNodes(nodes);
+                        if (connectedHostIds.isEmpty()) {
+                            return;
+                        }
                         Intent serviceIntent = new Intent(main, ForegroundService.class);
                         serviceIntent.putExtra("connectedHostIds", convertSetToCommaSeparatedList(connectedHostIds));
                         ContextCompat.startForegroundService(main, serviceIntent);
@@ -464,6 +478,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public void onRecordClick(View view) {
         if (!IS_RECORDING) {
             startRecording(this);
+//            if (connectedHostIds.isEmpty()) {
+//                return;
+//            }
             // Change the image to STOP icon
             ImageView imageView = findViewById(R.id.mic);
             imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red));
@@ -832,7 +849,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             createNotificationChannel();
             notificationChannelIsCreated = true;
         }
-
         int loudness = 90 - (int) Double.parseDouble(audioLabel.db);
 
 
