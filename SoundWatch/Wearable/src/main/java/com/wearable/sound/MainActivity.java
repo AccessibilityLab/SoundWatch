@@ -182,7 +182,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             String[] parts = soundKvPair.split("_");
             String label = parts[0];
             String accuracy = parts[1];
-            Log.i(TAG, "Label: " + label + ", Acc: " + accuracy);
             result.add(new SoundPrediction(label, Float.parseFloat(accuracy)));
         }
         return result;
@@ -191,7 +190,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private AudioLabel filterTopSoundLabel(List<SoundPrediction> soundPredictions, String time, String db) {
         ArrayList<String> enabledSounds = ((MyApplication) getApplicationContext()).enabledSounds;
 
-        Log.i(TAG, "Filtering top list sounds");
         // Traverse list in decreasing order, so the first one found should be the one in notification
         for (SoundPrediction soundPrediction: soundPredictions) {
             // Check if sound is not currently blocked and isEnabled
@@ -205,9 +203,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (soundPrediction.getAccuracy() < PREDICTION_THRESHOLD) {
                 continue;
             }
-
-            Log.i(TAG, "Chosen sound for filtering: " + soundPrediction.getLabel() + ", " + soundPrediction.getAccuracy());
-
             return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getAccuracy()), time, db, null);
         }
         return new AudioLabel("Unrecognized Sound", Float.toString(1.0f), time, db, null);

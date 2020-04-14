@@ -252,6 +252,13 @@ public class MainActivity extends Activity
         }
         if (currentSound != null) {
             boolean isEnabled = ((CheckBox) view).isChecked();
+            CheckBox checkBox = ((CheckBox) view);
+            if (checkBox.getText().toString().contains("Snoozed")) {
+                // If the sound is currently snoozed
+                int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
+                String soundLabel = checkBox.getText().toString().substring(0, snoozeTextIndex);
+                checkBox.setText(soundLabel);
+            }
             currentSound.isEnabled = isEnabled;
             new sendSoundEnableMessageToWatchTask(currentSound).execute();
         }
