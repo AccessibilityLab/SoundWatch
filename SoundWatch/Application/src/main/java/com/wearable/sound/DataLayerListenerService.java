@@ -208,7 +208,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        //Log.i(TAG, "Message received from Watch");
+//        Log.i(TAG, "Message received from Watch");
         if (messageEvent.getPath().equals(SOUND_SNOOZE_FROM_WATCH_PATH)) {
             String soundLabel = (new String(messageEvent.getData())).split(",")[0];
             Log.i(TAG, "Phone received Snooze Sound from watch: " + soundLabel);
@@ -745,6 +745,24 @@ public class DataLayerListenerService extends WearableListenerService {
                 //Run inference
                 tfLite.run(input4D, output);
 
+                if (PREDICT_MULTIPLE_SOUNDS) {
+                    List<SoundPrediction> predictions = new ArrayList<>();
+                    for (int i = 0; i < 30; i++) {
+                        predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
+                    }
+                    // Sort the predictions by value in decreasing order
+                    Collections.sort(predictions, Collections.reverseOrder());
+                    // Convert this map into a shape of sound=value_sound=value
+                    String result = "";
+                    for (SoundPrediction soundPrediction: predictions) {
+                        result += soundPrediction.getLabel() + "_" + soundPrediction.getAccuracy() + ",";
+                    }
+                    // Strip the last ","
+                    result = result.substring(0, result.length() - 1);
+                    new SendAllAudioPredictionsToWearTask(result, db(sData), recordTime).execute();
+                    return result;
+                }
+
 
                 if(TEST_MODEL_LATENCY) {
                     long elapsedTime = System.currentTimeMillis() - startTime;
@@ -853,9 +871,9 @@ public class DataLayerListenerService extends WearableListenerService {
             Collection<String> nodes = getNodes();
             String result;
             if (TEST_E2E_LATENCY) {
-                result = this.result + "," + LocalTime.now() + "," + db + "," + recordTime;
+                result = this.result + ";" + LocalTime.now() + ";" + db + ";" + recordTime;
             } else {
-                result = this.result + "," + LocalTime.now() + "," + db;
+                result = this.result + ";" + LocalTime.now() + ";" + db;
             }
             Log.i(TAG, "Number of connnected devices:" + nodes.size());
             for (String node : nodes) {

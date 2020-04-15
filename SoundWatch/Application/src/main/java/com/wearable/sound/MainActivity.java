@@ -252,6 +252,13 @@ public class MainActivity extends Activity
         }
         if (currentSound != null) {
             boolean isEnabled = ((CheckBox) view).isChecked();
+            CheckBox checkBox = ((CheckBox) view);
+            if (checkBox.getText().toString().contains("Snoozed")) {
+                // If the sound is currently snoozed
+                int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
+                String soundLabel = checkBox.getText().toString().substring(0, snoozeTextIndex);
+                checkBox.setText(soundLabel);
+            }
             currentSound.isEnabled = isEnabled;
             new sendSoundEnableMessageToWatchTask(currentSound).execute();
         }
@@ -590,13 +597,19 @@ public class MainActivity extends Activity
                 checkBox.setText(checkBox.getText() + " (Snoozed) ");
 //                checkBox.setCompoundDrawablesWithIntrinsicBounds(0,0 , android.R.drawable.ic_lock_silent_mode, 0);
             } else if (intent.getAction().equals(mBroadcastUnsnoozeSound)) {
+                Log.i(TAG, "Phone received unsnoozed");
                 CheckBox checkBox = getCheckboxFromAudioLabel(intent.getStringExtra(AUDIO_LABEL));
                 SoundNotification soundNotification = SOUNDS_MAP.get(intent.getStringExtra(AUDIO_LABEL));
                 soundNotification.isSnoozed = false;
                 if (checkBox == null) {
                     return;
                 }
-                checkBox.setText(checkBox.getText());
+                if (checkBox.getText().toString().contains("Snoozed")) {
+                    // If the sound is currently snoozed
+                    int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
+                    String soundLabel = checkBox.getText().toString().substring(0, snoozeTextIndex);
+                    checkBox.setText(soundLabel);
+                }
             }
         }
     };
