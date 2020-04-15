@@ -208,7 +208,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.i(TAG, "Message received from Watch");
+        //Log.i(TAG, "Message received from Watch");
         if (messageEvent.getPath().equals(SOUND_SNOOZE_FROM_WATCH_PATH)) {
             String soundLabel = (new String(messageEvent.getData())).split(",")[0];
             Log.i(TAG, "Phone received Snooze Sound from watch: " + soundLabel);
