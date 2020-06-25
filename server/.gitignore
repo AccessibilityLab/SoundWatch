@@ -1,0 +1,4 @@
+*/*.hdf5
+models/*
+models/example_model.hdf5
+*.pyc
