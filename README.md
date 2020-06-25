@@ -22,9 +22,9 @@ Screenshots
 
 Folder Structure
 -------------
-`server`: Python server to serve predictions from raw audio data sent from phone or watch. Refer to [server documentation](server/README.md)
-`SoundWatch/Application`: Android phone application to configure list of displayed sounds on watch and serve audio predictions from watch.Refer to [phone app documentation](SoundWatch/Application/README.md)
-`SoundWatch/Wearable`: Android watch application to listen for surrounding sounds and display the predictions sounds from ML model.Refer to [watch app documentation](SoundWatch/Wearable/README.md)
+- `server`: Python server to serve predictions from raw audio data sent from phone or watch. Refer to [server documentation](server/README.md)
+- `SoundWatch/Application`: Android phone application to configure list of displayed sounds on watch and serve audio predictions from watch.Refer to [phone app documentation](SoundWatch/Application/README.md)
+- `SoundWatch/Wearable`: Android watch application to listen for surrounding sounds and display the predictions sounds from ML model.Refer to [watch app documentation](SoundWatch/Wearable/README.md)
 
 Getting Started
 ---------------

@@ -35,28 +35,29 @@ Example Usage of SocketIO Client:
 *Request*:
 ```json
 {
-    "data": [1.0,2.0,3.0,...] // Audio features from MFCC
+    "data": [1.0,2.0,3.0] // Audio features from MFCC
 }
 ```
 *Response*:
 ```json
 {
-    'label': 'Knocking',
-    'accuracy': '0.96'
+    "label": "Knocking",
+    "accuracy": "0.96"
 }
 ```
 - `audio_data`: Serve predictions from raw audio
 ```json
 {
-    "data": [1.0,2.0,3.0,...] // Raw audio of 16000 float elements
+    "data": [1.0,2.0,3.0] // Raw audio of 16000 float elements
 }
 ```
 *Response*:
 ```json
 {
-    'label': 'Knocking',
-    'accuracy': '0.96'
+    "label": "Knocking",
+    "accuracy": "0.96"
 }
+```
 
 
 Tests
