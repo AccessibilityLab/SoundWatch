@@ -1,4 +1,4 @@
-package com.wearable.sound;
+package com.wearable.sound.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,10 +10,14 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.wearable.sound.ui.activity.MainActivity;
+import com.wearable.sound.R;
+import com.wearable.sound.utils.SoundRecorder;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.NotificationCompat;
 

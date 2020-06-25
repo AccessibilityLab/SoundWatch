@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wearable.sound;
+package com.wearable.sound.datalayer;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +27,9 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.wearable.sound.ui.activity.MainActivity;
+import com.wearable.sound.application.MyApplication;
+
 import java.util.List;
 
 /** Listens to DataItems and Messages from the local node. */

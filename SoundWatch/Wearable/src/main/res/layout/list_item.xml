@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wearable.sound.WearableListItemLayout
+<com.wearable.sound.ui.components.WearableListItemLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center_horizontal"
     android:layout_width="match_parent"
@@ -20,6 +20,6 @@
         android:fontFamily="sans-serif-condensed-light"
         android:background="@color/grey"
         android:textSize="14.1sp"/>
-</com.wearable.sound.WearableListItemLayout>
+</com.wearable.sound.ui.components.WearableListItemLayout>
 
     <!--android:textColor="@color/text_color"-->

@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package com.wearable.sound;
+package com.wearable.sound.utils;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -29,22 +25,15 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.app.RemoteInput;
 
 import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
+import com.wearable.sound.ui.activity.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,18 +61,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static com.wearable.sound.DataLayerListenerService.AUDIO_LABEL;
-import static com.wearable.sound.MainActivity.ARCHITECTURE;
-import static com.wearable.sound.MainActivity.AUDIO_FEATURES_TRANSMISSION;
-import static com.wearable.sound.MainActivity.AUDIO_TRANMISSION_STYLE;
-import static com.wearable.sound.MainActivity.PHONE_WATCH_ARCHITECTURE;
-import static com.wearable.sound.MainActivity.PHONE_WATCH_SERVER_ARCHITECTURE;
-import static com.wearable.sound.MainActivity.RAW_AUDIO_TRANSMISSION;
-import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
-import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
-import static com.wearable.sound.MainActivity.MODEL_FILENAME;
-import static com.wearable.sound.MainActivity.LABEL_FILENAME;
-import static com.wearable.sound.MainActivity.mSocket;
+import static com.wearable.sound.datalayer.DataLayerListenerService.AUDIO_LABEL;
+import static com.wearable.sound.ui.activity.MainActivity.ARCHITECTURE;
+import static com.wearable.sound.ui.activity.MainActivity.AUDIO_TRANMISSION_STYLE;
+import static com.wearable.sound.ui.activity.MainActivity.PHONE_WATCH_ARCHITECTURE;
+import static com.wearable.sound.ui.activity.MainActivity.PHONE_WATCH_SERVER_ARCHITECTURE;
+import static com.wearable.sound.ui.activity.MainActivity.RAW_AUDIO_TRANSMISSION;
+import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
+import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
+import static com.wearable.sound.ui.activity.MainActivity.MODEL_FILENAME;
+import static com.wearable.sound.ui.activity.MainActivity.LABEL_FILENAME;
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage

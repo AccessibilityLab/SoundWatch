@@ -1,4 +1,4 @@
-package com.wearable.sound;
+package com.wearable.sound.ui.activity;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -36,6 +36,13 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
 import com.google.android.gms.tasks.Task;
+import com.wearable.sound.R;
+import com.wearable.sound.application.MyApplication;
+import com.wearable.sound.datalayer.DataLayerListenerService;
+import com.wearable.sound.models.SoundPrediction;
+import com.wearable.sound.service.ForegroundService;
+import com.wearable.sound.service.SnoozeSoundService;
+import com.wearable.sound.utils.AlarmReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,7 +71,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import static com.wearable.sound.SnoozeSoundService.SOUND_SNOOZE_FROM_WATCH_PATH;
+import static com.wearable.sound.service.SnoozeSoundService.SOUND_SNOOZE_FROM_WATCH_PATH;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
     public static final String MODEL_1 = "file:///android_asset/example_model.tflite";

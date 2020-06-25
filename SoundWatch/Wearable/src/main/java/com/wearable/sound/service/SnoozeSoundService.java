@@ -1,4 +1,4 @@
-package com.wearable.sound;
+package com.wearable.sound.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -12,6 +12,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
+import com.wearable.sound.utils.AlarmReceiver;
+import com.wearable.sound.application.MyApplication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.wearable.sound.MainActivity.convertSetToCommaSeparatedList;
+import static com.wearable.sound.ui.activity.MainActivity.convertSetToCommaSeparatedList;
 
 
 public class SnoozeSoundService extends IntentService {

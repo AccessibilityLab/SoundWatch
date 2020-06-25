@@ -1,4 +1,4 @@
-package com.wearable.sound;
+package com.wearable.sound.application;
 
 import android.app.Application;
 import java.util.ArrayList;

@@ -1,10 +1,13 @@
-package com.wearable.sound;
+package com.wearable.sound.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
+import com.wearable.sound.ui.activity.MainActivity;
+import com.wearable.sound.application.MyApplication;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.Arrays;

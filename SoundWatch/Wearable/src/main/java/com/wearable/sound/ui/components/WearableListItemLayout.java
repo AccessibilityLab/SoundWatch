@@ -1,10 +1,12 @@
-package com.wearable.sound;
+package com.wearable.sound.ui.components;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.wearable.sound.R;
 
 public class WearableListItemLayout extends LinearLayout
         implements WearableListView.OnCenterProximityListener {
