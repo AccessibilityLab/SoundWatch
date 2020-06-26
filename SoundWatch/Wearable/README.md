@@ -18,6 +18,25 @@ Folder Structure
 -------------
 
 
+Core functions
+-------------
+- [predictSoundsFromRawAudio]()
+Description:
+
+Parameters:
+`soundBuffer`: `List<Short>`
+`recordTime`: `long`
+
+Pseudocode:
+
+- [createAudioLabelNotification]()
+Description:
+
+Parameters:
+
+
+Pseudocode:
+
 Getting Started
 ---------------
 

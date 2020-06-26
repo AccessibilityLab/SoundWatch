@@ -13,7 +13,8 @@ import androidx.core.app.NotificationManagerCompat;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
 import com.wearable.sound.utils.AlarmReceiver;
-import com.wearable.sound.application.MyApplication;
+import com.wearable.sound.application.MainApplication;
+import static com.wearable.sound.utils.Constants.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -25,18 +26,15 @@ import static com.wearable.sound.ui.activity.MainActivity.convertSetToCommaSepar
 
 
 public class SnoozeSoundService extends IntentService {
-    public static final String SNOOZE_SOUND = "SNOOZE_SOUND";
-    public static final String SOUND_ID = "SOUND_ID";
-    public static final String SOUND_LABEL = "SOUND_LABEL";
+
     private static final String TAG = "SnoozeSoundService";
-    public static final String SNOOZE_TIME = "SNOOZE_TIME";
-    public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
-    public static final String CONNECTED_HOST_IDS = "CONNECTED_HOST_IDS";
+
     private Set<String> connectedHostIds;
 
     public SnoozeSoundService() {
         super("SnoozeSoundService");
     }
+
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Log.d(TAG, "onHandleIntent(): " + intent);
@@ -58,17 +56,15 @@ public class SnoozeSoundService extends IntentService {
                 );
                 this.connectedHostIds = connectedHostIds;
             }
-
-
-            ((MyApplication) this.getApplication()).addBlockedSounds(blockedNotificationID);
+            ((MainApplication) this.getApplication()).addBlockedSounds(blockedNotificationID);
             Log.i(TAG, "Add to list of blocked sounds " + blockedNotificationID);
 
             if (!snoozeTime.equals("Forever")) {
                 Intent alarmIntent = new Intent(this,  AlarmReceiver.class);
                 alarmIntent.setAction("com.wearable.sound.almMgr");
                 alarmIntent.putExtra("blockedSoundId", blockedNotificationID);
-                alarmIntent.putExtra(SnoozeSoundService.SOUND_LABEL, soundLabel);
-                alarmIntent.putExtra(SnoozeSoundService.CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
+                alarmIntent.putExtra(SOUND_LABEL, soundLabel);
+                alarmIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
                 int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, uniqueInt, alarmIntent, 0);
                 AlarmManager alarmMgr = (AlarmManager)this.getSystemService(ALARM_SERVICE);

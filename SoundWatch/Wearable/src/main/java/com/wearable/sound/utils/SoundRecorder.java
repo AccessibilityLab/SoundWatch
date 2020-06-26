@@ -61,7 +61,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static com.wearable.sound.datalayer.DataLayerListenerService.AUDIO_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.ARCHITECTURE;
 import static com.wearable.sound.ui.activity.MainActivity.AUDIO_TRANMISSION_STYLE;
 import static com.wearable.sound.ui.activity.MainActivity.PHONE_WATCH_ARCHITECTURE;
@@ -71,6 +70,10 @@ import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.ui.activity.MainActivity.MODEL_FILENAME;
 import static com.wearable.sound.ui.activity.MainActivity.LABEL_FILENAME;
+import static com.wearable.sound.utils.Constants.AUDIO_LABEL;
+import static com.wearable.sound.utils.HelperUtils.convertByteArrayToShortArray;
+import static com.wearable.sound.utils.HelperUtils.db;
+import static com.wearable.sound.utils.HelperUtils.longToBytes;
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
@@ -119,6 +122,11 @@ public class SoundRecorder {
         IDLE, RECORDING, PLAYING
     }
 
+    /**
+     *
+     * @param context
+     * @param outputFileName
+     */
     public SoundRecorder(Context context, String outputFileName) {
         mOutputFileName = outputFileName;
         mContext = context;
@@ -147,7 +155,13 @@ public class SoundRecorder {
         }
     }
 
-    /** Memory-map the model file in Assets. */
+    /**
+     * Memory-map the model file in Assets.
+     * @param assets
+     * @param modelFilename
+     * @return
+     * @throws IOException
+     */
     private static MappedByteBuffer loadModelFile(AssetManager assets, String modelFilename)
             throws IOException {
         AssetFileDescriptor fileDescriptor = assets.openFd(modelFilename);
@@ -160,17 +174,8 @@ public class SoundRecorder {
 
     /**
      * Starts recording from the MIC.
+     * @param connectedHostIds
      */
-    public void startRecording() {
-        if (mState != State.IDLE) {
-            return;
-        }
-
-        mRecordingAsyncTask = new RecordAudioAsyncTask(this);
-
-        mRecordingAsyncTask.execute();
-    }
-
     public void startRecording(Set<String> connectedHostIds) {
         Log.i(TAG, "Current Architecture: " + MainActivity.ARCHITECTURE);
         Log.i(TAG, "Tranportation Mode: " + MainActivity.AUDIO_TRANMISSION_STYLE);
@@ -182,6 +187,7 @@ public class SoundRecorder {
 
         mRecordingAsyncTask.execute();
     }
+
 
     public void stopRecording() {
         if (mRecordingAsyncTask != null) {
@@ -195,27 +201,13 @@ public class SoundRecorder {
     public void cleanup() {
         stopRecording();
     }
+
     /**
-     * Code to extract audio features
+     *
+     * @param soundBuffer
+     * @param recordTime
+     * @return
      */
-    private double db(short[] data) {
-        double rms = 0.0;
-        for (int i = 0; i < data.length; i++) {
-            rms += Math.abs(data[i]);
-        }
-        rms = rms/data.length;
-        return 20 * Math.log10(rms/32768.0);
-    }
-
-    public static double db(List<Short> soundBuffer) {
-        double rms = 0.0;
-        for (int i = 0; i < soundBuffer.size(); i++) {
-            rms += Math.abs(soundBuffer.get(i));
-        }
-        rms = rms/soundBuffer.size();
-        return 20 * Math.log10(rms/32768.0);
-}
-
     private String predictSoundsFromRawAudio(List<Short> soundBuffer, long recordTime) {
         if (soundBuffer.size() != 16000) {
             soundBuffer = new ArrayList<>();
@@ -327,10 +319,6 @@ public class SoundRecorder {
         byte[] bytes = new byte[8];
         ByteBuffer.wrap(bytes).putDouble(value);
         return bytes;
-    }
-
-    public static double toDouble(byte[] bytes) {
-        return ByteBuffer.wrap(bytes).getDouble();
     }
 
     private float[] extractAudioFeatures(List<Short> soundBuffer) {
@@ -543,7 +531,7 @@ public class SoundRecorder {
                 byte [] data = null;
 
                 if(TEST_E2E_LATENCY) {
-                    byte [] currentTimeData = soundRecorder.longToBytes(recordTime);
+                    byte [] currentTimeData = longToBytes(recordTime);
                     Log.i(TAG, "Current time sent from watch: " + recordTime);
                     data = new byte[currentTimeData.length + dbData.length + featuresData.length];
                     System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
@@ -568,19 +556,19 @@ public class SoundRecorder {
         }
 
 
-
+        /**
+         *
+         * @param buffer
+         * @param recordTime
+         */
         private void sendRawAudioToPhone(byte[] buffer, long recordTime) {
             SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
             if (TEST_E2E_LATENCY) {
-                byte[] currentTimeData = soundRecorder.longToBytes(recordTime);
+                byte[] currentTimeData = longToBytes(recordTime);
                 byte[] data = new byte[currentTimeData.length + buffer.length];
                 System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
                 System.arraycopy(buffer, 0, data, currentTimeData.length, buffer.length);
-//                Log.i(TAG, "Amount of raw audio sent " + data.length);
-//                Log.i(TAG, "Elapsed time from recording to before sending data to watch: " +
-//                        (System.currentTimeMillis() - recordTime));
                 for (String connectedHostId : soundRecorder.connectedHostIds) {
-//                    Log.d(TAG, "Sending audio data to phone");
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data)
@@ -595,6 +583,11 @@ public class SoundRecorder {
             }
         }
 
+        /**
+         *
+         * @param soundBuffer
+         * @param recordTime
+         */
         private void sendSoundFeaturesToServer(List<Short> soundBuffer, long recordTime) {
             try {
                 Log.i(TAG, "sendSoundFeaturesToServer()");
@@ -622,6 +615,11 @@ public class SoundRecorder {
             }
         }
 
+        /**
+         *
+         * @param soundBuffer
+         * @param recordTime
+         */
         private void sendRawAudioToServer(List<Short> soundBuffer, long recordTime) {
             try {
                 JSONObject jsonObject = new JSONObject();
@@ -635,12 +633,6 @@ public class SoundRecorder {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-
-        private short[] convertByteArrayToShortArray(byte[] bytes) {
-            short[] result = new short[bytes.length / 2];
-            ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(result);
-            return result;
         }
 
         @Override
@@ -667,32 +659,5 @@ public class SoundRecorder {
                 soundRecorder.mRecordingAsyncTask = null;
             }
         }
-    }
-
-    private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
-        StringBuilder result = new StringBuilder();
-        for (String connectedHostId: connectedHostIds) {
-            result.append(connectedHostId);
-        }
-        if (connectedHostIds.size() <= 1) {
-            return result.toString();
-        }
-        result.substring(0, result.length() - 1);
-        return result.toString();
-    }
-
-
-    // For Latency Tests
-    public byte[] longToBytes(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(x);
-        return buffer.array();
-    }
-
-    public long bytesToLong(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.put(bytes);
-        buffer.flip();//need flip
-        return buffer.getLong();
     }
 }

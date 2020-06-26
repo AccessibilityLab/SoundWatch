@@ -6,7 +6,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
 import com.wearable.sound.ui.activity.MainActivity;
-import com.wearable.sound.application.MyApplication;
+import com.wearable.sound.application.MainApplication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -28,7 +28,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     {
         Log.d(MainActivity.TAG, "Alarm received");
         int blockedNotificationID = intent.getIntExtra("blockedSoundId", 0);
-        ((MyApplication) context.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
+        ((MainApplication) context.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
         final String soundLabel = intent.getStringExtra(SOUND_LABEL);
         String input = intent.getStringExtra(CONNECTED_HOST_IDS);
         Log.i(TAG, "Connected host id: " + input);

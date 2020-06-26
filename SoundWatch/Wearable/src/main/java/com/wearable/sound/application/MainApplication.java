@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MyApplication extends Application {
+public class MainApplication extends Application {
     public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
         "Fire/Smoke Alarm",
         "Speech",

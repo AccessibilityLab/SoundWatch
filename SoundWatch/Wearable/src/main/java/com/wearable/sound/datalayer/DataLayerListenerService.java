@@ -28,7 +28,8 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.wearable.sound.ui.activity.MainActivity;
-import com.wearable.sound.application.MyApplication;
+import com.wearable.sound.application.MainApplication;
+import static com.wearable.sound.utils.Constants.*;
 
 import java.util.List;
 
@@ -37,21 +38,11 @@ public class DataLayerListenerService extends WearableListenerService {
 
     private static final String TAG = "DataLayerService";
 
-    private static final String START_ACTIVITY_PATH = "/start-activity";
-    private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
-    private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
-    private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
-    private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
-    private static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
-
-    public static final String COUNT_PATH = "/count";
-    public static final String AUDIO_LABEL = "AUDIO_LABEL";
-
     @Override
     public void onPeerConnected(Node node) {
         super.onPeerConnected(node);
         Log.i(TAG, "onPeerConnected()");
-        List blockedSounds = ((MyApplication) this.getApplication()).getBlockedSounds();
+        List blockedSounds = ((MainApplication) this.getApplication()).getBlockedSounds();
         Task<Integer> sendMessageTask =
                 Wearable.getMessageClient(this)
                         .sendMessage(node.getId(), SEND_CURRENT_BLOCKED_SOUND_PATH,
@@ -140,43 +131,25 @@ public class DataLayerListenerService extends WearableListenerService {
         String soundLabel = parts[0];
         boolean isEnabled = Boolean.parseBoolean(parts[1]);
         boolean isSnoozed = Boolean.parseBoolean(parts[2]);
-        List<String> enabledSounds = ((MyApplication) this.getApplication()).enabledSounds;
-
-
+        List<String> enabledSounds = ((MainApplication) this.getApplication()).enabledSounds;
         Log.i(TAG, "handleEnableSoundNotificatioN()");
 
         if (isEnabled) {
             Log.i(TAG, "Enabling sound ");
-
             // If it is currently snoozed, unsnooze it
-            final int blockedNotificationID = ((MyApplication) getApplicationContext()).getIntegerValueOfSound(soundLabel);
-            ((MyApplication) this.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
+            final int blockedNotificationID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(soundLabel);
+            ((MainApplication) this.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
             if (!enabledSounds.contains(soundLabel)) {
                 Log.i(TAG, "Remove from list of blocked sounds " + soundLabel);
-                ((MyApplication) this.getApplication()).addEnabledSound(soundLabel);
+                ((MainApplication) this.getApplication()).addEnabledSound(soundLabel);
             }
         } else {
             // adding the sound from current sound list
             Log.i(TAG, "Disabling sound ");
             if (enabledSounds.contains(soundLabel)) {
                 Log.i(TAG, "Add to list of blocked sounds " + soundLabel);
-                ((MyApplication) this.getApplication()).removeEnabledSound(soundLabel);
+                ((MainApplication) this.getApplication()).removeEnabledSound(soundLabel);
 
-            }
-        }
-    }
-
-    public class AudioLabel {
-        String label;
-        double confidence;
-        String time;
-        public AudioLabel(byte[] data) {
-            String message = new String(data);
-            String[] parts = message.split(",");
-            if (parts.length == 3) {
-                label = parts[0];
-                confidence = Double.parseDouble(parts[1]);
-                time = parts[2];
             }
         }
     }

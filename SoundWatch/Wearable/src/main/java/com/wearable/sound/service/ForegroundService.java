@@ -20,10 +20,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import androidx.core.app.NotificationCompat;
+import static com.wearable.sound.utils.Constants.*;
 
 public class ForegroundService extends Service {
-    public static final String CHANNEL_ID = "ForegroundServiceChannel";
-    private static final String VOICE_FILE_NAME = "audiorecord.pcm";
     private static final String TAG = "ForegroundService";
 
     private SoundRecorder mSoundRecorder;
@@ -53,14 +52,6 @@ public class ForegroundService extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(2, notification);
-        //do heavy work on a background thread
-        //stopSelf();
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                mSoundRecorder.startRecording(connectedHostIds);
-//            }
-//        }.start();
         mSoundRecorder.startRecording(connectedHostIds);
         Log.d(TAG, "Start Recording...");
         return START_NOT_STICKY;
