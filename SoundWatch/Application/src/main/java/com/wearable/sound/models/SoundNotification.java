@@ -1,4 +1,4 @@
-package com.wearable.sound;
+package com.wearable.sound.models;
 
 public class SoundNotification {
     public String label;

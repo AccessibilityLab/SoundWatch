@@ -1,4 +1,4 @@
-package com.wearable.sound;
+package com.wearable.sound.datalayer;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.media.AudioFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,7 +17,6 @@ import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.github.nkzawa.emitter.Emitter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -41,7 +39,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -54,14 +51,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
@@ -69,18 +61,19 @@ import androidx.core.app.NotificationCompat;
 
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.wearable.sound.R;
+import com.wearable.sound.models.SoundPrediction;
+import com.wearable.sound.ui.activity.MainActivity;
 
-import static com.wearable.sound.MainActivity.AUDIO_LABEL;
-import static com.wearable.sound.MainActivity.PREDICT_MULTIPLE_SOUNDS;
-import static com.wearable.sound.MainActivity.TEST_E2E_LATENCY;
-import static com.wearable.sound.MainActivity.TEST_MODEL_LATENCY;
+import static com.wearable.sound.ui.activity.MainActivity.AUDIO_LABEL;
+import static com.wearable.sound.ui.activity.MainActivity.PREDICT_MULTIPLE_SOUNDS;
+import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
+import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
 
 
 
 /** Listens to DataItems and Messages from the local node. */
 public class DataLayerListenerService extends WearableListenerService {
-
-
     private static final String TAG = "Phone/DataLayerService";
     private static final String UNIDENTIFIED_SOUND = "Unidentified Sound";
 

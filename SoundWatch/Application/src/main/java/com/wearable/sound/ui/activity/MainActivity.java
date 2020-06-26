@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wearable.sound;
+package com.wearable.sound.ui.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -63,6 +63,9 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.wearable.sound.datalayer.DataLayerListenerService;
+import com.wearable.sound.R;
+import com.wearable.sound.models.SoundNotification;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -444,7 +447,7 @@ public class MainActivity extends Activity
             throw new RuntimeException(e);
         }
 
-        mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.main_activity);
 
         // Stores DataItems received by the local broadcaster or from the paired watch.
