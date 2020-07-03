@@ -8,13 +8,17 @@ a deep learning-based sound classification engine (running on either the watch o
 cloud) to continually sense and process sound events in real-time. Below, we describe our sound classification
 engine, our privacy-preserving sound sensing pipeline, system architectures, and implementation.
 
+![SoundWatch system mockup](images/image.png?raw=true "Title")
+![SoundWatch system mockup 1](images/image_1.png?raw=true "Title")
+
+
 Pre-requisites
 --------------
-
+- Latest Android Studio 
 - Android SDK 28
 - Android Build Tools v28.0.3
 - Android Support Repository
-- Get the Tensorflow lite model that is open sourced [here]()
+- Get the sound classification Tensorflow lite model that is open sourced [here]()
 
 
 Screenshots
@@ -28,11 +32,33 @@ Folder Structure
 
 Getting Started
 ---------------
+- Point buildPython in build.grade to your local python installation (both of application and wearable modules), i.e:
+
+```gradle
+        python {
+            // If Chaquopy fails to find Python on your build machine, enable the following
+            // line and edit it to point to Python 3.4 or later.
+              buildPython "C:/Python36/python3.exe"
+//            buildPython "C:\\Users\\hungn\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+            pip {
+                install "numpy==1.14.2"
+            }
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+```
+
+Configuration
+-------------
+
+- Let gradle configure and install dependencies for both `Application` and `Wearable` projects. 
+- On top toolbar of Android Studio, make sure `Wearable` is chosen and click `Run` button. It is much preferred to use a physical Android Wear device since it is how we develop and tests the project. Otherwise, refer to the Android [documentation](https://developer.android.com/training/wearables/apps/creating) to set up the virtual Android Watch
 
 - Point buildPython in build.grade to your local python installation (both of application and wearable modules)
 - Change ARCHITECTURE in MainActivity for both Phone and Watch to switch between Architectures
-- please copy the tflite model into assets folder in Phone Application assets folder, and specify the filename inside MODEL_FILENAME in DataLayerListenerService
-- please copy the tflite model into assets folder in Watch Wearable assets folder, and specify the filename inside MODEL_FILENAME in MainActivity
+- please copy the `tflite` model and `labels.txt` into `src/assets` folder in Watch `Application` src folder, and specify the filename inside MODEL_FILENAME in MainActivity
+- please copy the `tflite` model and `labels.txt` into `src/assets` folder in Watch `Wearable` src folder, and specify the filename inside MODEL_FILENAME in MainActivity
 - WARNING: If use WATCH_ONLY_ARCHITECTURE, please copy the tflite model into assets folder in Wearable src folder, and specify the filename inside MODEL_FILENAME in SoundRecorder
 - Change AUDIO_TRANMISSION_STYLE in MainActivity for both Phone and Watch to change the Audio Transmission Style (Raw Audio vs. Audio Features)
 
@@ -45,4 +71,6 @@ Tests
 
 Support
 -------
+Contact [Hung V Ngo](www.hungvngo.com) @MakeabilityLab through email `hvn297` at cs.washington.edu
+Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at [MakeabilityLab](https://makeabilitylab.cs.washington.edu/)
 

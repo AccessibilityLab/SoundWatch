@@ -35,7 +35,8 @@ Example Usage of SocketIO Client:
 *Request*:
 ```json
 {
-    "data": [1.0,2.0,3.0] // Audio features from MFCC
+    "data": [1.0,2.0,3.0],
+    "db": "1.0"
 }
 ```
 *Response*:
@@ -48,7 +49,7 @@ Example Usage of SocketIO Client:
 - `audio_data`: Serve predictions from raw audio
 ```json
 {
-    "data": [1.0,2.0,3.0] // Raw audio of 16000 float elements
+    "data": [1.0,2.0,3.0]
 }
 ```
 *Response*:
@@ -68,4 +69,6 @@ Tests
 
 Support
 -------
+Contact [Hung V Ngo](www.hungvngo.com) @MakeabilityLab through email `hvn297` at cs.washington.edu
+Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at [MakeabilityLab](https://makeabilitylab.cs.washington.edu/)
 

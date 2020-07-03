@@ -61,19 +61,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static com.wearable.sound.ui.activity.MainActivity.ARCHITECTURE;
-import static com.wearable.sound.ui.activity.MainActivity.AUDIO_TRANMISSION_STYLE;
-import static com.wearable.sound.ui.activity.MainActivity.PHONE_WATCH_ARCHITECTURE;
-import static com.wearable.sound.ui.activity.MainActivity.PHONE_WATCH_SERVER_ARCHITECTURE;
-import static com.wearable.sound.ui.activity.MainActivity.RAW_AUDIO_TRANSMISSION;
-import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
-import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
-import static com.wearable.sound.ui.activity.MainActivity.MODEL_FILENAME;
-import static com.wearable.sound.ui.activity.MainActivity.LABEL_FILENAME;
+import static com.wearable.sound.ui.activity.MainActivity.mBroadcastSoundPrediction;
 import static com.wearable.sound.utils.Constants.AUDIO_LABEL;
 import static com.wearable.sound.utils.HelperUtils.convertByteArrayToShortArray;
 import static com.wearable.sound.utils.HelperUtils.db;
 import static com.wearable.sound.utils.HelperUtils.longToBytes;
+import static com.wearable.sound.utils.Constants.*;
 
 /**
  * A helper class to provide methods to record audio input from the MIC to the internal storage
@@ -130,7 +123,7 @@ public class SoundRecorder {
     public SoundRecorder(Context context, String outputFileName) {
         mOutputFileName = outputFileName;
         mContext = context;
-        if (MainActivity.ARCHITECTURE.equals(MainActivity.WATCH_ONLY_ARCHITECTURE)) {
+        if (ARCHITECTURE.equals(WATCH_ONLY_ARCHITECTURE)) {
             //Load labels
             String actualLabelFilename = LABEL_FILENAME.split("file:///android_asset/", -1)[1];
             BufferedReader br = null;
@@ -177,8 +170,8 @@ public class SoundRecorder {
      * @param connectedHostIds
      */
     public void startRecording(Set<String> connectedHostIds) {
-        Log.i(TAG, "Current Architecture: " + MainActivity.ARCHITECTURE);
-        Log.i(TAG, "Tranportation Mode: " + MainActivity.AUDIO_TRANMISSION_STYLE);
+        Log.i(TAG, "Current Architecture: " + ARCHITECTURE);
+        Log.i(TAG, "Tranportation Mode: " + AUDIO_TRANMISSION_STYLE);
         if (mState != State.IDLE) {
             return;
         }
@@ -294,7 +287,7 @@ public class SoundRecorder {
                     // Send prediction back to MainActivity
 
                     Intent broadcastIntent = new Intent();
-                    broadcastIntent.setAction(MainActivity.mBroadcastSoundPrediction);
+                    broadcastIntent.setAction(mBroadcastSoundPrediction);
                     if (TEST_E2E_LATENCY) {
                         String data = prediction + "," + confidence + "," + LocalTime.now() + "," + db(sData) + "," + recordTime;
                         broadcastIntent.putExtra(AUDIO_LABEL, data);
@@ -444,16 +437,16 @@ public class SoundRecorder {
         private void processAudioRecognition(List<Short> soundBuffer, byte[] buffer) {
             long recordTime = System.currentTimeMillis();
 //            Log.i(TAG, "Record time from watch is: " + recordTime);
-            switch (MainActivity.ARCHITECTURE) {
-                case MainActivity.WATCH_ONLY_ARCHITECTURE:
+            switch (ARCHITECTURE) {
+                case WATCH_ONLY_ARCHITECTURE:
                     predictSoundsFromRawAudio(soundBuffer, recordTime);
                     break;
-                case MainActivity.WATCH_SERVER_ARCHITECTURE:
-                    switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
-                        case MainActivity.AUDIO_FEATURES_TRANSMISSION:
+                case WATCH_SERVER_ARCHITECTURE:
+                    switch (AUDIO_TRANMISSION_STYLE) {
+                        case AUDIO_FEATURES_TRANSMISSION:
                             sendSoundFeaturesToServer(soundBuffer, recordTime);
                             break;
-                        case MainActivity.RAW_AUDIO_TRANSMISSION:
+                        case RAW_AUDIO_TRANSMISSION:
                             sendRawAudioToServer(soundBuffer, recordTime);
                             break;
                         default:
@@ -461,12 +454,12 @@ public class SoundRecorder {
                             break;
                     }
                     break;
-                case MainActivity.PHONE_WATCH_ARCHITECTURE:
-                    switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
-                        case MainActivity.AUDIO_FEATURES_TRANSMISSION:
+                case PHONE_WATCH_ARCHITECTURE:
+                    switch (AUDIO_TRANMISSION_STYLE) {
+                        case AUDIO_FEATURES_TRANSMISSION:
                             sendSoundFeaturesToPhone(soundBuffer, recordTime);
                             break;
-                        case MainActivity.RAW_AUDIO_TRANSMISSION:
+                        case RAW_AUDIO_TRANSMISSION:
                             sendRawAudioToPhone(buffer, recordTime);
                             break;
                         default:
@@ -474,16 +467,16 @@ public class SoundRecorder {
                             break;
                     }
                     break;
-                case MainActivity.PHONE_WATCH_SERVER_ARCHITECTURE:
+                case PHONE_WATCH_SERVER_ARCHITECTURE:
                     /**
                      *
                      This is the same because phone is in charge of which mode it wants to run
                      */
-                    switch (MainActivity.AUDIO_TRANMISSION_STYLE) {
-                        case MainActivity.AUDIO_FEATURES_TRANSMISSION:
+                    switch (AUDIO_TRANMISSION_STYLE) {
+                        case AUDIO_FEATURES_TRANSMISSION:
                             sendSoundFeaturesToPhone(soundBuffer, recordTime);
                             break;
-                        case MainActivity.RAW_AUDIO_TRANSMISSION:
+                        case RAW_AUDIO_TRANSMISSION:
                             sendRawAudioToPhone(buffer, recordTime);
                             break;
                         default:

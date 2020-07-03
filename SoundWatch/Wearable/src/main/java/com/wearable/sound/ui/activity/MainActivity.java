@@ -729,13 +729,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
-    /**
-     *
-     * @param audioLabel
-     */
-    public void createAudioLabelNotification(AudioLabel audioLabel) {
-
-        /* J AREA */
+    private void configureTestingAudioLabelNotification(AudioLabel audioLabel) {
+        // For testing purposes
         if (MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
             if (System.currentTimeMillis() <= absolutelastTime + 7 * 1000) { //multiply by 1000 to get milliseconds
                 Log.i(TAG, "A sound appear in less than 7 seconds of previous sound");
@@ -767,9 +762,17 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                     break;
                 }
         }
+    }
 
-        //Log.i(TAG, "Sound on watch: " + audioLabel.label);
+    /**
+     *
+     * @param audioLabel
+     */
+    public void createAudioLabelNotification(AudioLabel audioLabel) {
+        configureTestingAudioLabelNotification(audioLabel);
 
+        // Because these sounds are really similar, if there are more conditions, we can make this if else
+        // to be a separate helper function
         if((audioLabel.label).equals("Chopping") || (audioLabel.label).equals("Utensils and Cutlery")){
             audioLabel.label = "Knocking";
             Log.i(TAG, "Converted to " + audioLabel.label);
