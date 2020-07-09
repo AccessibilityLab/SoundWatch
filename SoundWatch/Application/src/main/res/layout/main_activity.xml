@@ -20,15 +20,16 @@
             android:text="SoundWatch"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="30sp"></TextView>
-        <!--    <Button-->
-        <!--        android:id="@+id/button"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:background="@drawable/rounablebutton"-->
-        <!--        android:padding="10sp"-->
-        <!--        android:textColor="#008ad3"-->
-        <!--        android:text="Favourite Places"-->
-        <!--        android:layout_gravity="top|right"/>-->
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounablebutton"
+                android:padding="10sp"
+                android:textColor="#008ad3"
+                android:text="Favourite Places"
+                android:layout_gravity="top|right"
+                android:onClick="onGeofenceClick"/>
 
     </LinearLayout>
 

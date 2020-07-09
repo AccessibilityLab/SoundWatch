@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=43:D3:70:29:4C:26:43:93:EB:F3:77:D6:13:1B:68:B4:FB:64:96:7E%3Bcom.wearable.sound.geofence
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.wearable.sound.geofence
+
+    SHA-1 certificate fingerprint:
+    43:D3:70:29:4C:26:43:93:EB:F3:77:D6:13:1B:68:B4:FB:64:96:7E
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyBv1jFk2nNCZOZkxAnoznRUeiaZQtXBT3c</string>
+</resources>

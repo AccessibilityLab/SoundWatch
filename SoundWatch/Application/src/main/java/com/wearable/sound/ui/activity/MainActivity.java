@@ -65,6 +65,7 @@ import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.wearable.sound.datalayer.DataLayerListenerService;
 import com.wearable.sound.R;
+import com.wearable.sound.geofence.GeofenceActivity;
 import com.wearable.sound.models.SoundNotification;
 
 import org.json.JSONException;
@@ -685,8 +686,10 @@ public class MainActivity extends Activity
         // "start-activity" message to each connected node.
         new StartWearableActivityTask().execute();
     }
-    public void onLocationAwarenessClick(View view) {
-
+    public void onGeofenceClick(View view) {
+        Log.d(TAG, "Navigating to GeofenceActivity");
+        Intent intent = new Intent(this, GeofenceActivity.class);
+        startActivity(intent);
     }
 
     @WorkerThread

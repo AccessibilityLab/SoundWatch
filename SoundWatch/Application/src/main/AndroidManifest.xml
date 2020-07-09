@@ -20,6 +20,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
             android:allowBackup="true"
@@ -28,6 +29,22 @@
             android:usesCleartextTraffic="true"
             android:theme="@android:style/Theme.Black.NoTitleBar"
         >
+        <receiver android:name=".geofence.GeofenceBroadcastReceiver"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key"/>
+
+
+        <activity android:name=".geofence.GeofenceActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            >
+
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        </activity>
+
+        <provider
+            android:name=".provider.PlaceContentProvider"
+            android:authorities="com.wearable.sound"
+            android:exported="false"/>
 
 
         <meta-data
