@@ -52,7 +52,7 @@
                 android:value="@integer/google_play_services_version" />
 
         <service
-                android:name=".datalayer.DataLayerListenerService" >
+                android:name=".ui.activity.datalayer.DataLayerListenerService" >
             <intent-filter>
                 <!-- listeners receive events that match the action and data filters -->
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />

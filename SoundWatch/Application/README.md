@@ -15,7 +15,7 @@ Refer to main documentation
 
 Core functions
 -------------
-[onMessageReceived](src/main/java/com/wearable/sound/datalayer/DataLayerListenerService.java)
+[onMessageReceived](src/main/java/com/wearable/sound/ui/activity/datalayer/DataLayerListenerService.java)
 -----
 Description:
 Main gateway to receive message from watch including various messages
@@ -25,7 +25,7 @@ Main gateway to receive message from watch including various messages
 - `AUDIO_PREDICTIOn`
 
 
-[processAudioRecognition](src/main/java/com/wearable/sound/datalayer/DataLayerListenerService.java)
+[processAudioRecognition](src/main/java/com/wearable/sound/ui/activity/datalayer/DataLayerListenerService.java)
 ------
 Description:
 Run different audio prediction algorithms depends on different conditions:
@@ -34,13 +34,13 @@ Run different audio prediction algorithms depends on different conditions:
 - Send data to server through socket and wait for response from server
 
 
-[sendSoundFeaturesToServer](src/main/java/com/wearable/sound/datalayer/DataLayerListenerService.java)
+[sendSoundFeaturesToServer](src/main/java/com/wearable/sound/ui/activity/datalayer/DataLayerListenerService.java)
 -----
 Description: Send socket events to server to process audio recognition
 
 
 
-[predictSoundsFromRawAudio](src/main/java/com/wearable/sound/datalayer/DataLayerListenerService.java)
+[predictSoundsFromRawAudio](src/main/java/com/wearable/sound/ui/activity/datalayer/DataLayerListenerService.java)
 -------
 Description: Convert raw audio sound of 16000 float elements (in 1 second) to corresponding label by using `tflite` model
 
@@ -49,12 +49,12 @@ Parameters:
 - `soundBuffer`: `List<Short>`
 - `recordTime`: `long`
 
-Pseudocode: 
+Pseudocode:
 1. Check if decibel threshold is large enough (to ensure the sound is sufficiently large)
-2. Compute [MFCC features](https://en.wikipedia.org/wiki/Mel-frequency_cepstrum) from raw audio by utilizing [Chaquopy](https://chaquo.com/chaquopy/) to run `python` function.  
+2. Compute [MFCC features](https://en.wikipedia.org/wiki/Mel-frequency_cepstrum) from raw audio by utilizing [Chaquopy](https://chaquo.com/chaquopy/) to run `python` function.
 3. If the accuracy is larger than the minimum threshold, the sound label is sent to `MainActivity` to display watch notification by sending a `BroadCastIntent`
 
-[SendAudioLabelToWearTask](src/main/java/com/wearable/sound/datalayer/DataLayerListenerService.java)
+[SendAudioLabelToWearTask](src/main/java/com/wearable/sound/ui/activity/datalayer/DataLayerListenerService.java)
 -----
 Description: Send serialized `AudioLabel` as a concatenated string object back to watch for displaying notification
 
@@ -85,7 +85,7 @@ Getting Started
         }
 ```
 
-- Let gradle configure and install dependencies for both `Application` and `Wearable` projects. 
+- Let gradle configure and install dependencies for both `Application` and `Wearable` projects.
 - On top toolbar of Android Studio, make sure `Application` is chosen and click `Run` button. It is much preferred to use a physical Android Wear device since it is how we develop and tests the project. Otherwise, refer to the Android [documentation](https://developer.android.com/training/wearables/apps/creating) to set up the virtual Android Watch
 
 - Point buildPython in build.grade to your local python installation (both of application and wearable modules)
@@ -99,7 +99,7 @@ Getting Started
 Tests
 -------
 
-- For Model Latency, enable "TEST_MODEL_LATENCY" in MainActivity for both Watch and Phone 
+- For Model Latency, enable "TEST_MODEL_LATENCY" in MainActivity for both Watch and Phone
 - For E2E Latency, enable "TEST_E2E_LATENCY" in MainActivity for both Watch and Phone
 
 Support

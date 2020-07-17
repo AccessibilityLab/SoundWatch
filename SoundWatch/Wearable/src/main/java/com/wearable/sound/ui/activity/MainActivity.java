@@ -38,9 +38,8 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.tasks.Task;
 import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
-import com.wearable.sound.datalayer.DataLayerListenerService;
-import com.wearable.sound.models.AudioLabel;
-import com.wearable.sound.models.SoundPrediction;
+import com.wearable.sound.ui.activity.models.AudioLabel;
+import com.wearable.sound.ui.activity.models.SoundPrediction;
 import com.wearable.sound.service.ForegroundService;
 import com.wearable.sound.service.SnoozeSoundService;
 import com.wearable.sound.utils.AlarmReceiver;
@@ -779,7 +778,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }
 
         /* J AREA ENDS */
-        
+
         // Unique notification for each kind of sound
         final int NOTIFICATION_ID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
 

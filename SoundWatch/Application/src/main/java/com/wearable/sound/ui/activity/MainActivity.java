@@ -63,10 +63,10 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.wearable.sound.datalayer.DataLayerListenerService;
+import com.wearable.sound.ui.activity.datalayer.DataLayerListenerService;
 import com.wearable.sound.R;
 import com.wearable.sound.geofence.GeofenceActivity;
-import com.wearable.sound.models.SoundNotification;
+import com.wearable.sound.ui.activity.models.SoundNotification;
 
 import org.json.JSONException;
 import org.json.JSONObject;

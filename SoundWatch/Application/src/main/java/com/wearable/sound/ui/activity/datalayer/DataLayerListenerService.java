@@ -1,4 +1,4 @@
-package com.wearable.sound.datalayer;
+package com.wearable.sound.ui.activity.datalayer;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -62,7 +62,7 @@ import androidx.core.app.NotificationCompat;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.wearable.sound.R;
-import com.wearable.sound.models.SoundPrediction;
+import com.wearable.sound.ui.activity.models.SoundPrediction;
 import com.wearable.sound.ui.activity.MainActivity;
 
 import static com.wearable.sound.ui.activity.MainActivity.AUDIO_LABEL;

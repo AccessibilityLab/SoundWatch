@@ -1,4 +1,4 @@
-package com.wearable.sound.models;
+package com.wearable.sound.ui.activity.models;
 
 public class SoundPrediction implements Comparable<SoundPrediction>{
     private String label;

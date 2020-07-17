@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wearable.sound.datalayer;
+package com.wearable.sound.ui.activity.datalayer;
 
 import android.content.Intent;
 import android.net.Uri;

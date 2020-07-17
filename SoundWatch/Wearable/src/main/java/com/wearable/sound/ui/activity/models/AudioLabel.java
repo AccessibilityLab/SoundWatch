@@ -1,4 +1,4 @@
-package com.wearable.sound.models;
+package com.wearable.sound.ui.activity.models;
 
 public class AudioLabel {
     public String label;
