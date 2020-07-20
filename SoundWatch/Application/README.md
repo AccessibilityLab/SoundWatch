@@ -1,17 +1,11 @@
 
 Introduction
 ------------
+This folder contains the SoundWatch application on the Android phone. 
 
-Pre-requisites
---------------
-- Android SDK 28
-- Android Build Tools v28.0.3
-- Android Support Repository
-- Get the Tensorflow lite model that is open sourced [here]()
-
-Screenshots
--------------
-Refer to main documentation
+Features
+- Show a list of current sounds that users can enable and disable
+- Receive audio data from watch
 
 Core functions
 -------------
