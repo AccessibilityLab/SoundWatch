@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#000"
+	android:orientation="vertical"
+	android:textColor="@color/common_google_signin_btn_text_dark_pressed">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="100dp"
+			android:paddingTop="12sp"
+			android:paddingBottom="20sp"
+			android:paddingLeft="8sp"
+			android:text="SoundWatch"
+			android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+			android:textSize="30sp"></TextView>
+
+	</LinearLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="#000"
+			android:orientation="vertical">
+
+			<CheckBox
+				android:id="@+id/speech"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Speech"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/knocking"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Knocking"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/door_in_use"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Door In-Use"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/fire_smoke_alarm"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:drawablePadding="20dp"
+				android:onClick="onCheckBoxClick"
+				android:text="Fire Smoke Alarm"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/phone_ring"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Phone Ring"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/water_running"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Water Running"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+
+			<CheckBox
+				android:id="@+id/microwave"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Microwave"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/dishwasher"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Dishwasher"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/laughing"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Laughing"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/car_honk"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Car Honk"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+			<CheckBox
+				android:id="@+id/vehicle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="30dp"
+				android:buttonTint="@color/wl_blue"
+				android:checked="true"
+				android:onClick="onCheckBoxClick"
+				android:text="Vehicle"
+				android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

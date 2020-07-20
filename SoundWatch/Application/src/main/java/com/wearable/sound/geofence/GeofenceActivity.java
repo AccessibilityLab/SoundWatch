@@ -232,6 +232,9 @@ public class GeofenceActivity extends AppCompatActivity implements
 
             // Get live data information
             refreshPlacesData();
+
+			Intent intent = new Intent(this, GeofenceSoundPreferenceActivity.class);
+			startActivity(intent);
         }
     }
 

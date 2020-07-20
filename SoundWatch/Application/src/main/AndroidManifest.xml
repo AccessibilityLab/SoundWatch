@@ -41,6 +41,12 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
         </activity>
 
+		<activity android:name=".geofence.GeofenceSoundPreferenceActivity"
+			android:theme="@style/Theme.AppCompat.Light"
+		>
+
+		</activity>
+
         <provider
             android:name=".provider.PlaceContentProvider"
             android:authorities="com.wearable.sound"
