@@ -17,7 +17,6 @@ engine, our privacy-preserving sound sensing pipeline, system architectures, and
 [[Paper PDF](https://makeabilitylab.cs.washington.edu/media/publications/Jain_ExploringSmartwatchBasedDeepLearningApproachesToSupportSoundAwarenessForDeafAndHardOfHearingUsers_ASSETS2020.pdf)]
 
 ![SoundWatch system mockup](images/image.png?raw=true "Title")
-![SoundWatch system mockup 1](images/image_1.png?raw=true "Title")
 
 ## Table Of Contents ##
 
@@ -55,7 +54,7 @@ Folder Structure
             // If Chaquopy fails to find Python on your build machine, enable the following
             // line and edit it to point to Python 3.4 or later.
               buildPython "C:/Python36/python3.exe"
-//            buildPython "C:\\Users\\hungn\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+            // buildPython "C:\\Users\\hungn\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
             pip {
                 install "numpy==1.14.2"
             }
