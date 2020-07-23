@@ -6,15 +6,10 @@
 
 Introduction
 ------------
-SoundWatch is an Android-based app that leverages commercially available smartwatches to provide
-glanceable, always-available, and private sound feedback in multiple contexts. Building from previous work, SoundWatch informs users about three key sound properties: sound identity, loudness, and time of
-occurrence through customizable sound alerts using visual and vibration feedback. We use
-a deep learning-based sound classification engine (running on either the watch or on the paired phone or the
-cloud) to continually sense and process sound events in real-time. Below, we describe our sound classification
-engine, our privacy-preserving sound sensing pipeline, system architectures, and implementation.
+SoundWatch is an Android-based app designed for commercially available smartwatches to provide glanceable, always-available, and private sound feedback in multiple contexts. SoundWatch informs users about three key sound properties: sound identity, loudness, and time of occurrence through customizable sound alerts using visual and vibrational feedback. We use a deep learning-based sound classification engine (running on either the watch or on the paired phone or cloud) to continually sense and process sound events in real-time. SoundWatch supports four different architectural configurations: watch-only, watch+phone, watch+phone+cloud, and watch+cloud.
 
 [[Website](https://makeabilitylab.cs.washington.edu/project/soundwatch/)]
-[[Paper PDF](https://makeabilitylab.cs.washington.edu/media/publications/Jain_ExploringSmartwatchBasedDeepLearningApproachesToSupportSoundAwarenessForDeafAndHardOfHearingUsers_ASSETS2020.pdf)]
+[[Paper PDF](https://homes.cs.washington.edu/~djain/img/portfolio/Jain_SoundWatch_ASSETS2020.pdf)]
 
 ![SoundWatch system mockup](images/image.png?raw=true "Title")
 
@@ -32,7 +27,7 @@ engine, our privacy-preserving sound sensing pipeline, system architectures, and
 - Android SDK 28
 - Android Build Tools v28.0.3
 - Android Support Repository
-- Get the sound classification Tensorflow lite model that is open sourced [here](https://www.dropbox.com/s/suwdf3bub5nd933/example_model.tflite?dl=0&fbclid=IwAR10xvhog9POOdamV7oUmOjkFQhiMNQp61ZZjaQwzVjD2RyY8fsZNznnMps)
+- Get the sound classification Tensorflow lite model and the label files that are open sourced [here](https://www.dropbox.com/sh/wngu1kuufwdk8nr/AAC1rm5QR-amL_HBzTOgsZnca?dl=0)
 
 Screenshots
 -------------
@@ -68,37 +63,35 @@ Configuration
 -------------
 
 - Let gradle configure and install dependencies for both `Application` and `Wearable` projects. 
-- On top toolbar of Android Studio, make sure `Wearable` is chosen and click `Run` button. It is much preferred to use a physical Android Wear device since it is how we develop and tests the project. Otherwise, refer to the Android [documentation](https://developer.android.com/training/wearables/apps/creating) to set up the virtual Android Watch
+- On top toolbar of Android Studio, make sure `Wearable` is chosen and click `Run` button. It is much preferred to use a physical Android Wear device, which is how we developed and tested the project. Otherwise, refer to the Android [documentation](https://developer.android.com/training/wearables/apps/creating) to set up the virtual Android Watch
 - Point `buildPython` in `build.gradle` to your local python installation (both of application and wearable modules)
 - Change `ARCHITECTURE` in MainActivity for both Phone and Watch to switch between Architectures
-- Copy the `tflite` model and `labels.txt` into `src/assets` folder in Watch `Application` src folder, and specify the filename inside MODEL_FILENAME in MainActivity
-- Copy the `tflite` model and `labels.txt` into `src/assets` folder in Watch `Wearable` src folder, and specify the filename inside MODEL_FILENAME in MainActivity
-- WARNING: If use `WATCH_ONLY_ARCHITECTURE`, please copy the tflite model into assets folder in Wearable src folder, and specify the filename inside `MODEL_FILENAME` in SoundRecorder
-- Change `AUDIO_TRANMISSION_STYLE` in `MainActivity.java` for both Phone and Watch to change the Audio Transmission Style (Raw Audio vs. Audio Features)
-
+- Copy the `tflite` model and `labels.txt` (downloaded above) into `src/assets` folder in Watch `Application` src folder, and specify the filename inside MODEL_FILENAME in MainActivity
+- Also copy the same `tflite` model and `labels.txt` into `src/assets` folder in Watch `Wearable` src folder, and specify the filename inside MODEL_FILENAME in MainActivity
+- WARNING: If using the `WATCH_ONLY_ARCHITECTURE`, please copy the tflite model into assets folder in Wearable src folder, and specify the filename inside `MODEL_FILENAME` in SoundRecorder
+- Change `AUDIO_TRANMISSION_STYLE` in `MainActivity.java` for both Phone and Watch to change the Audio Transmission Style ("Raw Audio" which is faster to process and transmit vs. "Audio Features" which are more private)
 
 ## Test ##
 -------
 
-- For Model Latency, enable "TEST_MODEL_LATENCY" in MainActivity for both Watch and Phone to get the time used to run the ML model for audio recognition
+- For Model Latency, enable "TEST_MODEL_LATENCY" in MainActivity for both Watch and Phone to test the model prediction time.
 - For E2E Latency, enable "TEST_E2E_LATENCY" in MainActivity for both Watch and Phone to get the end to end latency from when the sound is first captured on the watch to the time when the notification is displayed on the watch.
 
-After enabling the boolean flags, just run the watch and phone app like usual. The test results will be output as `*.txt` (i.e: `watch_model.txt`, `e2e_latency.txt`) to local device directory (Phone or watch) inside the `com.wearable.sound` folder.
+After enabling the boolean flags, just run the watch and phone app like usual. The test results will be output as `*.txt` (i.e: `watch_model.txt`, `e2e_latency.txt`) to local device directory (phone or watch) inside the `com.wearable.sound` folder.
 
 ## Support ##
 -------
-Contact [Hung V Ngo](www.hungvngo.com) @MakeabilityLab through email `hvn297` at cs.washington.edu
-Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at [MakeabilityLab](https://makeabilitylab.cs.washington.edu/)
+Contact [Hung V Ngo](www.hungvngo.com) @MakeabilityLab through email `hvn297@cs.washington.edu`
+Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at the [Makeability Lab](https://makeabilitylab.cs.washington.edu/)
 
-Drop us a note if you are using or plan to use SoundWatch for research purposes.
+Drop us a note if you are using or plan to use SoundWatch for research purposes. We are also happy to help with any questions or issues.
 
 ## Acknowledgement ##
 -------
 - The Android watch was built based on the [Data layer sample](https://github.com/android/wear-os-samples/tree/master/DataLayer) from Google Android repo to establish connection between phone and watch.
 - Python server is created with [Socket.io](https://socket.io/blog/native-socket-io-and-android/)
-- The ML model depends on the Python module to convert raw audio sounds to MFCC features through the use of Python-Android bridge with [Chaquopy](https://chaquo.com/chaquopy/)
+- The ML model depends on the Python module to convert raw audio sounds to MFCC features through a Python-Android bridge with [Chaquopy](https://chaquo.com/chaquopy/)
 
 ## Related work ##
 --------
 - [HomeSound](https://makeabilitylab.cs.washington.edu/project/smarthomedhh/): An Iterative Field Deployment of an In-Home Sound Awareness System for Deaf or Hard of Hearing Users
-
