@@ -11,7 +11,7 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 [[Website](https://makeabilitylab.cs.washington.edu/project/soundwatch/)]
 [[Paper PDF](https://homes.cs.washington.edu/~djain/img/portfolio/Jain_SoundWatch_ASSETS2020.pdf)]
 
-![SoundWatch system mockup](images/SoundWatch_mockups.png?raw=true "Title")
+![SoundWatch system mockup](images/SoundWatch_demos.png?raw=true "Title")
 
 ## Table Of Contents ##
 
@@ -31,7 +31,7 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 
 Screenshots
 -------------
-![SoundWatch system mockup](images/SoundWatch_demos.png?raw=true "Title")
+![SoundWatch system mockup](images/SoundWatch_mockups.png?raw=true "Title")
 
 
 Folder Structure
