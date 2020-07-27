@@ -21,6 +21,25 @@ Getting Started
 
 - `server.py`: Socket server to serve audio predictions from clients devices such as phone and watch
 
+*Usage*: ```python server.py```
+
+- Watch and Phone application *MUST* let `ARCHITECTURE` variable in `MainActivity.java` to `WATCH_SERVER_ARCHITECTURE` or `PHONE_WATCH_SERVER_ARCHITECTURE` to establish connection to server.
+
+- Change `SERVER_URL` to the path that is running the socket server. For example, if running locally, it should be something like 
+```java
+SERVER_URL = "http://128.123.456.41:8787";
+```
+
+*Debug instructions* 
+- Make sure that the socket server is working properly, navigate to the server in the browser (i.e: `http://localhost:8787`) and checks that the browser render the [index.html](templates/index.html) file properly. 
+- Type a message to the text area and click `Send` to make sure that the message is properly sent to the server. Upon receiving the message, the socket server will reply back the exact message to the browser and render a `<div>` text. Make sure that the text appear and the message is the same with what you type in.
+
+
+![server html](../images/server.png?raw=true "Title")
+
+Testing 
+-----
+
 - `e2eServer.py`: server application that measures the end to end runtime of the sound prediction 
 
 *Warning*: This requires the watch and the phone to set `TEST_E2E_LATENCY` to be `true` in the corresponding files.
