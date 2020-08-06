@@ -38,18 +38,31 @@
             android:text="SoundWatch"
             android:textSize="18sp" />
 
-        <ImageView
-            android:id="@+id/mic"
+        <com.kuassivi.component.RipplePulseRelativeLayout
+            android:id="@+id/pulseLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="13dp"
-            android:src="@drawable/ic_mic_32dp"
-            android:onClick="onRecordClick"
-            android:background="@drawable/rounded_background_blue"
-            />
+            android:layout_height="match_parent"
+            app:pulse_layout_PulseDuration="1800"
+            app:pulse_layout_PulseType="fill"
+            app:pulse_layout_RippleColor="@color/semitransparent_grey"
+            app:pulse_layout_RippleEndRadiusPercent="200"
+            app:pulse_layout_RippleStartRadiusPercent="50"
+            app:pulse_layout_ShowPreview="true">
+
+            <!-- You can add now any View inside here -->
+            <ImageView
+                android:id="@+id/mic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="13dp"
+                android:background="@drawable/rounded_background_blue"
+                android:onClick="onRecordClick"
+                android:src="@drawable/ic_mic_32dp"
+                android:contentDescription="TODO" />
+        </com.kuassivi.component.RipplePulseRelativeLayout>
     </LinearLayout>
 
     <!-- Don't show again display-->
@@ -57,9 +70,7 @@
         android:id="@+id/dontshowDisplay_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:gravity="center"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="80sp"
         android:paddingTop="20sp">
         <TextView
@@ -68,7 +79,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="Click the button above \n to begin listening"
+            android:text="@string/click_the_button_above_n_to_begin_listening"
             android:textSize="14.1sp" />
     </LinearLayout>
 

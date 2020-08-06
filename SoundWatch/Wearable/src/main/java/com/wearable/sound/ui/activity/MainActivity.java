@@ -1,6 +1,7 @@
 package com.wearable.sound.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -21,6 +23,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +40,7 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
 import com.google.android.gms.tasks.Task;
+import com.kuassivi.component.RipplePulseRelativeLayout;
 import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
 import com.wearable.sound.datalayer.DataLayerListenerService;
@@ -441,30 +446,38 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         });
     }
 
+    @SuppressLint("SetTextI18n")
     public void onRecordClick(View view) {
+        // Change the image to STOP icon
+        ImageView imageView = findViewById(R.id.mic);
+        TextView textView = findViewById(R.id.dontshowDisplay);
+        TextView soundTextView = findViewById(R.id.soundDisplay);
+        TextView locationTextView = findViewById(R.id.locationDisplay);
+        // add ripple effect for better readability
+        RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
         if (!IS_RECORDING) {
             startRecording(this);
 //            if (connectedHostIds.isEmpty()) {
 //                return;
 //            }
-            // Change the image to STOP icon
-            ImageView imageView = findViewById(R.id.mic);
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red));
+            // Update deprecated method from API 22 (getDrawable)
+            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
             imageView.setImageResource(R.drawable.ic_pause_black_32dp);
-
+            pulseLayout.startPulse();
             // Change the instruction text
-            TextView textView = findViewById(R.id.dontshowDisplay);
+            locationTextView.setText("");
+            soundTextView.setText("LISTENING");
             textView.setText("Press side button and wait for notifications");
             IS_RECORDING = true;
         } else {
-            ImageView imageView = findViewById(R.id.mic);
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue));
+            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
             imageView.setImageResource(R.drawable.ic_mic_32dp);
+            pulseLayout.stopPulse();
             IS_RECORDING = false;
             onStopClick(view);
-
             // Change the instruction text
-            TextView textView = findViewById(R.id.dontshowDisplay);
+            locationTextView.setText("Welcome");
+            soundTextView.setText("SoundWatch");
             textView.setText("Click the button above \n to begin listening");
         }
 

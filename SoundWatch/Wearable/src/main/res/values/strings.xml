@@ -24,4 +24,5 @@
     <string name="main_text_activity_big_text_main">
         Sound Prediction
     </string>
+    <string name="click_the_button_above_n_to_begin_listening">Click the button above \n to begin listening</string>
 </resources>
