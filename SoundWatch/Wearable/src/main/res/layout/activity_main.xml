@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             app:pulse_layout_PulseDuration="1800"
             app:pulse_layout_PulseType="fill"
-            app:pulse_layout_RippleColor="@color/semitransparent_grey"
+            app:pulse_layout_RippleColor="@color/grey"
             app:pulse_layout_RippleEndRadiusPercent="200"
             app:pulse_layout_RippleStartRadiusPercent="50"
             app:pulse_layout_ShowPreview="true">
