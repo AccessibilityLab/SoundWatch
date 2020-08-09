@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="80sp"
         android:layout_marginTop="40sp"
-        android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -25,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:fontFamily="sans-serif"
-            android:text="Welcome"
+            android:text="@string/welcome"
             android:textSize="18sp"
             android:layout_marginBottom="-1sp"/>
         <TextView
@@ -34,8 +33,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:text="SoundWatch"
+            android:textStyle="normal"
+            android:text="@string/soundwatch"
             android:textSize="18sp" />
 
         <com.kuassivi.component.RipplePulseRelativeLayout
@@ -45,19 +44,22 @@
             app:pulse_layout_PulseDuration="1800"
             app:pulse_layout_PulseType="fill"
             app:pulse_layout_RippleColor="@color/grey"
-            app:pulse_layout_RippleEndRadiusPercent="200"
+            app:pulse_layout_RippleEndRadiusPercent="300"
             app:pulse_layout_RippleStartRadiusPercent="50"
             app:pulse_layout_ShowPreview="true">
 
             <!-- You can add now any View inside here -->
             <ImageView
                 android:id="@+id/mic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_above="@+id/center"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="13dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:scaleType="centerCrop"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 android:background="@drawable/rounded_background_blue"
                 android:onClick="onRecordClick"
                 android:src="@drawable/ic_mic_32dp"
@@ -72,23 +74,24 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginTop="80sp"
-        android:paddingTop="20sp">
+        android:paddingTop="35sp">
+
         <TextView
             android:id="@+id/dontshowDisplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
+            android:gravity="center_horizontal"
             android:text="@string/click_the_button_above_n_to_begin_listening"
-            android:textSize="14.1sp" />
+            android:textSize="14.1sp"
+            android:textStyle="bold"
+            android:background="#07000000"/>
     </LinearLayout>
 
     <!-- Items layout -->
     <LinearLayout
         android:id="@+id/wearable_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="93sp"
-        android:layout_weight="1"
+        android:layout_height="70sp"
         android:layout_marginTop="140sp"
         android:paddingTop="-10sp">
         <android.support.wearable.view.WearableListView

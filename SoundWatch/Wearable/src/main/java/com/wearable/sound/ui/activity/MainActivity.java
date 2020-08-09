@@ -466,7 +466,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             pulseLayout.startPulse();
             // Change the instruction text
             locationTextView.setText("");
-            soundTextView.setText("LISTENING");
+            soundTextView.setText("LISTENING..");
             textView.setText("Press side button and wait for notifications");
             IS_RECORDING = true;
         } else {

@@ -25,4 +25,6 @@
         Sound Prediction
     </string>
     <string name="click_the_button_above_n_to_begin_listening">Click the button above \n to begin listening</string>
+    <string name="welcome">Welcome</string>
+    <string name="soundwatch">SoundWatch</string>
 </resources>
