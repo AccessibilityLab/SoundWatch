@@ -236,7 +236,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             } else {
                 audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db,
                         null);
-
             }
 
             createAudioLabelNotification(audioLabel);
@@ -466,8 +465,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             pulseLayout.startPulse();
             // Change the instruction text
             locationTextView.setText("");
-            soundTextView.setText("LISTENING..");
-            textView.setText("Press side button and wait for notifications");
+            soundTextView.setText("Listening..");
+            textView.setText("Press Side button and wait for notifications");
             IS_RECORDING = true;
         } else {
             imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
@@ -476,7 +475,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             IS_RECORDING = false;
             onStopClick(view);
             // Change the instruction text
-            locationTextView.setText("Welcome");
+            locationTextView.setText("Welcome to");
             soundTextView.setText("SoundWatch");
             textView.setText("Click the button above \n to begin listening");
         }
@@ -626,7 +625,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                             TextView soundDisplay = findViewById(R.id.soundDisplay);
                             TextView locationDisplay = findViewById(R.id.locationDisplay);
                             locationDisplay.setText("");
-                            soundDisplay.setText("HomeSounds app");
+                            soundDisplay.setText("Listening..");
                             TextView fTextView = (findViewById(R.id.dontshowDisplay));
                             fTextView.setText("Press the side button and wait for notifications.");
                         }

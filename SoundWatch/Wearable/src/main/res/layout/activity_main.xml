@@ -13,78 +13,82 @@
         android:id="@+id/text_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="80sp"
-        android:layout_marginTop="40sp"
-        android:gravity="center"
+        android:layout_marginTop="@dimen/screen_percentage_12"
+        android:layout_marginBottom="@dimen/diag_button_size"
+        android:gravity="top"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/locationDisplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginBottom="-1sp"
             android:fontFamily="sans-serif"
+            android:gravity="center"
             android:text="@string/welcome"
-            android:textSize="18sp"
-            android:layout_marginBottom="-1sp"/>
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/soundDisplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:fontFamily="sans-serif"
-            android:textStyle="normal"
+            android:gravity="center"
             android:text="@string/soundwatch"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <com.kuassivi.component.RipplePulseRelativeLayout
-            android:id="@+id/pulseLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:pulse_layout_PulseDuration="1800"
-            app:pulse_layout_PulseType="fill"
-            app:pulse_layout_RippleColor="@color/grey"
-            app:pulse_layout_RippleEndRadiusPercent="300"
-            app:pulse_layout_RippleStartRadiusPercent="50"
-            app:pulse_layout_ShowPreview="true">
-
-            <!-- You can add now any View inside here -->
-            <ImageView
-                android:id="@+id/mic"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_above="@+id/center"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:scaleType="centerCrop"
-                android:scaleX="1.2"
-                android:scaleY="1.2"
-                android:background="@drawable/rounded_background_blue"
-                android:onClick="onRecordClick"
-                android:src="@drawable/ic_mic_32dp"
-                android:contentDescription="TODO" />
-        </com.kuassivi.component.RipplePulseRelativeLayout>
     </LinearLayout>
+
+    <com.kuassivi.component.RipplePulseRelativeLayout
+        android:id="@+id/pulseLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:pulse_layout_PulseDuration="1800"
+        app:pulse_layout_PulseType="fill"
+        app:pulse_layout_RippleColor="@color/grey"
+        app:pulse_layout_RippleEndRadiusPercent="300"
+        app:pulse_layout_RippleStartRadiusPercent="50"
+        app:pulse_layout_ShowPreview="true">
+
+        <!-- You can add now any View inside here -->
+        <ImageView
+            android:id="@+id/mic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/center"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/rounded_background_blue"
+            android:contentDescription="@string/mic"
+            android:gravity="center"
+            android:onClick="onRecordClick"
+            android:scaleType="centerCrop"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/ic_mic_32dp" />
+    </com.kuassivi.component.RipplePulseRelativeLayout>
 
     <!-- Don't show again display-->
     <LinearLayout
         android:id="@+id/dontshowDisplay_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="19sp"
         android:gravity="center"
-        android:layout_marginTop="80sp"
-        android:paddingTop="35sp">
+        android:paddingTop="90sp">
 
         <TextView
             android:id="@+id/dontshowDisplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#07000000"
             android:gravity="center_horizontal"
             android:text="@string/click_the_button_above_n_to_begin_listening"
             android:textSize="14.1sp"
-            android:textStyle="bold"
-            android:background="#07000000"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- Items layout -->
@@ -94,6 +98,7 @@
         android:layout_height="70sp"
         android:layout_marginTop="140sp"
         android:paddingTop="-10sp">
+
         <android.support.wearable.view.WearableListView
             android:id="@+id/wearable_list"
             android:layout_width="match_parent"
