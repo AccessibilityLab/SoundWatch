@@ -28,4 +28,5 @@
     <string name="welcome">Welcome to</string>
     <string name="soundwatch">SoundWatch</string>
     <string name="mic">mic</string>
+    <string name="snooze">Snooze time for</string>
 </resources>

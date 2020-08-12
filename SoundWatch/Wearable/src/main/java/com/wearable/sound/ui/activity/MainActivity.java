@@ -23,6 +23,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -342,7 +343,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             locationDisplay.setText("");
             //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
-            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
+            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence)*100) + "%");
             soundDisplay.setVisibility(View.VISIBLE);
 //            pulseLayout.setVisibility(View.INVISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
@@ -534,9 +535,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             TextView locationDisplay = findViewById(R.id.locationDisplay);
             RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
 
-            String message  = "Block\n" + audioLabel + " (" + (int) Math.round(Double.parseDouble(confidence )*100) + "%) for:";
-            locationDisplay.setText(message);
-            soundDisplay.setText("");
+            locationDisplay.setText(R.string.snooze);
+            soundDisplay.setText(audioLabel);
             pulseLayout.setVisibility(View.INVISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
@@ -581,7 +581,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 locationDisplay.setText("");
                 soundDisplay.setText("SoundWatch app");
                 TextView fTextView = (findViewById(R.id.dontshowDisplay));
-                fTextView.setText("This sound is already blocked.");
+                fTextView.setText("This sound is already snoozed.");
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -605,7 +605,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             }
             ((MainApplication) this.getApplication()).addBlockedSounds(blockedNotificationID);
             sendSnoozeSoundMessageToPhone(audioLabel);
-            Log.i(TAG, "Add to list of blocked sounds");
+            Log.i(TAG, "Add to list of snoozed sounds");
 
             if (tag < elementsInSec.length)     //If not forever, start an alarm manager to remove sounds from blocked list. AlarmManager because Doze mode..
             {
@@ -636,9 +636,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             fTextView.setVisibility(View.VISIBLE);
             // TODO: Change this sound to a specific sound
             if (elements[tag].equals("Cancel")) {
-                fTextView.setText(MessageFormat.format("\"{0}\" is not blocked.", audioLabel));
+                fTextView.setText(MessageFormat.format("\"{0}\" is not snoozed.", audioLabel));
             } else {
-                fTextView.setText(MessageFormat.format("\"{0}\" is blocked \n for {1}.", audioLabel, elements[tag]));
+                fTextView.setText(MessageFormat.format("\"{0}\" is snoozed \n for {1}.", audioLabel, elements[tag]));
             }
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -763,7 +763,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         } else {
             msg = getString(R.string.no_device);
         }
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_VERTICAL, 50, 50);
+        toast.show();
     }
 
     private void configureTestingAudioLabelNotification(AudioLabel audioLabel) {
