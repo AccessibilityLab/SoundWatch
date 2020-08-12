@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_toast_container"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="8dp"
+    android:background="#DAAA"
+    >
+    <TextView android:id="@+id/text"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:textColor="#FFF"
+        />
+</LinearLayout>

@@ -536,7 +536,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
 
             locationDisplay.setText(R.string.snooze);
-            soundDisplay.setText(audioLabel);
+            soundDisplay.setText(audioLabel + ":");
             pulseLayout.setVisibility(View.INVISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
@@ -764,7 +764,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             msg = getString(R.string.no_device);
         }
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_VERTICAL, 50, 50);
+        toast.setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL, 0, 60);
         toast.show();
     }
 
