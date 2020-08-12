@@ -20,22 +20,24 @@
 
         <TextView
             android:id="@+id/locationDisplay"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:layout_marginBottom="-1sp"
             android:fontFamily="sans-serif"
-            android:gravity="center"
             android:text="@string/welcome"
-            android:textSize="18sp" />
+            android:textSize="19sp" />
 
         <TextView
             android:id="@+id/soundDisplay"
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
+            android:layout_gravity="center"
             android:gravity="center"
+            android:fontFamily="sans-serif"
             android:text="@string/soundwatch"
-            android:textSize="18sp"
+            android:textSize="19sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -43,13 +45,13 @@
     <com.kuassivi.component.RipplePulseRelativeLayout
         android:id="@+id/pulseLayout"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:pulse_layout_PulseDuration="1800"
         app:pulse_layout_PulseType="fill"
         app:pulse_layout_RippleColor="@color/grey"
-        app:pulse_layout_RippleEndRadiusPercent="300"
-        app:pulse_layout_RippleStartRadiusPercent="50"
+        app:pulse_layout_RippleEndRadiusPercent="320"
+        app:pulse_layout_RippleStartRadiusPercent="80"
         app:pulse_layout_ShowPreview="true">
 
         <!-- You can add now any View inside here -->
@@ -95,8 +97,8 @@
     <LinearLayout
         android:id="@+id/wearable_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="70sp"
-        android:layout_marginTop="140sp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="90sp"
         android:paddingTop="-10sp">
 
         <android.support.wearable.view.WearableListView
