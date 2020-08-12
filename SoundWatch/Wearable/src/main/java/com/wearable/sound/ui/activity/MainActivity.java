@@ -13,12 +13,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableListView;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +62,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,6 +81,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.TypefaceCompat;
 
 import static com.wearable.sound.utils.Constants.*;
 
@@ -91,8 +97,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private String audioTime = "";
     private String db = "";
     private int wearableListCentralPosition = 1;
-    String[] elements = {"1 min", "2 mins", "5 mins", "10 mins", "1 hour", "1 day", "Forever"};
-    int[] elementsInSec = {60,      120,        300,        600,    3600,   86400};
+    String[] elements = {"Cancel", "1 min", "2 mins", "5 mins", "10 mins", "1 hour", "1 day", "Forever"};
+    int[] elementsInSec = {0, 60,      120,        300,        600,    3600,   86400};
     private static final String CHANNEL_ID = "SOUNDWATCH";
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
@@ -332,15 +338,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             TextView soundDisplay = findViewById(R.id.soundDisplay);
             TextView locationDisplay = findViewById(R.id.locationDisplay);
+//            RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
+
             locationDisplay.setText("");
             //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
             soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
             soundDisplay.setVisibility(View.VISIBLE);
-            soundDisplay.setVisibility(View.VISIBLE);
-            (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.VISIBLE);
+//            pulseLayout.setVisibility(View.INVISIBLE);
+            (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
-            TextView fTextView = (findViewById(R.id.dontshowDisplay));
-            fTextView.setText("");
         }
 
         // Get the list component from the layout of the activity
@@ -465,8 +471,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             pulseLayout.startPulse();
             // Change the instruction text
             locationTextView.setText("");
-            soundTextView.setText("Listening..");
-            textView.setText("Press Side button and wait for notifications");
+            soundTextView.setText("Listening...");
+            textView.setText("Press Side Button and \n wait for notifications");
             IS_RECORDING = true;
         } else {
             imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
@@ -526,15 +532,14 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             TextView soundDisplay = findViewById(R.id.soundDisplay);
             TextView locationDisplay = findViewById(R.id.locationDisplay);
-            locationDisplay.setText("");
-            //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
-            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
-            soundDisplay.setVisibility(View.VISIBLE);
-            soundDisplay.setVisibility(View.VISIBLE);
-            (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.VISIBLE);
+            RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
+
+            String message  = "Block\n" + audioLabel + " (" + (int) Math.round(Double.parseDouble(confidence )*100) + "%) for:";
+            locationDisplay.setText(message);
+            soundDisplay.setText("");
+            pulseLayout.setVisibility(View.INVISIBLE);
+            (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
-            TextView fTextView = (findViewById(R.id.dontshowDisplay));
-            fTextView.setText("");
         }
     }
 
@@ -555,9 +560,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     @Override
     public void onClick(WearableListView.ViewHolder v) {
+        TextView soundDisplay = findViewById(R.id.soundDisplay);
+        TextView locationDisplay = findViewById(R.id.locationDisplay);
+        RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
+        LinearLayout dontShowLayout = findViewById(R.id.dontshowDisplay_layout);
+
         Log.i(TAG, "Blocking sounds started");
         Integer tag = (Integer) v.itemView.getTag();
-
         if(tag!=wearableListCentralPosition)
             return;
 
@@ -567,6 +576,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             if((((MainApplication) this.getApplication()).getBlockedSounds()).contains(blockedNotificationID)) {         //Just in case the sound is already blocked and user comes to it again.
                 (findViewById(R.id.wearable_list_layout)).setVisibility(View.GONE);
+                pulseLayout.setVisibility(View.VISIBLE);
+                dontShowLayout.setVisibility(View.VISIBLE);
+                locationDisplay.setText("");
+                soundDisplay.setText("SoundWatch app");
                 TextView fTextView = (findViewById(R.id.dontshowDisplay));
                 fTextView.setText("This sound is already blocked.");
                 new Timer().schedule(new TimerTask() {
@@ -612,9 +625,21 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             notificationManager.cancel(blockedNotificationID);
 
             //Change view to avoid reclicking and also to give feedback
+
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.GONE);
+            pulseLayout.setVisibility(View.VISIBLE);
+            dontShowLayout.setVisibility(View.VISIBLE);
+            locationDisplay.setText("");
+            soundDisplay.setText("");
+
             TextView fTextView = (findViewById(R.id.dontshowDisplay));
-            fTextView.setText("This sound is blocked for " + elements[tag] + ".");
+            fTextView.setVisibility(View.VISIBLE);
+            // TODO: Change this sound to a specific sound
+            if (elements[tag].equals("Cancel")) {
+                fTextView.setText(MessageFormat.format("\"{0}\" is not blocked.", audioLabel));
+            } else {
+                fTextView.setText(MessageFormat.format("\"{0}\" is blocked \n for {1}.", audioLabel, elements[tag]));
+            }
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -625,9 +650,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                             TextView soundDisplay = findViewById(R.id.soundDisplay);
                             TextView locationDisplay = findViewById(R.id.locationDisplay);
                             locationDisplay.setText("");
-                            soundDisplay.setText("Listening..");
+                            soundDisplay.setText("Listening...");
                             TextView fTextView = (findViewById(R.id.dontshowDisplay));
-                            fTextView.setText("Press the side button and wait for notifications.");
+                            fTextView.setText("Press Side Button and wait for notifications");
                         }
                     });
 
