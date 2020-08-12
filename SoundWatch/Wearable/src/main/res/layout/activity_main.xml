@@ -27,7 +27,7 @@
             android:layout_marginBottom="-1sp"
             android:fontFamily="sans-serif"
             android:text="@string/welcome"
-            android:textSize="18sp" />
+            android:textSize="19sp" />
 
         <TextView
             android:id="@+id/soundDisplay"
@@ -37,7 +37,7 @@
             android:gravity="center"
             android:fontFamily="sans-serif"
             android:text="@string/soundwatch"
-            android:textSize="18sp"
+            android:textSize="19sp"
             android:textStyle="bold" />
 
     </LinearLayout>
