@@ -846,8 +846,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             createNotificationChannel();
             notificationChannelIsCreated = true;
         }
-        int loudness = 90 - (int) Double.parseDouble(audioLabel.db);
-
+        int loudness = 90 + (int) Double.parseDouble(audioLabel.db);
+//        int loudness = (int) Double.parseDouble(audioLabel.db);
 
         db = Integer.toString(loudness);
         //Log.i(TAG, "level" + audioLabel.db + " " + db);
