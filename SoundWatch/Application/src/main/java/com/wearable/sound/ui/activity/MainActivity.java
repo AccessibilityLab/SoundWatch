@@ -493,11 +493,15 @@ public class MainActivity extends Activity
 
     private double db(short[] data) {
         double rms = 0.0;
-        for (int i = 0; i < data.length; i++) {
-            rms += Math.abs(data[i]);
+        int dataLength = 0;
+        for (short datum : data) {
+            if (datum != 0) {
+                dataLength++;
+            }
+            rms += datum * datum;
         }
-        rms = rms/data.length;
-        return 20 * Math.log10(rms/32768.0);
+        rms = rms / dataLength;
+        return 10 * Math.log10(rms);
     }
 
     private short[] convertByteArrayToShortArray(byte[] bytes) {

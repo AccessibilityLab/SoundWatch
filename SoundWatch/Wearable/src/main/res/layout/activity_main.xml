@@ -23,11 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="-2sp"
             android:gravity="center"
-            android:layout_marginBottom="-1sp"
             android:fontFamily="sans-serif"
             android:text="@string/welcome"
-            android:textSize="19sp" />
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/soundDisplay"
@@ -37,8 +38,9 @@
             android:gravity="center"
             android:fontFamily="sans-serif"
             android:text="@string/soundwatch"
-            android:textSize="19sp"
-            android:textStyle="bold" />
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

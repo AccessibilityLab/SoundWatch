@@ -66,6 +66,7 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,6 +94,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     public static boolean notificationChannelIsCreated = false;
     public static final String TAG = "HomeSoundDebug";
+    public static final String DEBUG_TAG = "FromSoftware";
     private String audioLabel = "";
     private String confidence = "";
     private String audioTime = "";
@@ -120,10 +122,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Received intent"  + intent.getAction());
+            Log.i(TAG, "Received intent: "  + intent.getAction());
             if (intent.getAction().equals(mBroadcastSoundPrediction)) {
                 String data = intent.getStringExtra(AUDIO_LABEL);
                 String[] parts = data.split(",");
+                Log.i(DEBUG_TAG, Arrays.toString(parts));
                 if (TEST_E2E_LATENCY) {
                     if (parts.length == 5) {
                         String prediction = parts[0];
@@ -146,6 +149,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 String data = intent.getStringExtra(AUDIO_LABEL);
                 Log.i(TAG, "Received audio data from phone: " + data);
                 String[] parts = data.split(";");
+                Log.i(DEBUG_TAG, parts[2]);
                 String soundPredictions = parts[0];
                 String time = parts[1];
                 String db = parts[2];
@@ -343,7 +347,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             locationDisplay.setText("");
             //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
-            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence)*100) + "%");
+//            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence)*100) + "%");
+            soundDisplay.setText(audioLabel);
             soundDisplay.setVisibility(View.VISIBLE);
 //            pulseLayout.setVisibility(View.INVISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
@@ -522,6 +527,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             confidence = dataPassed[1];
             audioTime = dataPassed[2];
             db = dataPassed[3];
+            Log.i(DEBUG_TAG, Arrays.toString(dataPassed));
             if (db.contains("\\.")) {
                 String[] parts = db.split("\\.");
                 db = parts[0];
@@ -630,8 +636,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             pulseLayout.setVisibility(View.VISIBLE);
             dontShowLayout.setVisibility(View.VISIBLE);
             locationDisplay.setText("");
-            soundDisplay.setText("");
-
+            if (IS_RECORDING) {
+                soundDisplay.setText("Listening...");
+            } else {
+                soundDisplay.setText("");
+            }
             TextView fTextView = (findViewById(R.id.dontshowDisplay));
             fTextView.setVisibility(View.VISIBLE);
             // TODO: Change this sound to a specific sound
@@ -650,7 +659,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                             TextView soundDisplay = findViewById(R.id.soundDisplay);
                             TextView locationDisplay = findViewById(R.id.locationDisplay);
                             locationDisplay.setText("");
-                            soundDisplay.setText("Listening...");
+                            if (IS_RECORDING) {
+                                soundDisplay.setText("Listening...");
+                            } else {
+                                soundDisplay.setText("");
+                            }
                             TextView fTextView = (findViewById(R.id.dontshowDisplay));
                             fTextView.setText("Press Side Button and wait for notifications");
                         }
@@ -846,8 +859,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             createNotificationChannel();
             notificationChannelIsCreated = true;
         }
-        int loudness = 90 - (int) Double.parseDouble(audioLabel.db);
-
+        int loudness = (int) Double.parseDouble(audioLabel.db);
+//        int loudness = (int) Double.parseDouble(audioLabel.db);
 
         db = Integer.toString(loudness);
         //Log.i(TAG, "level" + audioLabel.db + " " + db);
@@ -877,7 +890,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
+//                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
+                .setContentTitle(audioLabel.label)
                 .setContentText("(" + db + " dB)")
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -890,7 +904,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 .setAutoCancel(true) //Remove notification from the list after the user has tapped it
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.ic_full_cancel,
-                        "10 min", snoozeSoundPendingIntent);
+                        "Snooze 10 mins", snoozeSoundPendingIntent);
 
         //NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);

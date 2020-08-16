@@ -3,4 +3,6 @@
     <style name="DisableBackSwipe" parent="@android:style/Theme.DeviceDefault">
         <item name="android:windowSwipeToDismiss">false</item>
     </style>
+
+    <string name="condensed">sans-serif-condensed</string>
 </resources>
