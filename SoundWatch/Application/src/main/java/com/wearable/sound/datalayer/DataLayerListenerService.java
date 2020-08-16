@@ -84,7 +84,8 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
     private static final float PREDICTION_THRES = 0.4F;
-    private static final double DBLEVEL_THRES = -40.0;
+//    private static final double DBLEVEL_THRES = 40.0;
+    private static final double DBLEVEL_THRES = 40;
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_UNSNOOZE_FROM_WATCH_PATH = "/SOUND_UNSNOOZE_FROM_WATCH_PATH";
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
@@ -93,7 +94,9 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
     int BufferElements2Rec = 16000;
-    private List<String> labels = new ArrayList<String>();
+    private List<String> labels = new ArrayList<>();
+    private double dbTotal = 0;
+    private int counter = 0;
 
 
     protected Python py;
@@ -539,23 +542,43 @@ public class DataLayerListenerService extends WearableListenerService {
         return ByteBuffer.wrap(bytes).getDouble();
     }
 
-
+    // TODO: This is the main db, find the fix
     private double db(short[] data) {
         double rms = 0.0;
-        for (int i = 0; i < data.length; i++) {
-            rms += Math.abs(data[i]);
+        int dataLength = 0;
+        for (short datum : data) {
+            if (datum != 0) {
+                dataLength++;
+            }
+            rms += datum * datum;
         }
-        rms = rms/data.length;
-        return 20 * Math.log10(rms/32768.0);
+        rms = rms / dataLength;
+        return 10 * Math.log10(rms);
     }
+//    private double db(short[] data) {
+//        double rms = 0.0;
+//        int len = 0;
+//        for (short datum : data) {
+//            if (datum != 0) {
+//                len++;
+//            }
+//            rms += Math.abs(datum);
+//        }
+//        rms = rms / len;
+//        return 20 * Math.log10(rms);
+//    }
 
     public static double db(List<Short> soundBuffer) {
         double rms = 0.0;
+        int dataLength = 0;
         for (int i = 0; i < soundBuffer.size(); i++) {
-            rms += Math.abs(soundBuffer.get(i));
+            if (soundBuffer.get(i) != 0) {
+                dataLength++;
+            }
+            rms += soundBuffer.get(i) * soundBuffer.get(i);
         }
-        rms = rms/soundBuffer.size();
-        return 20 * Math.log10(rms/32768.0);
+        rms = rms/dataLength;
+        return 10 * Math.log10(rms);
     }
 
     private void createNotificationChannel() {
@@ -680,7 +703,10 @@ public class DataLayerListenerService extends WearableListenerService {
         return "Unrecognized sound" + "                           " + LocalTime.now();
     }
 
+    // TODO: predictSoundsFromRawAudio
     private String predictSoundsFromRawAudio() {
+//        counter++;
+        Log.d(TAG, "Counter: " + counter);
         if (soundBuffer.size() != 16000) {
             soundBuffer = new ArrayList<>();
             return "Invalid audio size";
@@ -691,7 +717,9 @@ public class DataLayerListenerService extends WearableListenerService {
         }
         soundBuffer = new ArrayList<>();
         try {
-            if (db(sData) >= DBLEVEL_THRES && sData.length > 0) {
+            double decibel = db(sData);
+            if (decibel >= DBLEVEL_THRES && sData.length > 0) {
+                Log.i(TAG, "2. DB of data: " + decibel);
                 //Log.i(TAG, "Time elapsed before Running chaquopy" + (System.currentTimeMillis() - recordTime));
                 long startTimePython = System.currentTimeMillis();
                 if (py == null || pythonModule == null) {
@@ -752,6 +780,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     }
                     // Strip the last ","
                     result = result.substring(0, result.length() - 1);
+                    // TODO: Something with DB
                     new SendAllAudioPredictionsToWearTask(result, db(sData), recordTime).execute();
                     return result;
                 }
@@ -788,6 +817,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     //Get label and confidence
                     final String prediction = labels.get(argmax);
                     final String confidence = String.format("%,.2f", max);
+                    // TODO: Something with DB
                     new SendAudioLabelToWearTask(prediction, confidence, Math.abs(db(sData)), recordTime).execute();
                     return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
                 } else {

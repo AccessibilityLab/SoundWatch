@@ -75,6 +75,7 @@ import static com.wearable.sound.utils.Constants.*;
 public class SoundRecorder {
 
     private static final String TAG = "SoundRecorder";
+    private static final String DEBUG_TAG = "FromSoftware";
     private static final int RECORDING_RATE = 16000; // can go up to 44K, if needed
     private static final int CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO;
     private static final int CHANNELS_OUT = AudioFormat.CHANNEL_OUT_MONO;
@@ -399,6 +400,7 @@ public class SoundRecorder {
                 mAudioRecord.startRecording();
                 while (!isCancelled()) {
                     int read = mAudioRecord.read(buffer, 0, buffer.length);
+//                    Log.i(DEBUG_TAG, read + ", " + buffer.length);
                     short[] shorts = convertByteArrayToShortArray(buffer);
                     if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION)
                         && (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE) || ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE))) {
@@ -410,6 +412,7 @@ public class SoundRecorder {
                         for (short num : shorts) {
                             if (soundRecorder.soundBuffer.size() == 16000) {
                                 final List<Short> tempBuffer = soundRecorder.soundBuffer;
+//                                Log.i(DEBUG_TAG, String.valueOf(tempBuffer));
                                 processAudioRecognition(tempBuffer, buffer);
                                 soundRecorder.soundBuffer = new ArrayList<>();
                             }

@@ -37,6 +37,7 @@ import java.util.List;
 public class DataLayerListenerService extends WearableListenerService {
 
     private static final String TAG = "DataLayerService";
+//    private static final String DEBUG_TAG = "FromSoftware";
 
     @Override
     public void onPeerConnected(Node node) {
@@ -114,6 +115,7 @@ public class DataLayerListenerService extends WearableListenerService {
             handleEnableSoundNotification(new String(messageEvent.getData()));
         } else if (messageEvent.getPath().equals(SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH)) {
             Log.i(TAG, "Sending All sounds label to MainActivity");
+//            Log.d(DEBUG_TAG, new String(messageEvent.getData()));
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MainActivity.mBroadcastAllSoundPredictions);
             broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
@@ -149,7 +151,6 @@ public class DataLayerListenerService extends WearableListenerService {
             if (enabledSounds.contains(soundLabel)) {
                 Log.i(TAG, "Add to list of blocked sounds " + soundLabel);
                 ((MainApplication) this.getApplication()).removeEnabledSound(soundLabel);
-
             }
         }
     }
