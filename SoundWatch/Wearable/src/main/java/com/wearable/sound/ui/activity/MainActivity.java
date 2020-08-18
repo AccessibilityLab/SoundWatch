@@ -825,12 +825,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         // Because these sounds are really similar, if there are more conditions, we can make this if else
         // to be a separate helper function
-        if((audioLabel.label).equals("Chopping") || (audioLabel.label).equals("Utensils and Cutlery")){
+        /* if((audioLabel.label).equals("Chopping") || (audioLabel.label).equals("Utensils and Cutlery")){
             audioLabel.label = "Knocking";
             Log.i(TAG, "Converted to " + audioLabel.label);
-        }
-
-        /* J AREA ENDS */
+        } */
         
         // Unique notification for each kind of sound
         final int NOTIFICATION_ID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
@@ -860,7 +858,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             notificationChannelIsCreated = true;
         }
         int loudness = (int) Double.parseDouble(audioLabel.db);
-//        int loudness = (int) Double.parseDouble(audioLabel.db);
 
         db = Integer.toString(loudness);
         //Log.i(TAG, "level" + audioLabel.db + " " + db);
