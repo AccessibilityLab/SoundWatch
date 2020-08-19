@@ -162,36 +162,36 @@ public class MainActivity extends Activity
     //private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     private static final float PREDICTION_THRES = 0.5F;
-    private static final double DBLEVEL_THRES = -35.0;
+    private static final double DBLEVEL_THRES = 45.0;
     private Interpreter tfLite;
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
 
     //TODO HUNG 5: This is a bad way of mapping. What if we decide not to display all these 30 sounds? Will we have to change this code manually? Can we figure out a way to specify just once what all sounds we want for each context (home, office, outdoors), and it gets synced on phone, watch and server?
-    private static final String SPEECH = "Speech";
-    private static final String KNOCKING = "Knocking";
-    private static final String PHONE_RING = "Phone Ring";
-    private static final String DOG_BARK = "Dog Bark";
-    private static final String DRILL = "Drill";
-    private static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm";
-    private static final String VACUUM = "Vacuum";
-    private static final String BABY_CRY = "Baby Cry";
-    private static final String CHOPPING = "Chopping";
-    private static final String DOOR_IN_USE = "Door In Use";
-    private static final String WATER_RUNNING = "Water Running";
-    private static final String MICROWAVE= "Microwave";
-    private static final String SHAVER= "Shaver";
-    private static final String TOOTHBRUSH= "Toothbrush";
-    private static final String BLENDER = "Blender";
-    private static final String DISHWASHER = "Dishwasher";
+    private static final String SPEECH = "Speech"; //
+    private static final String KNOCKING = "Knocking"; //
+    private static final String PHONE_RING = "Phone Ring"; //
+    private static final String DOG_BARK = "Dog Bark"; //
+    private static final String DRILL = "Drill"; //
+    private static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm"; //
+    private static final String VACUUM = "Vacuum"; //
+    private static final String BABY_CRY = "Baby Cry"; //
+    private static final String CHOPPING = "Chopping"; //
+    private static final String DOOR_IN_USE = "Door In Use"; //
+    private static final String WATER_RUNNING = "Water Running"; //
+    private static final String MICROWAVE= "Microwave"; //
+    private static final String SHAVER= "Shaver"; //
+    private static final String TOOTHBRUSH= "Toothbrush"; //
+    private static final String BLENDER = "Blender"; //
+    private static final String DISHWASHER = "Dishwasher"; //
     private static final String DOORBELL = "Doorbell";
     private static final String TOILET_FLUSH = "Toilet Flush";
     private static final String HAIR_DRYER= "Hair Dryer";
-    private static final String LAUGHING= "Laughing";
+    private static final String LAUGHING= "Laughing"; //
     private static final String SNORING= "Snoring";
     private static final String HAMMERING= "Hammering";
-    private static final String CAR_HONK= "Car Honk";
-    private static final String VEHICLE= "Vehicle";
+    private static final String CAR_HONK= "Car Honk"; //
+    private static final String VEHICLE= "Vehicle"; //
     private static final String SAW= "Saw";
     private static final String CAT_MEOW= "Cat Meow";
     private static final String ALARM_CLOCK= "Alarm Clock";
@@ -249,6 +249,39 @@ public class MainActivity extends Activity
                 break;
             case R.id.laughing:
                 currentSound = SOUNDS_MAP.get(LAUGHING);
+                break;
+            case R.id.dog_bark:
+                currentSound = SOUNDS_MAP.get(DOG_BARK);
+                break;
+            case R.id.drill:
+                currentSound = SOUNDS_MAP.get(DRILL);
+                break;
+            case R.id.vacuum:
+                currentSound = SOUNDS_MAP.get(VACUUM);
+                break;
+            case R.id.baby_cry:
+                currentSound = SOUNDS_MAP.get(BABY_CRY);
+                break;
+            case R.id.chopping:
+                currentSound = SOUNDS_MAP.get(CHOPPING);
+                break;
+            case R.id.shaver:
+                currentSound = SOUNDS_MAP.get(SHAVER);
+                break;
+            case R.id.tooth_brush:
+                currentSound = SOUNDS_MAP.get(TOOTHBRUSH);
+                break;
+            case R.id.blender:
+                currentSound = SOUNDS_MAP.get(BLENDER);
+                break;
+            case R.id.door_bell:
+                currentSound = SOUNDS_MAP.get(DOORBELL);
+                break;
+            case R.id.toilet_flush:
+                currentSound = SOUNDS_MAP.get(TOILET_FLUSH);
+                break;
+            case R.id.hair_dryer:
+                currentSound = SOUNDS_MAP.get(HAIR_DRYER);
                 break;
             default:
                 break;
