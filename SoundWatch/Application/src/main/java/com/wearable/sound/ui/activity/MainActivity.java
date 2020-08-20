@@ -81,6 +81,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -247,6 +248,57 @@ public class MainActivity extends Activity
             case R.id.dishwasher:
                 currentSound = SOUNDS_MAP.get(DISHWASHER);
                 break;
+            case R.id.door_bell:
+                currentSound = SOUNDS_MAP.get(DOORBELL);
+                break;
+            case R.id.shaver:
+                currentSound = SOUNDS_MAP.get(SHAVER);
+                break;
+            case R.id.tooth_brush:
+                currentSound = SOUNDS_MAP.get(TOOTHBRUSH);
+                break;
+            case R.id.toilet_flush:
+                currentSound = SOUNDS_MAP.get(VACUUM);
+                break;
+            case R.id.baby_cry:
+                currentSound = SOUNDS_MAP.get(BABY_CRY);
+                break;
+            case R.id.chopping:
+                currentSound = SOUNDS_MAP.get(CHOPPING);
+                break;
+            case R.id.blender:
+                currentSound = SOUNDS_MAP.get(BLENDER);
+                break;
+            case R.id.hair_dryer:
+                currentSound = SOUNDS_MAP.get(HAIR_DRYER);
+                break;
+            case R.id.snoring:
+                currentSound = SOUNDS_MAP.get(SNORING);
+                break;
+            case R.id.hammering:
+                currentSound = SOUNDS_MAP.get(HAMMERING);
+                break;
+            case R.id.saw:
+                currentSound = SOUNDS_MAP.get(SAW);
+                break;
+            case R.id.cat_meow:
+                currentSound = SOUNDS_MAP.get(CAT_MEOW);
+                break;
+            case R.id.alarm_clock:
+                currentSound = SOUNDS_MAP.get(ALARM_CLOCK);
+                break;
+            case R.id.utensils_and_cutlery:
+                currentSound = SOUNDS_MAP.get(UTENSILS_AND_CUTLERY);
+                break;
+            case R.id.dog_bark:
+                currentSound = SOUNDS_MAP.get(DOG_BARK);
+                break;
+            case R.id.drill:
+                currentSound = SOUNDS_MAP.get(DRILL);
+                break;
+            case R.id.vacuum:
+                currentSound = SOUNDS_MAP.get(VACUUM);
+                break;
             case R.id.laughing:
                 currentSound = SOUNDS_MAP.get(LAUGHING);
                 break;
@@ -261,6 +313,7 @@ public class MainActivity extends Activity
                 int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
                 String soundLabel = checkBox.getText().toString().substring(0, snoozeTextIndex);
                 checkBox.setText(soundLabel);
+//                checkBox.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             currentSound.isEnabled = isEnabled;
             new sendSoundEnableMessageToWatchTask(currentSound).execute();
@@ -601,7 +654,10 @@ public class MainActivity extends Activity
                 if (checkBox == null) {
                     return;
                 }
-                checkBox.setText(checkBox.getText() + " (Snoozed) ");
+                if (!checkBox.getText().toString().contains("Snoozed")) {
+                    checkBox.setText(MessageFormat.format("{0} (Snoozed) ", checkBox.getText()));
+                }
+                checkBox.setChecked(false);
 //                checkBox.setCompoundDrawablesWithIntrinsicBounds(0,0 , android.R.drawable.ic_lock_silent_mode, 0);
             } else if (intent.getAction().equals(mBroadcastUnsnoozeSound)) {
                 Log.i(TAG, "Phone received unsnoozed");
@@ -616,6 +672,7 @@ public class MainActivity extends Activity
                     int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
                     String soundLabel = checkBox.getText().toString().substring(0, snoozeTextIndex);
                     checkBox.setText(soundLabel);
+//                    checkBox.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
             }
         }
@@ -630,9 +687,9 @@ public class MainActivity extends Activity
             case PHONE_RING:
                 return (CheckBox) findViewById(R.id.phone_ring);
             case UTENSILS_AND_CUTLERY:
-                return (CheckBox) findViewById(R.id.knocking);
+                return (CheckBox) findViewById(R.id.utensils_and_cutlery);
             case CHOPPING:
-                return (CheckBox) findViewById(R.id.knocking);
+                return (CheckBox) findViewById(R.id.chopping);
             case VEHICLE:
                 return (CheckBox) findViewById(R.id.vehicle);
             case CAR_HONK:
@@ -649,6 +706,36 @@ public class MainActivity extends Activity
                 return (CheckBox) findViewById(R.id.dishwasher);
             case LAUGHING:
                 return (CheckBox) findViewById(R.id.laughing);
+            case DOG_BARK:
+                return (CheckBox) findViewById(R.id.dog_bark);
+            case DRILL:
+                return (CheckBox) findViewById(R.id.drill);
+            case VACUUM:
+                return (CheckBox) findViewById(R.id.vacuum);
+            case BABY_CRY:
+                return (CheckBox) findViewById(R.id.baby_cry);
+            case SHAVER:
+                return (CheckBox) findViewById(R.id.shaver);
+            case TOOTHBRUSH:
+                return (CheckBox) findViewById(R.id.tooth_brush);
+            case BLENDER:
+                return (CheckBox) findViewById(R.id.blender);
+            case DOORBELL:
+                return (CheckBox) findViewById(R.id.door_bell);
+            case TOILET_FLUSH:
+                return (CheckBox) findViewById(R.id.toilet_flush);
+            case SNORING:
+                return (CheckBox) findViewById(R.id.snoring);
+            case HAMMERING:
+                return (CheckBox) findViewById(R.id.hammering);
+            case SAW:
+                return (CheckBox) findViewById(R.id.saw);
+            case CAT_MEOW:
+                return (CheckBox) findViewById(R.id.cat_meow);
+            case HAIR_DRYER:
+                return (CheckBox) findViewById(R.id.hair_dryer);
+            case ALARM_CLOCK:
+                return (CheckBox) findViewById(R.id.alarm_clock);
             default:
                 return null;
         }

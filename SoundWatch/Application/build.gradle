@@ -84,6 +84,12 @@ dependencies {
     // SocketIO
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
 
+    // Scalable UI
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
+    implementation 'com.android.support:design:28.0.0'
+
 }
 
 // The sample build uses multiple directories to

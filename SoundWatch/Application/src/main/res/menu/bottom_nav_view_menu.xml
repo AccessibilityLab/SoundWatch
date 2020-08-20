@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_navigation_item_logs"
+        android:icon="@drawable/common_google_signin_btn_icon_dark"
+        android:title="@string/saw" />
+
+    <item
+        android:id="@+id/bottom_navigation_item_progress"
+        android:icon="@drawable/common_google_signin_btn_icon_dark"
+        android:title="@string/shaver" />
+
+    <item
+        android:id="@+id/bottom_navigation_item_profile"
+        android:icon="@drawable/common_google_signin_btn_icon_dark"
+        android:title="@string/snoring"/>
+
+</menu>
