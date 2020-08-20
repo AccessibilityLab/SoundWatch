@@ -9,31 +9,32 @@
     android:background="#000"
     android:textColor="@color/common_google_signin_btn_text_dark_pressed">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="100dp"-->
-<!--            android:paddingTop="12sp"-->
-<!--            android:paddingBottom="20sp"-->
-<!--            android:paddingLeft="8sp"-->
-<!--            android:text="@string/soundwatch"-->
-<!--            android:textColor="@color/common_google_signin_btn_text_dark_pressed"-->
-<!--            android:textSize="30sp" />-->
-<!--        &lt;!&ndash;    <Button&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:id="@+id/button"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:background="@drawable/rounablebutton"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:padding="10sp"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:textColor="#008ad3"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:text="Favourite Places"&ndash;&gt;-->
-<!--        &lt;!&ndash;        android:layout_gravity="top|right"/>&ndash;&gt;-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:paddingTop="12sp"
+            android:paddingBottom="20sp"
+            android:paddingLeft="8sp"
+            android:text="@string/soundwatch"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textSize="30sp" />
+        <!--    <Button-->
+        <!--        android:id="@+id/button"-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:background="@drawable/rounablebutton"-->
+        <!--        android:padding="10sp"-->
+        <!--        android:textColor="#008ad3"-->
+        <!--        android:text="Favourite Places"-->
+        <!--        android:layout_gravity="top|right"/>-->
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,12 +51,20 @@
             android:paddingTop="@dimen/_50sdp"
             android:paddingBottom="@dimen/_20sdp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_1"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_70sdp"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="@dimen/_14ssp"/>
             <CheckBox
                 android:id="@+id/speech"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
@@ -67,7 +76,7 @@
                 android:id="@+id/knocking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -80,7 +89,7 @@
                 android:id="@+id/door_in_use"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -89,12 +98,19 @@
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_11ssp" />
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_2"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="@dimen/_14ssp"/>
             <CheckBox
                 android:id="@+id/fire_smoke_alarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -107,7 +123,7 @@
                 android:id="@+id/phone_ring"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -120,7 +136,7 @@
                 android:id="@+id/water_running"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -134,7 +150,7 @@
                 android:id="@+id/microwave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -147,7 +163,7 @@
                 android:id="@+id/dishwasher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -155,12 +171,19 @@
                 android:text="@string/dishwasher"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_11ssp" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_3"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="@dimen/_14ssp"/>
             <CheckBox
                 android:id="@+id/laughing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -173,7 +196,7 @@
                 android:id="@+id/car_honk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -186,7 +209,7 @@
                 android:id="@+id/vehicle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:autoSizeTextType="uniform"
                 android:buttonTint="@color/wl_blue"
@@ -200,7 +223,7 @@
                 android:id="@+id/dog_bark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -208,11 +231,20 @@
                 android:text="@string/dog_bark"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_4"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="@dimen/_14ssp"/>
             <CheckBox
                 android:id="@+id/drill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -224,7 +256,7 @@
                 android:id="@+id/vacuum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -236,7 +268,7 @@
                 android:id="@+id/baby_cry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -248,7 +280,7 @@
                 android:id="@+id/chopping"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -260,7 +292,7 @@
                 android:id="@+id/shaver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -268,11 +300,19 @@
                 android:text="@string/shaver"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_11ssp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_5"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="@dimen/_14ssp"/>
             <CheckBox
                 android:id="@+id/tooth_brush"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -284,7 +324,7 @@
                 android:id="@+id/blender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -296,7 +336,7 @@
                 android:id="@+id/door_bell"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -308,7 +348,7 @@
                 android:id="@+id/toilet_flush"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -320,7 +360,7 @@
                 android:id="@+id/snoring"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -332,7 +372,7 @@
                 android:id="@+id/hammering"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -344,7 +384,7 @@
                 android:id="@+id/saw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -356,7 +396,7 @@
                 android:id="@+id/cat_meow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -368,7 +408,7 @@
                 android:id="@+id/hair_dryer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -380,7 +420,7 @@
                 android:id="@+id/alarm_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/wl_blue"
                 android:checked="true"
@@ -392,7 +432,7 @@
                 android:id="@+id/utensils_and_cutlery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:layout_marginBottom="@dimen/_100sdp"
                 android:buttonTint="@color/wl_blue"

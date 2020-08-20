@@ -18,7 +18,7 @@
 
     <!-- Activity themes -->
 
-    <style name="Theme.Base" parent="Theme.AppCompat.DayNight" />
+    <style name="Theme.Base" parent="Theme.AppCompat.DayNight.NoActionBar" />
 
     <style name="Theme.Sample" parent="Theme.Base" />
 
