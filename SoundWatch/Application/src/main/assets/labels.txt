@@ -19,8 +19,8 @@ Doorbell
 Toilet Flush
 Hair Dryer
 Laughing
-Snoring
 Typing
+Snoring
 Hammering
 Car Honk
 Vehicle

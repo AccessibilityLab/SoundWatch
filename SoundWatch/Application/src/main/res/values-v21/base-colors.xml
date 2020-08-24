@@ -17,5 +17,10 @@
 
 <resources>
     <color name="wl_blue">#2878ff</color>
-
+    <color name="colorPrimary">#0A84FF</color>
+    <color name="colorSecondary">#8E8E93</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimaryRipple">#0A84FF</color>
+    <color name="colorNavBar">#19191E</color>
 </resources>

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bottom_navigation_item_logs"
-        android:icon="@drawable/common_google_signin_btn_icon_dark"
-        android:title="@string/saw" />
+        android:id="@+id/bottom_navigation_item_sound_list"
+        android:icon="@drawable/nav_bar_selector_sound_list"
+        android:title="@string/home"
+        app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/bottom_navigation_item_progress"
-        android:icon="@drawable/common_google_signin_btn_icon_dark"
-        android:title="@string/shaver" />
+        android:id="@+id/bottom_navigation_item_help"
+        android:icon="@drawable/nav_bar_selector_help"
+        android:title="@string/tutorial"
+        app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/bottom_navigation_item_profile"
-        android:icon="@drawable/common_google_signin_btn_icon_dark"
-        android:title="@string/snoring"/>
+        android:id="@+id/bottom_navigation_item_about"
+        android:icon="@drawable/nav_bar_selector_about"
+        android:title="@string/about"
+        app:showAsAction="ifRoom"/>
 
 </menu>
