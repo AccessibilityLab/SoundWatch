@@ -67,16 +67,17 @@
 
         <LinearLayout
             android:id="@+id/checkbox_list"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:scaleX="1.25"
             android:scaleY="1.25"
             android:paddingTop="@dimen/_120sdp"
-            android:paddingBottom="@dimen/_20sdp">
+            android:paddingBottom="@dimen/_20sdp"
+            android:paddingStart="@dimen/_15sdp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_1"
                 android:layout_marginStart="@dimen/_28sdp"
@@ -85,7 +86,7 @@
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
                 android:id="@+id/car_honk"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -98,7 +99,7 @@
 
             <CheckBox
                 android:id="@+id/fire_smoke_alarm"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -110,7 +111,7 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_2"
                 android:layout_marginStart="@dimen/_28sdp"
@@ -120,7 +121,7 @@
 
             <CheckBox
                 android:id="@+id/alarm_clock"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -133,7 +134,7 @@
 
             <CheckBox
                 android:id="@+id/blender"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -146,7 +147,7 @@
 
             <CheckBox
                 android:id="@+id/chopping"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -158,7 +159,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/coughing"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -171,7 +172,7 @@
 
             <CheckBox
                 android:id="@+id/dishwasher"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -185,7 +186,7 @@
 
             <CheckBox
                 android:id="@+id/door_bell"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -198,7 +199,7 @@
 
             <CheckBox
                 android:id="@+id/door_in_use"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -211,8 +212,8 @@
 
             <CheckBox
                 android:id="@+id/hair_dryer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/colorPrimary"
@@ -224,7 +225,7 @@
 
             <CheckBox
                 android:id="@+id/knocking"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -237,11 +238,10 @@
 
             <CheckBox
                 android:id="@+id/microwave"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
-                android:autoSizeTextType="uniform"
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
@@ -251,7 +251,7 @@
 
             <CheckBox
                 android:id="@+id/phone_ring"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -264,7 +264,7 @@
 
             <CheckBox
                 android:id="@+id/water_running"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -276,7 +276,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/shaver"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -288,7 +288,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/utensils_and_cutlery"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -300,7 +300,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/toilet_flush"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -312,7 +312,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/tooth_brush"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -325,7 +325,7 @@
 
             <CheckBox
                 android:id="@+id/typing"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -338,7 +338,7 @@
 
             <CheckBox
                 android:id="@+id/vacuum"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -350,7 +350,7 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_3"
                 android:layout_marginStart="@dimen/_28sdp"
@@ -359,7 +359,7 @@
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
                 android:id="@+id/baby_crying"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -371,7 +371,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/dog_bark"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -383,7 +383,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/cat_meow"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -395,7 +395,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/snoring"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -407,7 +407,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/speech"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -419,7 +419,7 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/laughing"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -431,7 +431,7 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_4"
                 android:layout_marginStart="@dimen/_28sdp"
@@ -441,7 +441,7 @@
 
             <CheckBox
                 android:id="@+id/vehicle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
@@ -453,7 +453,7 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_5"
                 android:layout_marginStart="@dimen/_28sdp"
@@ -463,8 +463,8 @@
 
             <CheckBox
                 android:id="@+id/saw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/colorPrimary"
@@ -475,8 +475,8 @@
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/drill"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:buttonTint="@color/colorPrimary"
@@ -488,7 +488,7 @@
 
             <CheckBox
                 android:id="@+id/hammering"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"

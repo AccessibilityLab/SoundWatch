@@ -557,7 +557,7 @@ public class MainActivity extends AppCompatActivity
             ScrollView scrollView = findViewById(R.id.scroll_view);
             FrameLayout frameLayout = findViewById(R.id.fragment_container);
             TextView instructionalView = findViewById(R.id.instruction_text);
-            Fragment fragment;
+            Fragment fragment = null;
             switch(item.getItemId()) {
                 case R.id.bottom_navigation_item_about:
                     titleView.setText(R.string.about);
@@ -573,12 +573,14 @@ public class MainActivity extends AppCompatActivity
                     instructionalView.setVisibility(View.GONE);
                     scrollView.setVisibility(View.GONE);
                     break;
-                default:
+                case R.id.bottom_navigation_item_sound_list:
                     titleView.setText(R.string.soundwatch);
                     fragment = null;
                     frameLayout.setVisibility(View.GONE);
                     instructionalView.setVisibility(View.VISIBLE);
                     scrollView.setVisibility(View.VISIBLE);
+                    break;
+                default:
                     break;
             }
             return loadFragment(fragment);
