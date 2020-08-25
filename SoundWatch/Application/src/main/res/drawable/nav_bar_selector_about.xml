@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true"
+        android:drawable="@drawable/ic_baseline_about_48"/>
+    <item android:state_checked="false"
+        android:drawable="@drawable/ic_outline_about_48"/>
+</selector>
