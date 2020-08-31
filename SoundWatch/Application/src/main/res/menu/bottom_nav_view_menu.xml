@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bottom_navigation_item_sound_list"
-        android:icon="@drawable/nav_bar_selector_sound_list"
+        android:id="@+id/bottom_navigation_item_home"
+        android:icon="@drawable/nav_bar_selector_home"
         android:title="@string/home"
         app:showAsAction="ifRoom"/>
 

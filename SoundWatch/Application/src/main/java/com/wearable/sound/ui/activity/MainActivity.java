@@ -17,7 +17,6 @@
 package com.wearable.sound.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,17 +40,17 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
@@ -88,7 +87,6 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.MessageFormat;
 import java.time.LocalTime;
@@ -116,6 +114,11 @@ public class MainActivity extends AppCompatActivity
             CapabilityClient.OnCapabilityChangedListener {
 
     private static final String TAG = "MainActivity";
+
+    /**
+     * Different Mode configuration
+     */
+    public static final int HIGH_ACCURACY_MODE = 1;
 
     public static final boolean TEST_MODEL_LATENCY = false;
     public static final boolean TEST_E2E_LATENCY = false;
@@ -155,8 +158,10 @@ public class MainActivity extends AppCompatActivity
     private boolean mCameraSupported = false;
     int BufferElements2Rec = 16000;
 
+    private ConstraintLayout tutorialLayout;
     private ListView mDataItemList;
     private Button mSendPhotoBtn;
+    private Button tutorialBtn;
     private ImageView mThumbView;
     private Bitmap mImageBitmap;
     private View mStartActivityBtn;
@@ -172,7 +177,7 @@ public class MainActivity extends AppCompatActivity
     //private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     private static final float PREDICTION_THRES = 0.5F;
-    private static final double DBLEVEL_THRES = -35.0;
+    private static final double DBLEVEL_THRES = 45.0;
     private Interpreter tfLite;
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
@@ -209,10 +214,21 @@ public class MainActivity extends AppCompatActivity
     private static final String COUGHING = "Coughing";
     private static final String TYPING = "Typing";
 
+    // List of all sounds
     public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, SAW, VEHICLE, CAR_HONK,
             HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, DISHWASHER, BLENDER, TOOTHBRUSH,DOG_BARK,
             MICROWAVE, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
             KNOCKING, COUGHING, TYPING);
+
+    // List of IDs of only high accuracy sounds (11 sounds)
+    private static List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm, R.id.speech,
+            R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.microwave, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
+            R.id.vehicle, R.id.baby_crying));
+    // List of IDs of only low accuracy sounds (19 sounds)
+    private static List<Integer> lowAccuracyList = new ArrayList<>(Arrays.asList(R.id.utensils_and_cutlery, R.id.alarm_clock,
+            R.id.saw, R.id.hammering, R.id.snoring, R.id.laughing, R.id.hair_dryer, R.id.toilet_flush, R.id.door_bell,
+            R.id.dishwasher, R.id.blender, R.id.tooth_brush, R.id.shaver, R.id.chopping, R.id.vacuum, R.id.drill, R.id.speech,
+            R.id.coughing, R.id.typing));
 
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
@@ -337,6 +353,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onTutorialClick(View view) {
+        Log.d(TAG, "onTutorialClick called");
+    }
+
     public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
         private String data;
 
@@ -359,7 +379,7 @@ public class MainActivity extends AppCompatActivity
     private List<Short> soundBuffer = new ArrayList<>();
 
     /** Memory-map the model file in Assets. */
-    private static MappedByteBuffer loadModelFile(AssetManager assets, String modelFilename)
+    private static ByteBuffer loadModelFile(AssetManager assets, String modelFilename)
             throws IOException {
         AssetFileDescriptor fileDescriptor = assets.openFd(modelFilename);
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
@@ -520,18 +540,40 @@ public class MainActivity extends AppCompatActivity
         mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
 
+//        RelativeLayout parent = findViewById(R.id.main_layout);
+
+        // inflate fragment_scrolling2 into main_layout
+
+//        LayoutInflater inflater =
+//                (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View convertView = inflater.inflate(R.layout.fragment_scrolling2, parent);
+//        tutorialLayout = convertView.findViewById(R.id.tutorial_layout);
+//        tutorialLayout.setVisibility(View.GONE);
+//        tutorialBtn = convertView.findViewById(R.id.tutorial_btn);
+//        tutorialBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick called");
+//                Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
+//                startActivity(tutorial);
+//            }
+//        });
+
         // create BottomNavigationView
         LOGD(TAG, "create BottomNavigationView");
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
         bottomNavView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-//        bottomNavView.setSelectedItemId(R.id.bottom_navigation_item_sound_list);
-        loadFragment(null);
+        // bottomNavView.setSelectedItemId(R.id.bottom_navigation_item_sound_list);
+
+        // set Mode
+        setAccuracyMode(2);
 
         // Stores DataItems received by the local broadcaster or from the paired watch.
 //        mDataItemListAdapter = new DataItemAdapter(this, android.R.layout.simple_list_item_1);
 //        mDataItemList.setAdapter(mDataItemListAdapter);
 
         mGeneratorExecutor = new ScheduledThreadPoolExecutor(1);
+
 
 
 
@@ -548,44 +590,51 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(mReceiver, mIntentFilter);
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener
             mOnNavigationItemSelectedListener =
-        new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            TextView titleView = findViewById(R.id.title_text);
-            ScrollView scrollView = findViewById(R.id.scroll_view);
-            FrameLayout frameLayout = findViewById(R.id.fragment_container);
-            TextView instructionalView = findViewById(R.id.instruction_text);
-            Fragment fragment = null;
-            switch(item.getItemId()) {
-                case R.id.bottom_navigation_item_about:
-                    titleView.setText(R.string.about);
-                    fragment = new ScrollingFragment();
-                    frameLayout.setVisibility(View.VISIBLE);
-                    instructionalView.setVisibility(View.GONE);
-                    scrollView.setVisibility(View.GONE);
-                    break;
-                case R.id.bottom_navigation_item_help:
-                    titleView.setText(R.string.tutorial);
-                    fragment = new ScrollingFragment2();
-                    frameLayout.setVisibility(View.VISIBLE);
-                    instructionalView.setVisibility(View.GONE);
-                    scrollView.setVisibility(View.GONE);
-                    break;
-                case R.id.bottom_navigation_item_sound_list:
-                    titleView.setText(R.string.soundwatch);
-                    fragment = null;
-                    frameLayout.setVisibility(View.GONE);
-                    instructionalView.setVisibility(View.VISIBLE);
-                    scrollView.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    break;
-            }
-            return loadFragment(fragment);
-        }
-    };
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    TextView titleView = findViewById(R.id.title_text);
+                    ScrollView scrollView = findViewById(R.id.scroll_view);
+                    FrameLayout frameLayout = findViewById(R.id.fragment_container);
+                    TextView instructionalView = findViewById(R.id.instruction_text);
+                    Fragment fragment = null;
+                    switch (item.getItemId()) {
+                        case R.id.bottom_navigation_item_home:
+                            titleView.setText(R.string.soundwatch);
+                            fragment = null;
+                            frameLayout.setVisibility(View.GONE);
+                            instructionalView.setVisibility(View.VISIBLE);
+                            scrollView.setVisibility(View.VISIBLE);
+//                            tutorialLayout.setVisibility(View.GONE);
+                            break;
+                        case R.id.bottom_navigation_item_about:
+                            titleView.setText(R.string.about);
+                            fragment = new ScrollingFragment();
+                            frameLayout.setVisibility(View.VISIBLE);
+                            instructionalView.setVisibility(View.GONE);
+                            scrollView.setVisibility(View.GONE);
+//                            tutorialLayout.setVisibility(View.GONE);
+                            break;
+                        case R.id.bottom_navigation_item_help:
+                            titleView.setText(R.string.tutorial);
+                            fragment = new ScrollingFragment2();
+                            frameLayout.setVisibility(View.VISIBLE);
+                            instructionalView.setVisibility(View.GONE);
+                            scrollView.setVisibility(View.GONE);
+//                            tutorialLayout.setVisibility(View.VISIBLE);
+
+//                            Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
+//                            startActivity(tutorial);
+                            break;
+                        default:
+                            break;
+                    }
+                    loadFragment(fragment);
+                    return true;
+                }
+            };
     private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
         StringBuilder result = new StringBuilder();
         for (String connectedHostId: connectedHostIds) {
@@ -728,7 +777,9 @@ public class MainActivity extends AppCompatActivity
                 Log.i(TAG, "Phone received unsnoozed");
                 CheckBox checkBox = getCheckboxFromAudioLabel(intent.getStringExtra(AUDIO_LABEL));
                 SoundNotification soundNotification = SOUNDS_MAP.get(intent.getStringExtra(AUDIO_LABEL));
-                soundNotification.isSnoozed = false;
+                if (soundNotification != null) {
+                    soundNotification.isSnoozed = false;
+                }
                 if (checkBox == null) {
                     return;
                 }
@@ -992,6 +1043,7 @@ public class MainActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
+                Log.d(TAG, "convertView is null");
                 holder = new ViewHolder();
                 LayoutInflater inflater =
                         (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1000,6 +1052,7 @@ public class MainActivity extends AppCompatActivity
                 holder.text1 = (TextView) convertView.findViewById(android.R.id.text1);
                 holder.text2 = (TextView) convertView.findViewById(android.R.id.text2);
             } else {
+                Log.d(TAG, "convertView is " + convertView.getTag());
                 holder = (ViewHolder) convertView.getTag();
             }
             Event event = getItem(position);
@@ -1107,15 +1160,35 @@ public class MainActivity extends AppCompatActivity
      *
      * @param fragment a new fragment
      */
-    private boolean loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .commit();
-            return true;
         }
-        return false;
+    }
+
+    /*
+    * Set different mode based on user's preferences.
+    * Currently there are two modes:
+    *   1. High Accuracy Mode/ Less sounds recognized: 11 sounds available
+    *   2. Low Accuracy Mode/ More sounds recognized: 30 sounds available
+    *
+    * @param mode 1 for high accuracy, 2 for low accuracy
+    * */
+    private void setAccuracyMode(int mode) {
+        CheckBox checkBoxToDisable;
+        if (mode == HIGH_ACCURACY_MODE) {
+            for (Integer sound: lowAccuracyList) {
+                checkBoxToDisable = (CheckBox)findViewById(sound);
+                checkBoxToDisable.setVisibility(View.GONE);
+            }
+            // some config for padding
+            findViewById(R.id.category_5).setVisibility(View.GONE);
+            findViewById(R.id.padding_top).setPadding(0, 150, 0, 0);
+            findViewById(R.id.padding_bottom).setPadding(0, 0, 0, 80);
+        }
     }
 }

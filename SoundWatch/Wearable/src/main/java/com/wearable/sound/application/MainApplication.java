@@ -13,14 +13,11 @@ public class MainApplication extends Application {
         "Water Running",
         "Knocking",
         "Microwave",
-        "Dishwasher",
-        "Laughing",
-        "Phone Ring",
+        "Dog Bark",
+        "Cat Meow",
         "Car Honk",
         "Vehicle",
-
-        "Chopping",
-        "Utensils and Cutlery"
+        "Baby Cry"
     }));
 
 //    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {

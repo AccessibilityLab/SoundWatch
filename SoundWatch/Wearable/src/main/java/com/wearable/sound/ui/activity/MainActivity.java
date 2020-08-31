@@ -862,7 +862,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         db = Integer.toString(loudness);
         //Log.i(TAG, "level" + audioLabel.db + " " + db);
 
-        if(loudness > 70)
+        if (loudness > 70)
             db = "Loud, " + db;
         else if(loudness > 60)
             db = "Med, " + db;
