@@ -44,6 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
 
 import com.chaquo.python.PyException;
 import com.chaquo.python.PyObject;
@@ -531,6 +533,13 @@ public class MainActivity extends AppCompatActivity
 
         //Load model
         String actualModelFilename = MODEL_FILENAME.split("file:///android_asset/", -1)[1];
+//        try {
+//            Context context = createPackageContext("com.wearable.sound", 0);
+//            AssetManager assetManager = context.getAssets();
+//            tfLite = new Interpreter(loadModelFile(assetManager, actualModelFilename));
+//        } catch (PackageManager.NameNotFoundException | IOException e) {
+//            e.printStackTrace();
+//        }
         try {
             tfLite = new Interpreter(loadModelFile(getAssets(), actualModelFilename));
         } catch (Exception e) {
@@ -566,7 +575,7 @@ public class MainActivity extends AppCompatActivity
         // bottomNavView.setSelectedItemId(R.id.bottom_navigation_item_sound_list);
 
         // set Mode
-        setAccuracyMode(2);
+        setAccuracyMode(1);
 
         // Stores DataItems received by the local broadcaster or from the paired watch.
 //        mDataItemListAdapter = new DataItemAdapter(this, android.R.layout.simple_list_item_1);
@@ -618,7 +627,7 @@ public class MainActivity extends AppCompatActivity
 //                            tutorialLayout.setVisibility(View.GONE);
                             break;
                         case R.id.bottom_navigation_item_help:
-                            titleView.setText(R.string.tutorial);
+                            titleView.setText(R.string.help);
                             fragment = new ScrollingFragment2();
                             frameLayout.setVisibility(View.VISIBLE);
                             instructionalView.setVisibility(View.GONE);

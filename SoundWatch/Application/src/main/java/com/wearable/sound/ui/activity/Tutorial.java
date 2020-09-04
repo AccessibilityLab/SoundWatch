@@ -24,14 +24,14 @@ public class Tutorial extends TutorialActivity {
         Log.d("TutorialActivity", "onCreated called");
         addFragment( new Step.Builder().setTitle("Step 1")
                 .setContent("Content 1")
-                .setBackgroundColor(Color.parseColor("#FF0957"))
+                .setBackgroundColor(Color.parseColor("#00DC79"))
                 .setDrawable(R.drawable.ss_1)
                 .setSummary("Summary 1")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 2")
                 .setContent("Content 2")
-                .setBackgroundColor(Color.parseColor("#09d2ff"))
+                .setBackgroundColor(Color.parseColor("#00DC79"))
                 .setDrawable(R.drawable.ic_outline_about_48)
                 .setSummary("Summary 2")
                 .build());
@@ -56,10 +56,10 @@ public class Tutorial extends TutorialActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.prev:
-                Toast.makeText(this, "Back button clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Back button clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.next:
-                Toast.makeText(this, "Next button clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Next button clicked", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -59,7 +59,7 @@
     <string name="instruction">Select the sounds you want to recognize</string>
     <string name="about">About</string>
     <string name="home">Home</string>
-    <string name="tutorial">Tutorial</string>
+    <string name="help">Help</string>
     <string name="coughing">Coughing</string>
     <string name="typing">Typing</string>
     <string name="large_text">
@@ -177,6 +177,7 @@
                 "A material metaphor is the unifying theory of a rationalized space and a system of motion"
 
     </string>
-    <string name="get_started">Get Started</string>
+    <string name="get_started">Start Tutorial</string>
+    <string name="troubleshoot">Start Troubleshoot</string>
 
 </resources>

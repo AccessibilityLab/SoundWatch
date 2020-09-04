@@ -25,9 +25,10 @@ android {
             // If Chaquopy fails to find Python on your build machine, enable the following
             // line and edit it to point to Python 3.4 or later.
 //              buildPython "C:/Python36/python3.exe"
-            buildPython "C:\\Users\\ak_ka\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+//            buildPython "C:\\Users\\ak_ka\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+//            buildPython "C:\\Python38\\python.exe"
             pip {
-                install "numpy==1.14.2"
+                install "numpy==1.17.4"
             }
         }
         ndk {
@@ -45,6 +46,7 @@ android {
     aaptOptions {
         noCompress "tflite"
     }
+    
 }
 
 repositories {
@@ -62,6 +64,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
 
+    // This dependency is downloaded from the Google’s Maven repository.
+    // So, make sure you also include that repository in your project's build.gradle file.
+    implementation 'com.google.android.play:core:1.8.0'
+
 
 
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
@@ -69,13 +75,13 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
     wearApp project(':Wearable')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -132,4 +138,5 @@ android {
     lintOptions {
         abortOnError false
     }
+    assetPacks = [ ":InstallTimePack"]
 }
