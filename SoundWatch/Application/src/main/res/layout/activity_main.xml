@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category_1"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category_2"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
 
@@ -371,7 +371,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category_3"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
@@ -453,7 +453,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category_4"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
 
@@ -476,7 +476,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category_5"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
 
