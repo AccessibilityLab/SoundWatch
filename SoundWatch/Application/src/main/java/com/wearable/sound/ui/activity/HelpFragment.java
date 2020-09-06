@@ -8,16 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.wearable.sound.R;
 
-import java.util.Objects;
-
-public class ScrollingFragment2 extends Fragment {
+public class HelpFragment extends Fragment {
 
     @Nullable
     @Override
@@ -33,7 +30,7 @@ public class ScrollingFragment2 extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("ScrollingFragment2", "onClick called");
-                Intent tutorial = new Intent(ScrollingFragment2.this.getActivity(), Tutorial.class);
+                Intent tutorial = new Intent(HelpFragment.this.getActivity(), Tutorial.class);
                 startActivity(tutorial);
             }
         });

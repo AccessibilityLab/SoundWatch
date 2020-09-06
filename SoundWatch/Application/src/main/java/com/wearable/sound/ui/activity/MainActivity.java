@@ -40,7 +40,6 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -628,7 +627,7 @@ public class MainActivity extends AppCompatActivity
                             break;
                         case R.id.bottom_navigation_item_help:
                             titleView.setText(R.string.help);
-                            fragment = new ScrollingFragment2();
+                            fragment = new HelpFragment();
                             frameLayout.setVisibility(View.VISIBLE);
                             instructionalView.setVisibility(View.GONE);
                             scrollView.setVisibility(View.GONE);
