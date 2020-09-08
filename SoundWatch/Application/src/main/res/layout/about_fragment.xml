@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    tools:context=".ui.activity.ScrollingFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/question_1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_tiny"
+            android:text="@string/about_description"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textSize="@dimen/_12ssp"
+            android:paddingBottom="@dimen/_15sdp"
+            android:autoLink="web|email"
+            android:linksClickable="true"
+            android:textColorLink="@color/wl_blue"/>
+    </LinearLayout>
+
+
+
+</ScrollView>

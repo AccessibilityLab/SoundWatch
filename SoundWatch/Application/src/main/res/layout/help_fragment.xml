@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/faq"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_22ssp"
             android:textStyle="bold"
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_1"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold|italic"
@@ -120,10 +120,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_1"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:textColor="#DCDCDC"
             android:textSize="@dimen/_12ssp"
-            android:paddingBottom="@dimen/_10sdp"/>
+            android:paddingBottom="@dimen/_15sdp"/>
 
         <TextView
             android:id="@+id/question_2"
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_2"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold|italic"
@@ -143,10 +143,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_2"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:textColor="#DCDCDC"
             android:textSize="@dimen/_12ssp"
-            android:paddingBottom="@dimen/_10sdp"/>
+            android:paddingBottom="@dimen/_15sdp"/>
 
         <TextView
             android:id="@+id/question_3"
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_3"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold|italic"
@@ -166,10 +166,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_3"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:textColor="#DCDCDC"
             android:textSize="@dimen/_12ssp"
-            android:paddingBottom="@dimen/_10sdp"/>
+            android:paddingBottom="@dimen/_15sdp"/>
 
         <TextView
             android:id="@+id/question_4"
@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_4"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold|italic"
@@ -189,10 +189,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_4"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:textColor="#DCDCDC"
             android:textSize="@dimen/_12ssp"
-            android:paddingBottom="@dimen/_10sdp"/>
+            android:paddingBottom="@dimen/_15sdp"/>
 
         <TextView
             android:id="@+id/question_5"
@@ -200,7 +200,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_5"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold|italic"
@@ -212,10 +212,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_5"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:textColor="#DCDCDC"
             android:textSize="@dimen/_12ssp"
-            android:paddingBottom="@dimen/_10sdp"/>
+            android:paddingBottom="@dimen/_15sdp"/>
 
         <TextView
             android:id="@+id/question_6"
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_6"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold|italic"
@@ -235,10 +235,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_6"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:textColor="#DCDCDC"
             android:textSize="@dimen/_12ssp"
-            android:paddingBottom="@dimen/_10sdp"/>
+            android:paddingBottom="@dimen/_15sdp"/>
 
 
 

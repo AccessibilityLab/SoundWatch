@@ -550,11 +550,11 @@ public class MainActivity extends AppCompatActivity
 
 //        RelativeLayout parent = findViewById(R.id.main_layout);
 
-        // inflate fragment_scrolling2 into main_layout
+        // inflate help_fragment into main_layout
 
 //        LayoutInflater inflater =
 //                (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View convertView = inflater.inflate(R.layout.fragment_scrolling2, parent);
+//        View convertView = inflater.inflate(R.layout.help_fragment, parent);
 //        tutorialLayout = convertView.findViewById(R.id.tutorial_layout);
 //        tutorialLayout.setVisibility(View.GONE);
 //        tutorialBtn = convertView.findViewById(R.id.tutorial_btn);

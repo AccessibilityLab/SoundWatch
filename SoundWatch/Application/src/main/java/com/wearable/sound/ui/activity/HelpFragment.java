@@ -24,7 +24,7 @@ public class HelpFragment extends Fragment {
 //        if (container != null) {
 //            container.setVisibility(View.GONE);
 //        }
-        View view = inflater.inflate(R.layout.fragment_scrolling2, container, false);
+        View view = inflater.inflate(R.layout.help_fragment, container, false);
         final Button tutorialBtn = view.findViewById(R.id.tutorial_btn);
         tutorialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
