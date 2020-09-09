@@ -29,6 +29,7 @@ import android.media.AudioRecord;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -571,6 +572,7 @@ public class MainActivity extends AppCompatActivity
         LOGD(TAG, "create BottomNavigationView");
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
         bottomNavView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavView.setElevation(32);
         // bottomNavView.setSelectedItemId(R.id.bottom_navigation_item_sound_list);
 
         // set Mode

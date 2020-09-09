@@ -539,6 +539,5 @@
         app:menu="@menu/bottom_nav_view_menu"
         app:itemIconTint="@drawable/selector_bottom_navigation"
         app:itemTextColor="@drawable/selector_bottom_navigation"
-        app:elevation="@dimen/_16sdp"
         />
 </RelativeLayout>

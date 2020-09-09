@@ -94,4 +94,6 @@
         \nIt began on September 1st, 2018, and is led by a hard of hearing University of Washington PhD student who wanted to build for his community. Thus, SoundWatch has involved the DHH communities at many stages of its development, along with faculty advisors, student developers, programmers, and UI/UX designers.
         \nThe project is part of the Makeability Lab at University of Washington whose mission is to “design, build and study interactive tools and techniques to address pressing societal challenges.” Sponsored by the National Science Foundation, SoundWatch app is freely available and the code is open-sourced for anyone wanting to learn more and contribute to its development.\n\nThank you for using SoundWatch. This is a beta release, so always feel free to connect with us (at soundwatch@uw.edu) to provide feedback so we can improve or say hi!
         \nFor more details, please visit: https://makeabilitylab.cs.washington.edu/project/soundwatch/"</string>
+    <string name="feedback">Send us Feedback!</string>
+    <string name="arrow">Arrow</string>
 </resources>
