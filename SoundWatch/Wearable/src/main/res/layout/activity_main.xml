@@ -57,7 +57,7 @@
         app:pulse_layout_ShowPreview="true">
 
         <!-- You can add now any View inside here -->
-        <ImageView
+        <ImageButton
             android:id="@+id/mic"
             android:layout_width="40dp"
             android:layout_height="40dp"

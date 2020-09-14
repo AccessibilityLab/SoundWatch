@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity
     // List of IDs of only low accuracy sounds (19 sounds)
     private static List<Integer> lowAccuracyList = new ArrayList<>(Arrays.asList(R.id.utensils_and_cutlery, R.id.alarm_clock,
             R.id.saw, R.id.hammering, R.id.snoring, R.id.laughing, R.id.hair_dryer, R.id.toilet_flush, R.id.door_bell,
-            R.id.dishwasher, R.id.blender, R.id.tooth_brush, R.id.shaver, R.id.chopping, R.id.vacuum, R.id.drill, R.id.speech,
+            R.id.dishwasher, R.id.blender, R.id.tooth_brush, R.id.shaver, R.id.chopping, R.id.vacuum, R.id.drill, R.id.phone_ring,
             R.id.coughing, R.id.typing));
 
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
@@ -353,10 +353,6 @@ public class MainActivity extends AppCompatActivity
             currentSound.isEnabled = isEnabled;
             new sendSoundEnableMessageToWatchTask(currentSound).execute();
         }
-    }
-
-    public void onTutorialClick(View view) {
-        Log.d(TAG, "onTutorialClick called");
     }
 
     public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
@@ -548,25 +544,6 @@ public class MainActivity extends AppCompatActivity
 
         mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
-
-//        RelativeLayout parent = findViewById(R.id.main_layout);
-
-        // inflate help_fragment into main_layout
-
-//        LayoutInflater inflater =
-//                (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View convertView = inflater.inflate(R.layout.help_fragment, parent);
-//        tutorialLayout = convertView.findViewById(R.id.tutorial_layout);
-//        tutorialLayout.setVisibility(View.GONE);
-//        tutorialBtn = convertView.findViewById(R.id.tutorial_btn);
-//        tutorialBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick called");
-//                Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
-//                startActivity(tutorial);
-//            }
-//        });
 
         // create BottomNavigationView
         LOGD(TAG, "create BottomNavigationView");
@@ -763,6 +740,7 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(mReceiver, mIntentFilter);
     }
 
+    // Receive message from watch on which sound to snooze
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1053,7 +1031,7 @@ public class MainActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
-                Log.d(TAG, "convertView is null");
+                LOGD(TAG, "convertView is null");
                 holder = new ViewHolder();
                 LayoutInflater inflater =
                         (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1062,7 +1040,7 @@ public class MainActivity extends AppCompatActivity
                 holder.text1 = (TextView) convertView.findViewById(android.R.id.text1);
                 holder.text2 = (TextView) convertView.findViewById(android.R.id.text2);
             } else {
-                Log.d(TAG, "convertView is " + convertView.getTag());
+                LOGD(TAG, "convertView is " + convertView.getTag());
                 holder = (ViewHolder) convertView.getTag();
             }
             Event event = getItem(position);

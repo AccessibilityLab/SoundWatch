@@ -19,25 +19,23 @@ repositories {
     jcenter()
 }
 
-
-
 dependencies {
 
     implementation 'androidx.wear:wear:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
 
 
-    implementation 'com.google.android.gms:play-services-wearable:16.0.1'
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
 
 
-    compileOnly 'com.google.android.wearable:wearable:2.4.0'
+    compileOnly 'com.google.android.wearable:wearable:2.7.0'
 
-    implementation 'com.google.android.support:wearable:2.4.0'
+    implementation 'com.google.android.support:wearable:2.7.0'
 
-    implementation "com.android.support:support-v13:28.0.0"
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 
     // SocketIO
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
@@ -60,17 +58,17 @@ List<String> dirs = [
 
 android {
 
-    compileSdkVersion 28
+    compileSdkVersion 29
 
-    buildToolsVersion "28.0.3"
+    buildToolsVersion "29.0.2"
 
     defaultConfig {
         versionCode 1
         versionName "1.0"
-        applicationId "com.wearable.sound"
+        applicationId 'com.wearable.sound'
         minSdkVersion 28
 
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         multiDexEnabled true
 
@@ -85,7 +83,7 @@ android {
             }
         }
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
         }
 
     }

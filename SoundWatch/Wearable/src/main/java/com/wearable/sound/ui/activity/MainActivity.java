@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -460,7 +461,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     @SuppressLint("SetTextI18n")
     public void onRecordClick(View view) {
         // Change the image to STOP icon
-        ImageView imageView = findViewById(R.id.mic);
+        ImageButton imageView = findViewById(R.id.mic);
         TextView textView = findViewById(R.id.dontshowDisplay);
         TextView soundTextView = findViewById(R.id.soundDisplay);
         TextView locationTextView = findViewById(R.id.locationDisplay);
@@ -643,7 +644,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             }
             TextView fTextView = (findViewById(R.id.dontshowDisplay));
             fTextView.setVisibility(View.VISIBLE);
-            // TODO: Change this sound to a specific sound
             if (elements[tag].equals("Cancel")) {
                 fTextView.setText(MessageFormat.format("\"{0}\" is not snoozed.", audioLabel));
             } else {
