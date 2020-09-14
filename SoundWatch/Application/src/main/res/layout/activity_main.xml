@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,6 +25,13 @@
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_25ssp"
             android:textStyle="bold" />
+
+<!--        <Button-->
+<!--            android:id="@+id/aaaaa"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Button"/>-->
 
         <!--    <Button-->
         <!--        android:id="@+id/button"-->
@@ -72,16 +80,23 @@
             android:orientation="vertical"
             android:scaleX="1.25"
             android:scaleY="1.25"
-            android:paddingTop="@dimen/_120sdp"
             android:paddingBottom="@dimen/_20sdp"
-            android:paddingStart="@dimen/_15sdp">
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingEnd="@dimen/_15sdp">
 
             <TextView
+                android:id="@+id/padding_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/_110sdp"/>
+
+            <TextView
+                android:id="@+id/category_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_1"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
@@ -111,11 +126,12 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
+                android:id="@+id/category_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_2"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
 
@@ -157,6 +173,7 @@
                 android:text="@string/chopping"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_10ssp" />
+
             <CheckBox
                 android:id="@+id/coughing"
                 android:layout_width="match_parent"
@@ -182,7 +199,6 @@
                 android:text="@string/dishwasher"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_10ssp" />
-
 
             <CheckBox
                 android:id="@+id/door_bell"
@@ -350,11 +366,12 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
+                android:id="@+id/category_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_3"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
@@ -431,11 +448,12 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
+                android:id="@+id/category_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_4"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
 
@@ -453,11 +471,12 @@
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
+                android:id="@+id/category_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_5"
                 android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_12ssp"/>
 
@@ -492,13 +511,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
                 android:layout_marginTop="@dimen/margin_tiny"
-                android:layout_marginBottom="@dimen/_110sdp"
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/hammering"
                 android:textColor="@color/common_google_signin_btn_text_dark_pressed"
                 android:textSize="@dimen/_10ssp" />
+            <TextView
+                android:id="@+id/padding_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/_110sdp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -516,6 +539,5 @@
         app:menu="@menu/bottom_nav_view_menu"
         app:itemIconTint="@drawable/selector_bottom_navigation"
         app:itemTextColor="@drawable/selector_bottom_navigation"
-        app:elevation="@dimen/_16sdp"
         />
 </RelativeLayout>
