@@ -355,6 +355,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onTutorialClick(View view) {
+        Log.d(TAG, "onTutorialClick called");
+    }
+
     public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
         private String data;
 
@@ -544,6 +548,25 @@ public class MainActivity extends AppCompatActivity
 
         mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
+
+//        RelativeLayout parent = findViewById(R.id.main_layout);
+
+        // inflate help_fragment into main_layout
+
+//        LayoutInflater inflater =
+//                (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View convertView = inflater.inflate(R.layout.help_fragment, parent);
+//        tutorialLayout = convertView.findViewById(R.id.tutorial_layout);
+//        tutorialLayout.setVisibility(View.GONE);
+//        tutorialBtn = convertView.findViewById(R.id.tutorial_btn);
+//        tutorialBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick called");
+//                Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
+//                startActivity(tutorial);
+//            }
+//        });
 
         // create BottomNavigationView
         LOGD(TAG, "create BottomNavigationView");
