@@ -16,11 +16,12 @@
 -->
 
 <resources>
-    <color name="wl_blue">#2878ff</color>
+    <color name="wl_blue">#2877FF</color>
     <color name="colorPrimary">#0A84FF</color>
     <color name="colorSecondary">#8E8E93</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+<!--    <color name="colorAccent">#03DAC5</color>-->
+    <color name="colorAccent">#4285F4</color>
     <color name="colorFeedback">#C79324</color>
     <color name="colorNavBar">#19191E</color>
 </resources>

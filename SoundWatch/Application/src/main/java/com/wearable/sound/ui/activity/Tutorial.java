@@ -20,7 +20,6 @@ public class Tutorial extends TutorialActivity {
 //                .setBackgroundColor(Color.parseColor("#00DC79"))
                 .setBackgroundColor(Color.parseColor("#212121"))
                 .setDrawable(R.drawable.tutorial_1)
-                .setSummary("Phone Tutorial")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 1")
@@ -33,7 +32,6 @@ public class Tutorial extends TutorialActivity {
                 "using the app and the About section to learn more about the background behind SmartWatch.  ")
                 .setBackgroundColor(Color.parseColor("#212121"))
                 .setDrawable(R.drawable.ic_baseline_help_48)
-                .setSummary("Up next: Watch Tutorial")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 1")
@@ -41,14 +39,12 @@ public class Tutorial extends TutorialActivity {
                 "(a Paired with \"Your Device\" notification should appear)")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_1)
-                .setSummary("Watch Tutorial")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 2")
                 .setContent("The red icon with pulsing effect mean your watch is listening")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_2)
-                .setSummary("Watch Tutorial - Step 2")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 3")
@@ -56,28 +52,24 @@ public class Tutorial extends TutorialActivity {
                 "to appear identifying sounds")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_6)
-                .setSummary("Watch Tutorial - Step 3")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 4")
                 .setContent("To snooze a sound for a specified period of time, press the “snooze” button.\n")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_3)
-                .setSummary("Watch Tutorial")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 5").setContent("To pick the length of time of the snooze, press the “Open” " +
                 "button and a list of options will be presented.  \n")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_4)
-                .setSummary("Watch Tutorial")
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 6")
                 .setContent("Click on the length of time you want to snooze.  \n")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_5)
-                .setSummary("Watch Tutorial")
                 .build());
     }
 

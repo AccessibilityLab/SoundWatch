@@ -12,25 +12,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableListView;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +42,6 @@ import com.google.android.gms.tasks.Task;
 import com.kuassivi.component.RipplePulseRelativeLayout;
 import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
-import com.wearable.sound.datalayer.DataLayerListenerService;
 import com.wearable.sound.models.AudioLabel;
 import com.wearable.sound.models.SoundPrediction;
 import com.wearable.sound.service.ForegroundService;
@@ -84,7 +76,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.TypefaceCompat;
 
 import static com.wearable.sound.utils.Constants.*;
 
@@ -94,7 +85,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
 
     public static boolean notificationChannelIsCreated = false;
-    public static final String TAG = "HomeSoundDebug";
+    public static final String TAG = "Watch/MainActivity";
     public static final String DEBUG_TAG = "FromSoftware";
     private String audioLabel = "";
     private String confidence = "";
@@ -108,6 +99,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static Set<String> connectedHostIds = new HashSet<>();
     private long absolutelastTime = 0;
     public static final double PREDICTION_THRESHOLD = 0.4;
+    private static Toast mToast;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -119,6 +111,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
+    public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
+    public static final String mBroadcastDisableForegroundService = "com.wearable.sound.broadcast.disableforegroundservice";
     private IntentFilter mIntentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -157,6 +151,17 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 List<SoundPrediction> predictions = parsePredictions(soundPredictions);
                 AudioLabel audioLabel = filterTopSoundLabel(predictions, time, db);
                 createAudioLabelNotification(audioLabel);
+            } else if (intent.getAction().equals(mBroadcastForegroundService)) {
+                String data  = intent.getStringExtra(FOREGROUND_LABEL);
+                Log.i(TAG, "Received status request from phone: " + data);
+                assert data != null;
+                if (data.contains("enable")) {
+                    updateMicView(false);
+                    sendForegroundMessageToPhone("watch_start_record");
+                } else if (data.contains("disable")) {
+                    updateMicView(true);
+                    sendForegroundMessageToPhone("watch_stop_record");
+                }
             }
         }
     };
@@ -327,8 +332,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //Just in case the app has exited midway and started again from an intent, get data from PendingIntent
         String[] dataPassed = {"", "", ""};
         dataPassed = this.getIntent().getStringArrayExtra("audio_label");
-        if (dataPassed != null)
-        {
+        if (dataPassed != null) {
             audioLabel = dataPassed[0];
             confidence = dataPassed[1];
             audioTime = dataPassed[2];
@@ -379,6 +383,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         mIntentFilter.addAction(mBroadcastAllSoundPredictions);
+        mIntentFilter.addAction(mBroadcastForegroundService);
+        mIntentFilter.addAction(mBroadcastDisableForegroundService);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -420,7 +426,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     private void startRecording(final Context main) {
         // Refresh list of connected nodes
-        final String CAPABILITY = "capability_1";
+        final String CAPABILITY_1 = "capability_1";
         Task<Map<String, CapabilityInfo>> capabilitiesTask =
                 Wearable.getCapabilityClient(this)
                         .getAllCapabilities(CapabilityClient.FILTER_REACHABLE);
@@ -435,7 +441,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                             showDiscoveredNodes(nodes);
                             return;
                         }
-                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY);
+                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY_1);
                         if (capabilityInfo != null) {
                             nodes.addAll(capabilityInfo.getNodes());
                         }
@@ -453,13 +459,14 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         capabilitiesTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_LONG).show();
+                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @SuppressLint("SetTextI18n")
     public void onRecordClick(View view) {
+        Log.i(TAG, "onRecordClick: " + view);
         // Change the image to STOP icon
         ImageButton imageView = findViewById(R.id.mic);
         TextView textView = findViewById(R.id.dontshowDisplay);
@@ -467,11 +474,19 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         TextView locationTextView = findViewById(R.id.locationDisplay);
         // add ripple effect for better readability
         RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
-        if (!IS_RECORDING) {
+        updateMicView(IS_RECORDING);
+    }
+
+    private void updateMicView(boolean isRecording) {
+        // Change the image to STOP icon
+        ImageButton imageView = findViewById(R.id.mic);
+        TextView textView = findViewById(R.id.dontshowDisplay);
+        TextView soundTextView = findViewById(R.id.soundDisplay);
+        TextView locationTextView = findViewById(R.id.locationDisplay);
+        // add ripple effect for better readability
+        RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
+        if (!isRecording) {
             startRecording(this);
-//            if (connectedHostIds.isEmpty()) {
-//                return;
-//            }
             // Update deprecated method from API 22 (getDrawable)
             imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
             imageView.setImageResource(R.drawable.ic_pause_black_32dp);
@@ -486,16 +501,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             imageView.setImageResource(R.drawable.ic_mic_32dp);
             pulseLayout.stopPulse();
             IS_RECORDING = false;
-            onStopClick(view);
+            onStopClick();
             // Change the instruction text
             locationTextView.setText("Welcome to");
             soundTextView.setText("SoundWatch");
             textView.setText("Click the button above \n to begin listening");
         }
-
     }
 
-    public void onStopClick(View view) {
+    public void onStopClick() {
         Intent serviceIntent = new Intent(this, ForegroundService.class);
         stopService(serviceIntent);
     }
@@ -550,6 +564,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }
     }
 
+    // Use Wearable getMessageClient to send a message to phone and tell it to mute a certain sound
     private void sendSnoozeSoundMessageToPhone(String soundLabel) {
         ByteArrayOutputStream bas = new ByteArrayOutputStream();
         DataOutputStream ds = new DataOutputStream(bas);
@@ -562,6 +577,19 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             Task<Integer> sendMessageTask =
                     Wearable.getMessageClient(this.getApplicationContext())
                             .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
+        }
+    }
+
+    private void sendForegroundMessageToPhone(String connectStatus) { ;
+        if (connectedHostIds == null) {
+            // No phone connected to send the message right now
+            return;
+        }
+        for (String connectedHostId : connectedHostIds) {
+            Log.d(TAG, "Sending connected signal to phone:" + connectStatus);
+            Task<Integer> sendMessageTask =
+                    Wearable.getMessageClient(this.getApplicationContext())
+                            .sendMessage(connectedHostId, WATCH_CONNECT_STATUS, connectStatus.getBytes());
         }
     }
 
@@ -769,16 +797,31 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             connectedHostIds.add(node.getId());
             nodesList.add(node.getDisplayName());
         }
+        LayoutInflater inflater = getLayoutInflater();
+        View toastRoot = inflater.inflate(R.layout.custom_toast, null);
+
+
         String msg;
         if (!nodesList.isEmpty()) {
             msg = getString(R.string.connected_nodes, TextUtils.join(", ", nodesList));
             Log.i(TAG, "Connect phones names: " + nodesList);
         } else {
+            toastRoot = inflater.inflate(R.layout.custom_toast_warning, null);
             msg = getString(R.string.no_device);
         }
-        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL, 0, 60);
-        toast.show();
+        TextView tv = toastRoot.findViewById(R.id.toast_text);
+        tv.setText(msg);
+        showToast(this, toastRoot);
+    }
+
+    public static void showToast(Context context, View view){
+        if(null == mToast){
+            mToast = new Toast(context);
+        }
+        mToast.setDuration(Toast.LENGTH_SHORT);
+        mToast.setView(view);
+        mToast.setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL, 0, 0);
+        mToast.show();
     }
 
     private void configureTestingAudioLabelNotification(AudioLabel audioLabel) {
@@ -886,7 +929,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.notification_icon)
+                .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
 //                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
                 .setContentTitle(audioLabel.label)
                 .setContentText("(" + db + " dB)")

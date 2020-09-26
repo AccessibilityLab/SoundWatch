@@ -3,13 +3,13 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="8dp"
-    android:background="#DAAA"
-    >
-    <TextView android:id="@+id/text"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+    android:background="@drawable/rounded_corner"
+    android:padding="2sp">
+    <TextView android:id="@+id/toast_text"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
         android:layout_gravity="center"
-        android:textColor="#FFF"
-        />
+        android:textAlignment="center"
+        android:paddingTop="5sp"
+        android:textColor="#000" />
 </LinearLayout>

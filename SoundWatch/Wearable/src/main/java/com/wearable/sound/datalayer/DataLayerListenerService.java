@@ -120,7 +120,14 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.setAction(MainActivity.mBroadcastAllSoundPredictions);
             broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
             sendBroadcast(broadcastIntent);
-        } else {
+        } else if (messageEvent.getPath().equals(SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH)) {
+            Log.i(TAG, "Foreground Service status received: "+ new String(messageEvent.getData()) + "-> send to MainActivity");
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(MainActivity.mBroadcastForegroundService);
+            broadcastIntent.putExtra(FOREGROUND_LABEL, new String(messageEvent.getData()));
+            sendBroadcast(broadcastIntent);
+        }
+        else {
             Log.d(TAG, "Unrecognized message from phone. Check if this message is registered in AndroidManifest");
         }
     }

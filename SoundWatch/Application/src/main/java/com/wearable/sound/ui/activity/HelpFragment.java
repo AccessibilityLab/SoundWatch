@@ -20,6 +20,8 @@ import androidx.annotation.Nullable;
 
 import com.wearable.sound.R;
 
+import java.util.Objects;
+
 public class HelpFragment extends Fragment {
 
     @Nullable
@@ -41,7 +43,7 @@ public class HelpFragment extends Fragment {
             }
         });
 
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Display display = requireActivity().getWindowManager().getDefaultDisplay();
         Point point = new Point();
         display.getSize(point);
         ConstraintLayout constraintLayout = view.findViewById(R.id.help_layout);

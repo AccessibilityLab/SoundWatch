@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory app:title="@string/first_preference">
+        <Preference
+            app:key="connect_status"
+            app:title="Status"
+            app:summary="Please open SoundWatch app on your Wear OS watch to start listening"/>
+
+        <SwitchPreferenceCompat
+            app:key="foreground_service"
+            app:defaultValue="true"
+            app:summaryOff="@string/foreground_summary_off"
+            app:summaryOn="@string/foreground_summary_on"
+            app:title="@string/foreground_title" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/second_preference">
+
+        <SwitchPreferenceCompat
+            app:key="listening_status"
+            app:dependency="foreground_service"
+            app:defaultValue="false"
+            app:title="Listening status"
+            app:summaryOff="Enable to start recording on your Smart Watch"
+            app:summaryOn="Disable to stop recording on your Smart Watch"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

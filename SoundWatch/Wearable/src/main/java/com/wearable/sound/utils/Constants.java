@@ -10,6 +10,7 @@ public class Constants {
     public static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     public static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     public static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
+    public static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
     public static final String COUNT_PATH = "/count";
 
     /**
@@ -18,6 +19,7 @@ public class Constants {
 
     public static final String SNOOZE_TIME = "SNOOZE_TIME";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
+    public static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
     public static final String CONNECTED_HOST_IDS = "CONNECTED_HOST_IDS";
     public static final String SNOOZE_SOUND = "SNOOZE_SOUND";
     public static final String SOUND_ID = "SOUND_ID";
@@ -26,6 +28,7 @@ public class Constants {
      *
      */
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
+    public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     public static final String VOICE_FILE_NAME = "audiorecord.pcm";
 
@@ -62,4 +65,16 @@ public class Constants {
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
     public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
 
+
+    /*
+    *  Foreground Service configurations
+    * */
+    public interface ACTION {
+        String MAIN_ACTION = "com.wearable.sound.utils.action.main";
+        public static String PREV_ACTION = "com.wearable.sound.utils.action.prev";
+        public static String PLAY_ACTION = "com.wearable.sound.utils.action.play";
+        public static String NEXT_ACTION = "com.wearable.sound.utils.action.next";
+        public static String STARTFOREGROUND_ACTION = "com.wearable.sound.utils.action.startforeground";
+        public static String STOPFOREGROUND_ACTION = "com.wearable.sound.utils.action.stopforeground";
+    }
 }

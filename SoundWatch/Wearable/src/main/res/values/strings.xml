@@ -19,8 +19,8 @@
     <string name="intro">Waiting for data to arrive\u2026</string>
     <string name="capability_2_notification">Listen</string>
     <string name="capabilities_1_and_2_notification">Stop</string>
-    <string name="no_device">No device provides the requested capabilities</string>
-    <string name="connected_nodes">Phone: %1$s</string>
+    <string name="no_device">No device connected</string>
+    <string name="connected_nodes">Connected: %1$s</string>
     <string name="main_text_activity_big_text_main">
         Sound Prediction
     </string>

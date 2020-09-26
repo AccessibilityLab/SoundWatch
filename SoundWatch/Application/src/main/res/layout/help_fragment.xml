@@ -15,11 +15,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/help_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="664dp"
             android:background="#000"
             android:paddingBottom="@dimen/_100sdp"
             tools:context=".ui.activity.HelpFragment">
-
 
             <Button
                 android:id="@+id/tutorial_btn"
@@ -56,13 +55,13 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:contentDescription="@string/logo"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                android:src="@drawable/ic_launcher"
+                android:scaleX="1.8"
+                android:scaleY="1.8"
+                android:src="@drawable/welcome_screen_logo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

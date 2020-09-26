@@ -16,6 +16,7 @@ Main gateway to receive message from watch including various messages
 - `SOUND_SNOOZE_FROM_WATCH_PATH`
 - `SOUND_UNSNOOZE_FROM_WATCH_PATH`
 - `SEND_CURRENT_BLOCKED_SOUND_PATH`
+- `WATCH_CONNECT_STATUS`
 - `AUDIO_PREDICTIOn`
 
 

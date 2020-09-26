@@ -55,6 +55,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
 
@@ -64,8 +65,10 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.wearable.sound.R;
 import com.wearable.sound.models.SoundPrediction;
 import com.wearable.sound.ui.activity.MainActivity;
+import com.wearable.sound.utils.Constants;
 
 import static com.wearable.sound.ui.activity.MainActivity.AUDIO_LABEL;
+import static com.wearable.sound.ui.activity.MainActivity.FOREGROUND_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.PREDICT_MULTIPLE_SOUNDS;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
@@ -80,15 +83,16 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
     private static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
-    public static final String COUNT_PATH = "/count";
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
     private static final float PREDICTION_THRES = 0.4F;
-//    private static final double DBLEVEL_THRES = 40.0;
     private static final double DBLEVEL_THRES = 40;
+    private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
+    private static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
+
+    public static final String COUNT_PATH = "/count";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_UNSNOOZE_FROM_WATCH_PATH = "/SOUND_UNSNOOZE_FROM_WATCH_PATH";
-    private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
 
     private Interpreter tfLite;
     private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
@@ -164,6 +168,12 @@ public class DataLayerListenerService extends WearableListenerService {
         }
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
         Log.d(TAG, "onDataChanged: " + dataEvents);
@@ -204,10 +214,10 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-//        Log.i(TAG, "Message received from Watch");
+        Log.i(TAG, "Message received from Watch");
         if (messageEvent.getPath().equals(SOUND_SNOOZE_FROM_WATCH_PATH)) {
             String soundLabel = (new String(messageEvent.getData())).split(",")[0];
-            Log.i(TAG, "Phone received Snooze Sound from watch: " + soundLabel);
+            Log.i(TAG, "Phone received Snooze Sound [" + soundLabel + "] from watch");
             if (MainActivity.SOUNDS_MAP.containsKey(soundLabel)) {
                 Log.i(TAG, "Setting is Snooze true");
                 MainActivity.SOUNDS_MAP.get(soundLabel).isSnoozed = true;
@@ -244,6 +254,17 @@ public class DataLayerListenerService extends WearableListenerService {
                     }
                 }
             }
+            return;
+        }
+        // check if the watch is on and connected
+        if (messageEvent.getPath().equals(WATCH_CONNECT_STATUS)) {
+            String connectedStatus = new String(messageEvent.getData());
+            Log.i(TAG, "Phone received Watch Status: " + connectedStatus);
+            // check if the watch successfully start recording
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(MainActivity.mBroadcastForegroundService);
+            broadcastIntent.putExtra(FOREGROUND_LABEL, connectedStatus);
+            sendBroadcast(broadcastIntent);
             return;
         }
 
@@ -542,7 +563,6 @@ public class DataLayerListenerService extends WearableListenerService {
         return ByteBuffer.wrap(bytes).getDouble();
     }
 
-    // TODO: This is the main db, find the fix
     private double db(short[] data) {
         double rms = 0.0;
         int dataLength = 0;
@@ -595,24 +615,31 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String input = intent.getStringExtra("connectedHostIds");
-        createNotificationChannel();
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Foreground Service")
-                .setContentText(input)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentIntent(pendingIntent)
-                .build();
-        startForeground(1, notification);
-        //do heavy work on a background thread
-        //stopSelf();
-        Log.i(TAG, "Starting foreground service");
-//        MainActivity.mSocket.on("audio_label", onNewMessage);
+        if (intent.getAction() == null || intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+            Log.i(TAG, "Received Start Foreground Intent ");
+            // start service code
+            String input = intent.getStringExtra("connectedHostIds");
+            createNotificationChannel();
+            Intent notificationIntent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                    0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("Listening for surrounding sounds..")
+                    .setContentText(input)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentIntent(pendingIntent)
+                    .build();
+            startForeground(1, notification);
+
+        } else if (intent.getAction().equals(Constants.ACTION.STOPFOREGROUND_ACTION)) {
+            Log.i(TAG, "Received Stop Foreground Intent");
+            // stop service code
+            stopForeground(true);
+            stopSelfResult(1);
+        }
         return START_NOT_STICKY;
     }
+
 
     /**
      *  Predicting sounds Functions on device
@@ -703,7 +730,7 @@ public class DataLayerListenerService extends WearableListenerService {
         return "Unrecognized sound" + "                           " + LocalTime.now();
     }
 
-    // TODO: predictSoundsFromRawAudio
+
     private String predictSoundsFromRawAudio() {
 //        counter++;
         Log.d(TAG, "Counter: " + counter);
@@ -735,7 +762,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 //Get MFCC features
                 PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));   //System.out.println("Sending to python: " + Arrays.toString(sData));
 
-                Log.i(TAG, "Time elapsed after running Python" + (System.currentTimeMillis() - startTimePython));
+                Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
                 //Parse features into a float array
                 String inputString = mfccFeatures.toString();
                 if (inputString.isEmpty()) {
@@ -866,7 +893,7 @@ public class DataLayerListenerService extends WearableListenerService {
             } else {
                 result = prediction + "," + confidence + "," + LocalTime.now() + "," + db;
             }
-            Log.i(TAG, "Number of connnected devices:" + nodes.size());
+            Log.i(TAG, "Number of connected devices: " + nodes.size());
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
@@ -898,7 +925,7 @@ public class DataLayerListenerService extends WearableListenerService {
             } else {
                 result = this.result + ";" + LocalTime.now() + ";" + db;
             }
-            Log.i(TAG, "Number of connnected devices:" + nodes.size());
+            Log.i(TAG, "Number of connected devices:" + nodes.size());
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH, result.getBytes());

@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.wearable.sound.ui.activity.MainActivity;
 import com.wearable.sound.R;
+import com.wearable.sound.utils.Constants;
 import com.wearable.sound.utils.SoundRecorder;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class ForegroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i(TAG, "onCreate");
         mSoundRecorder = new SoundRecorder(this, VOICE_FILE_NAME);
     }
 
@@ -48,7 +50,7 @@ public class ForegroundService extends Service {
                 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Listening...")
-                .setSmallIcon(R.drawable.ic_cc_checkmark)
+                .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(2, notification);
