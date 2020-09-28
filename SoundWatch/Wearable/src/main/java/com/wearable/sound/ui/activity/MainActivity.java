@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -100,6 +101,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private long absolutelastTime = 0;
     public static final double PREDICTION_THRESHOLD = 0.4;
     private static Toast mToast;
+    public static boolean IS_FOREGROUND_DISABLED;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -112,7 +114,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
     public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
-    public static final String mBroadcastDisableForegroundService = "com.wearable.sound.broadcast.disableforegroundservice";
+    public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningstatus";
     private IntentFilter mIntentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -153,15 +155,34 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 createAudioLabelNotification(audioLabel);
             } else if (intent.getAction().equals(mBroadcastForegroundService)) {
                 String data  = intent.getStringExtra(FOREGROUND_LABEL);
-                Log.i(TAG, "Received status request from phone: " + data);
+                Log.i(TAG, "Received Foreground Service status from phone: " + data);
+
                 assert data != null;
-                if (data.contains("enable")) {
-                    updateMicView(false);
-                    sendForegroundMessageToPhone("watch_start_record");
-                } else if (data.contains("disable")) {
-                    updateMicView(true);
-                    sendForegroundMessageToPhone("watch_stop_record");
+                if (data.contains("foreground_enabled")) {
+                    IS_FOREGROUND_DISABLED = false;
+                    IS_RECORDING = true;
+                } else if (data.contains("foreground_disabled")) {
+                    IS_FOREGROUND_DISABLED = true;
+                    IS_RECORDING = true;
                 }
+                Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+                updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
+            } else if (intent.getAction().equals(mBroadcastListeningStatus)) {
+                String data  = intent.getStringExtra(WATCH_STATUS_LABEL);
+                Log.i(TAG, "Received Listening status request from phone: " + data);
+                Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+                if (!IS_FOREGROUND_DISABLED) {
+                    assert data != null;
+                    if (data.contains("start_listening")) {
+                        IS_RECORDING = false;
+//                        sendForegroundMessageToPhone("watch_start_record");
+                    } else if (data.contains("stop_listening")) {
+                        IS_RECORDING = true;
+//                        sendForegroundMessageToPhone("watch_stop_record");
+                    }
+                    updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
+                }
+
             }
         }
     };
@@ -348,14 +369,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             TextView soundDisplay = findViewById(R.id.soundDisplay);
             TextView locationDisplay = findViewById(R.id.locationDisplay);
-//            RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
 
             locationDisplay.setText("");
-            //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
-//            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence)*100) + "%");
             soundDisplay.setText(audioLabel);
             soundDisplay.setVisibility(View.VISIBLE);
-//            pulseLayout.setVisibility(View.INVISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
         }
@@ -384,7 +401,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         mIntentFilter.addAction(mBroadcastAllSoundPredictions);
         mIntentFilter.addAction(mBroadcastForegroundService);
-        mIntentFilter.addAction(mBroadcastDisableForegroundService);
+        mIntentFilter.addAction(mBroadcastListeningStatus);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -425,6 +442,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     }
 
     private void startRecording(final Context main) {
+        Log.i(TAG, "startRecording called");
         // Refresh list of connected nodes
         final String CAPABILITY_1 = "capability_1";
         Task<Map<String, CapabilityInfo>> capabilitiesTask =
@@ -468,48 +486,62 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public void onRecordClick(View view) {
         Log.i(TAG, "onRecordClick: " + view);
         // Change the image to STOP icon
-        ImageButton imageView = findViewById(R.id.mic);
-        TextView textView = findViewById(R.id.dontshowDisplay);
-        TextView soundTextView = findViewById(R.id.soundDisplay);
-        TextView locationTextView = findViewById(R.id.locationDisplay);
-        // add ripple effect for better readability
-        RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
-        updateMicView(IS_RECORDING);
+        Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+        updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
     }
 
-    private void updateMicView(boolean isRecording) {
+    private void updateMicView(boolean isRecording, boolean isForegroundDisabled) {
         // Change the image to STOP icon
         ImageButton imageView = findViewById(R.id.mic);
         TextView textView = findViewById(R.id.dontshowDisplay);
         TextView soundTextView = findViewById(R.id.soundDisplay);
         TextView locationTextView = findViewById(R.id.locationDisplay);
+        LayoutInflater inflater = getLayoutInflater();
+        View toastRoot = inflater.inflate(R.layout.custom_toast_warning, null);
+        TextView tv = toastRoot.findViewById(R.id.toast_text);
+
+        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         // add ripple effect for better readability
         RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
-        if (!isRecording) {
-            startRecording(this);
-            // Update deprecated method from API 22 (getDrawable)
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
-            imageView.setImageResource(R.drawable.ic_pause_black_32dp);
-            pulseLayout.startPulse();
-            // Change the instruction text
+        if (isForegroundDisabled) {
+            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_grey, null));
+            imageView.setImageResource(R.drawable.ic_baseline_mic_off_48);
             locationTextView.setText("");
-            soundTextView.setText("Listening...");
-            textView.setText("Press Side Button and \n wait for notifications");
-            IS_RECORDING = true;
-        } else {
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
-            imageView.setImageResource(R.drawable.ic_mic_32dp);
+            soundTextView.setText("Sleep Mode is ON");
+            textView.setText("Turn off Sleep Mode on \n phone to enable listening");
             pulseLayout.stopPulse();
+            tv.setText("Listening is disabled");
+            showToast(this, toastRoot);
             IS_RECORDING = false;
             onStopClick();
-            // Change the instruction text
-            locationTextView.setText("Welcome to");
-            soundTextView.setText("SoundWatch");
-            textView.setText("Click the button above \n to begin listening");
+        } else {
+            if (!isRecording) {
+                startRecording(this);
+                // Update deprecated method from API 22 (getDrawable)
+                imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
+                imageView.setImageResource(R.drawable.ic_pause_black_32dp);
+                pulseLayout.startPulse();
+                // Change the instruction text
+                locationTextView.setText("");
+                soundTextView.setText("Listening...");
+                textView.setText("Press Side Button and \n wait for notifications");
+                IS_RECORDING = true;
+            } else {
+                imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
+                imageView.setImageResource(R.drawable.ic_mic_32dp);
+                pulseLayout.stopPulse();
+                IS_RECORDING = false;
+                onStopClick();
+                // Change the instruction text
+                locationTextView.setText("Welcome to");
+                soundTextView.setText("SoundWatch");
+                textView.setText("Click the button above \n to begin listening");
+            }
         }
     }
 
     public void onStopClick() {
+        Log.i(TAG, "onStopClick called");
         Intent serviceIntent = new Intent(this, ForegroundService.class);
         stopService(serviceIntent);
     }
@@ -686,14 +718,21 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         public void run() {
                             TextView soundDisplay = findViewById(R.id.soundDisplay);
                             TextView locationDisplay = findViewById(R.id.locationDisplay);
-                            locationDisplay.setText("");
+                            TextView fTextView = (findViewById(R.id.dontshowDisplay));
+                            fTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             if (IS_RECORDING) {
                                 soundDisplay.setText("Listening...");
+                                fTextView.setText("Press Side Button and wait for notifications");
+                            } else if (IS_FOREGROUND_DISABLED){
+                                soundDisplay.setText("Sleep Mode is ON");
+                                fTextView.setText("Turn off Sleep Mode on \n phone to enable listening");
+
                             } else {
                                 soundDisplay.setText("");
+                                fTextView.setText("Click the button above \n to begin listening");
                             }
-                            TextView fTextView = (findViewById(R.id.dontshowDisplay));
-                            fTextView.setText("Press Side Button and wait for notifications");
+                            locationDisplay.setText("");
+
                         }
                     });
 
@@ -800,13 +839,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         LayoutInflater inflater = getLayoutInflater();
         View toastRoot = inflater.inflate(R.layout.custom_toast, null);
 
-
         String msg;
         if (!nodesList.isEmpty()) {
             msg = getString(R.string.connected_nodes, TextUtils.join(", ", nodesList));
             Log.i(TAG, "Connect phones names: " + nodesList);
         } else {
-            toastRoot = inflater.inflate(R.layout.custom_toast_warning, null);
+            toastRoot = inflater.inflate(R.layout.custom_toast_error, null);
             msg = getString(R.string.no_device);
         }
         TextView tv = toastRoot.findViewById(R.id.toast_text);

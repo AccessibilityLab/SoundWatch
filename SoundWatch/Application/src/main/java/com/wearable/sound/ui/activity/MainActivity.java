@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity
     private static final String START_ACTIVITY_PATH = "/start-activity";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
     private static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
+    private static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
     private static final String COUNT_PATH = "/count";
     private static final String IMAGE_PATH = "/image";
     private static final String IMAGE_KEY = "photo";
@@ -245,6 +246,7 @@ public class MainActivity extends AppCompatActivity
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
+    public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
 
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<String, SoundNotification>();
 
@@ -623,26 +625,43 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                     Intent serviceIntent = new Intent(MainActivity.this, DataLayerListenerService.class);
-                    boolean enableForegroundService = sharedPreferences.getBoolean("foreground_service", true);
-                    if (enableForegroundService) {
-                        Log.i(TAG, "Starting foreground service in main");
-                        serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                        ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
-                        mSocket.on("audio_label", onNewMessage);
-                        mSocket.connect();
-                        Wearable.getMessageClient(MainActivity.this)
-                                .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_enabled".getBytes());
-                        Toast.makeText(MainActivity.this, "Foreground service started.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.i(TAG, "Stopping foreground service in main");
-                        serviceIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
-                        ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
-                        mSocket.disconnect();
-                        mSocket.off("audio_label", onNewMessage);
-                        Wearable.getMessageClient(MainActivity.this)
-                                .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_disabled".getBytes());
-                        Toast.makeText(MainActivity.this, "Foreground service stopped.", Toast.LENGTH_SHORT).show();
+                    if (key.equals("foreground_service")) {
+                        boolean isSleepModeOn = sharedPreferences.getBoolean("foreground_service", false);
+                        if (!isSleepModeOn) {
+                            Log.i(TAG, "Starting foreground service in main (Sleep Mode ON)");
+                            mSocket.on("audio_label", onNewMessage);
+                            mSocket.connect();
+
+                            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                            ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
+
+                            Wearable.getMessageClient(MainActivity.this)
+                                    .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_enabled".getBytes());
+//                          Toast.makeText(MainActivity.this, "Foreground service started.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.i(TAG, "Stopping foreground service in main (Sleep Mode OFF)");
+                            serviceIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+                            mSocket.disconnect();
+                            mSocket.off("audio_label", onNewMessage);
+
+                            ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
+
+                            Wearable.getMessageClient(MainActivity.this)
+                                    .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_disabled".getBytes());
+//                          Toast.makeText(MainActivity.this, "Foreground service stopped.", Toast.LENGTH_SHORT).show();
+                        }
                     }
+                    // enable this for Listening MODE: 1 out of 3
+//                    else if (key.equals("listening_status")) {
+//                        boolean isListeningModeOn = sharedPreferences.getBoolean("listening_status", false);
+//                        if (isListeningModeOn) {
+//                            Wearable.getMessageClient(MainActivity.this)
+//                                    .sendMessage(WATCH_STATUS_LABEL, SEND_LISTENING_STATUS_FROM_PHONE_PATH, "start_listening".getBytes());
+//                        } else {
+//                            Wearable.getMessageClient(MainActivity.this)
+//                                    .sendMessage(WATCH_STATUS_LABEL, SEND_LISTENING_STATUS_FROM_PHONE_PATH, "stop_listening".getBytes());
+//                        }
+//                    }
                 }
             };
 
@@ -854,9 +873,9 @@ public class MainActivity extends AppCompatActivity
             } else if (intent.getAction().equals(mBroadcastForegroundService)) {
                 Log.i(TAG, "Phone received Watch Status: " + intent.getStringExtra(FOREGROUND_LABEL));
                 if (intent.getStringExtra(FOREGROUND_LABEL).equals("watch_start_record")) {
-                    Toast.makeText(MainActivity.this, "Watch Connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Smartwatch starts listening..", Toast.LENGTH_SHORT).show();
                 } else if (intent.getStringExtra(FOREGROUND_LABEL).equals("watch_stop_record")) {
-                    Toast.makeText(MainActivity.this, "Watch Not Connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Smartwatch stops listening", Toast.LENGTH_SHORT).show();
                 }
             }
         }

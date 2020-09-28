@@ -11,6 +11,7 @@ public class Constants {
     public static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     public static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
     public static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
+    public static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
     public static final String COUNT_PATH = "/count";
 
     /**
@@ -29,6 +30,7 @@ public class Constants {
      */
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
+    public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     public static final String VOICE_FILE_NAME = "audiorecord.pcm";
 

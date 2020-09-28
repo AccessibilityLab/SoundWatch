@@ -97,8 +97,8 @@
     <string name="feedback">Send us Feedback!</string>
     <string name="arrow">Arrow</string>
     <!-- Preference Titles -->
-    <string name="first_preference">Phone Services</string>
-    <string name="second_preference">Watch Status</string>
+    <string name="first_preference">Phone Setting</string>
+    <string name="second_preference">Watch Setting </string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
@@ -112,8 +112,10 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="setting">Settings</string>
     <!-- Foreground Service Preferences -->
-    <string name="foreground_title">Foreground service</string>
-    <string name="foreground_summary_on"> Service is enabled. Currently listening for surrounding sounds..
+    <string name="foreground_title">Sleep Mode</string>
+    <string name="foreground_summary_on"> Sleep Mode is ON.
     </string>
-    <string name="foreground_summary_off"> Service is disabled. Please enable to continue listening</string>
+    <string name="foreground_summary_off"> Sleep Mode is OFF"</string>
+    <string name="connect_status_summary">Sound Watch will be unable to start listening if Sleep Mode is ON</string>
+    <string name="sleep_mode_description">Sleep Mode will put the application into sleep, which effectively stop listening (if turned ON) and disable Listening Mode on the watch</string>
 </resources>

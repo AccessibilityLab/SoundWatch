@@ -24,28 +24,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SwitchPreferenceCompat switchPreference1 = (SwitchPreferenceCompat) findPreference("foreground_service");
         final SwitchPreferenceCompat switchPreference2 = (SwitchPreferenceCompat) findPreference("listening_status");
-
-        if (preferences.getBoolean("foreground_service", true)) {
-            switchPreference2.setChecked(true);
-        } else {
-            switchPreference2.setChecked(false);
-        }
-        assert switchPreference1 != null;
-        switchPreference1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean turned = (Boolean) newValue;
-                if (turned) {
-                    switchPreference2.setChecked(true);
-                    switchPreference2.setEnabled(true);
-                } else {
-                    switchPreference2.setChecked(false);
-                    switchPreference2.setEnabled(false);
-                }
-                preferences.edit().putBoolean("foreground_service", turned).apply();
-                return true;
-            }
-        });
+        // enable this for Listening MODE: 2 out of 3
+//        if (preferences.getBoolean("foreground_service", false)) {
+//            switchPreference2.setChecked(false);
+//            switchPreference2.setEnabled(false);
+//        } else {
+//            switchPreference2.setEnabled(true);
+//        }
+//        assert switchPreference1 != null;
+//        switchPreference1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//            @Override
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                boolean turned = (Boolean) newValue;
+//                if (turned) {
+//                    switchPreference2.setChecked(false);
+//                    switchPreference2.setEnabled(false);
+//                } else {
+//                    switchPreference2.setEnabled(true);
+//                }
+//                preferences.edit().putBoolean("foreground_service", turned).apply();
+//                return true;
+//            }
+//        });
     }
 
     @Nullable

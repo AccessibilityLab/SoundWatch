@@ -31,7 +31,7 @@ public class Tutorial extends TutorialActivity {
                 .setContent("Check out the Help section for more instructions on " +
                 "using the app and the About section to learn more about the background behind SmartWatch.  ")
                 .setBackgroundColor(Color.parseColor("#212121"))
-                .setDrawable(R.drawable.ic_baseline_help_48)
+                .setDrawable(R.drawable.tutorial_3)
                 .build());
 
         addFragment( new Step.Builder().setTitle("Step 1")
@@ -70,6 +70,12 @@ public class Tutorial extends TutorialActivity {
                 .setContent("Click on the length of time you want to snooze.  \n")
                 .setBackgroundColor(R.color.colorNavBar)
                 .setDrawable(R.drawable.watch_5)
+                .build());
+
+        addFragment( new Step.Builder().setTitle("Step 7")
+                .setContent("You can completely disable listening by turning ON \"Sleep Mode\" on Settings page. This will not allow the watch to start listening again until Sleep Mode is turn OFF.\n")
+                .setBackgroundColor(R.color.colorNavBar)
+                .setDrawable(R.drawable.watch_7)
                 .build());
     }
 

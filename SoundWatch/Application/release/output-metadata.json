@@ -11,10 +11,10 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 3,
+      "versionName": "1.01",
       "enabled": true,
-      "outputFile": "Application-release.apk"
+      "outputFile": "Wearable-release.apk"
     }
   ]
 }
