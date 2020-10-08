@@ -582,7 +582,7 @@ public class MainActivity extends AppCompatActivity
         bottomNavView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // set Mode
-        setAccuracyMode(1);
+        setAccuracyMode(HIGH_ACCURACY_MODE);
 
         // Stores DataItems received by the local broadcaster or from the paired watch.
 //        mDataItemListAdapter = new DataItemAdapter(this, android.R.layout.simple_list_item_1);
@@ -592,13 +592,23 @@ public class MainActivity extends AppCompatActivity
         // Create a SharedPreference for root_preferences to update and use value from the setting tab
         SharedPreferences sharedPref = PreferenceManager
                 .getDefaultSharedPreferences(this);
+        boolean isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
+        Log.d(TAG, "isSleepModeOn1" + isSleepModeOn);
+        if (!isSleepModeOn) {
+            Wearable.getMessageClient(MainActivity.this)
+                    .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_enabled".getBytes());
+        } else {
+            Wearable.getMessageClient(MainActivity.this)
+                    .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_disabled".getBytes());
+        }
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear().apply();
+        // Turn this on to reset Preference every time the app open (1/2)
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.clear().apply();
 
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, true);
-
-//        Log.i(TAG, "Starting foreground service in main");
+        // // Turn this to true to reset Preference every time the app open (2/2)
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
+        isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
         
 //         Start the service once by default
         Log.i(TAG, "Starting foreground service first time");
@@ -628,7 +638,7 @@ public class MainActivity extends AppCompatActivity
                     if (key.equals("foreground_service")) {
                         boolean isSleepModeOn = sharedPreferences.getBoolean("foreground_service", false);
                         if (!isSleepModeOn) {
-                            Log.i(TAG, "Starting foreground service in main (Sleep Mode ON)");
+                            Log.i(TAG, "Starting foreground service in main (Sleep Mode OFF)");
                             mSocket.on("audio_label", onNewMessage);
                             mSocket.connect();
 
@@ -639,7 +649,7 @@ public class MainActivity extends AppCompatActivity
                                     .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_enabled".getBytes());
 //                          Toast.makeText(MainActivity.this, "Foreground service started.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.i(TAG, "Stopping foreground service in main (Sleep Mode OFF)");
+                            Log.i(TAG, "Stopping foreground service in main (Sleep Mode ON)");
                             serviceIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
                             mSocket.disconnect();
                             mSocket.off("audio_label", onNewMessage);

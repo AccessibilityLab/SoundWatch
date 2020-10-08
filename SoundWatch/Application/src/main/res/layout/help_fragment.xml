@@ -46,10 +46,12 @@
                 android:id="@+id/troubleshoot_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:backgroundTint="#000A84FF"
+                android:layout_marginTop="16dp"
+                android:background="#000"
                 android:text="@string/troubleshoot"
+                android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tutorial_btn" />
 
@@ -101,26 +103,28 @@
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorFeedback"
                 android:contentDescription="@string/arrow"
                 android:rotation="89"
+                android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/troubleshoot_btn"
-                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/faq"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/faq"
-            android:layout_marginStart="@dimen/_15sdp"
             android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_22ssp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/question_1"
             android:layout_width="fill_parent"

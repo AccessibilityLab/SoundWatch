@@ -63,8 +63,8 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        versionCode 3
-        versionName "1.01"
+        versionCode 5
+        versionName "1.02"
         applicationId 'com.wearable.sound'
         minSdkVersion 28
 

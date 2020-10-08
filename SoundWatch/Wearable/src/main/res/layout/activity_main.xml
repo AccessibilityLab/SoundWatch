@@ -8,6 +8,19 @@
     android:orientation="vertical"
     android:padding="1dp">
 
+    <TextView
+        android:id="@+id/warning_display"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:layout_gravity="top|center"
+        android:background="@drawable/rounded_corner_error"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="@string/no_device"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        android:textSize="12sp" />
+
     <!-- Sound Display family -->
     <LinearLayout
         android:id="@+id/text_layout"
@@ -91,7 +104,7 @@
             android:background="#07000000"
             android:gravity="center_horizontal"
             android:text="@string/click_the_button_above_n_to_begin_listening"
-            android:textSize="14.1sp"
+            android:textSize="12.5sp"
             android:textAlignment="center"
             android:textStyle="bold" />
     </LinearLayout>

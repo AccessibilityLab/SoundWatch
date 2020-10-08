@@ -27,7 +27,7 @@
     <string name="fire_smoke_alarm">Fire Smoke Alarm</string>
     <string name="phone_ring">Phone Ring</string>
     <string name="water_running">Water Running</string>
-    <string name="microwave">Microwaves</string>
+    <string name="microwave">Microwave</string>
     <string name="dishwasher">Dishwasher</string>
     <string name="laughing">Laughter</string>
     <string name="car_honk">Car Honk</string>
@@ -63,12 +63,12 @@
     <string name="coughing">Coughing</string>
     <string name="typing">Typing</string>
     <string name="get_started">Start Tutorial</string>
-    <string name="troubleshoot">Scroll down for Troubleshooting</string>
+    <string name="troubleshoot">Scroll down for FAQ &amp; Troubleshooting</string>
     <string name="logo">Logo</string>
     <string name="welcome">Welcome To</string>
-    <string name="faq">FAQ: </string>
+    <string name="faq">FAQ &amp; Troubleshooting: </string>
     <string name="question_1">My phone and watch have become unpaired. How do I fix this?</string>
-    <string name="answer_1">Frequently, phones and watches become unpaired due to a bug for Google WearOs . Simply reopen the WearOS app on your phone, wait until the app said "Connected via Bluetooth|Wifi" then return to your watch and re-click the listen microphone icon. A pop-up should come up that tells you that your device is reconnected.</string>
+    <string name="answer_1">Frequently, phones and watches become unpaired due to a bug for Google WearOS. Simply reopen the WearOS app on your phone, wait until the app said "Connected via Bluetooth|Wifi" then return to your watch and re-click the listen microphone icon. A pop-up should come up that tells you that your device is reconnected.</string>
 
     <string name="question_2">How do I set SoundWatch to listen for sounds?</string>
     <string name="answer_2">Open the SoundWatch app in your watch and click on the microphone icon.
@@ -92,7 +92,7 @@
         you can swipe up on your watchface and the current and past notifications will display. </string>
     <string name="about_description">"SoundWatch is a smartwatch-based app that provides glanceable, always-available sound feedback.
         \nIt began on September 1st, 2018, and is led by a hard of hearing University of Washington PhD student who wanted to build for his community. Thus, SoundWatch has involved the DHH communities at many stages of its development, along with faculty advisors, student developers, programmers, and UI/UX designers.
-        \nThe project is part of the Makeability Lab at University of Washington whose mission is to “design, build and study interactive tools and techniques to address pressing societal challenges.” Sponsored by the National Science Foundation, SoundWatch app is freely available and the code is open-sourced for anyone wanting to learn more and contribute to its development.\n\nThank you for using SoundWatch. This is a beta release, so always feel free to connect with us (at soundwatch@cs.uw.edu) to provide feedback so we can improve or say hi!
+        \nThe project is part of the Makeability Lab at the University of Washington whose mission is to “design, build and study interactive tools and techniques to address pressing societal challenges.” Sponsored by the National Science Foundation, SoundWatch app is freely available and the code is open-sourced for anyone wanting to learn more and contribute to its development.\n\nThank you for using SoundWatch. This is a beta release, so always feel free to connect with us (at soundwatch@cs.uw.edu) to provide feedback so we can improve or say hi!
         \nFor more details, please visit: https://makeabilitylab.cs.washington.edu/project/soundwatch/"</string>
     <string name="feedback">Send us Feedback!</string>
     <string name="arrow">Arrow</string>

@@ -102,6 +102,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final double PREDICTION_THRESHOLD = 0.4;
     private static Toast mToast;
     public static boolean IS_FOREGROUND_DISABLED;
+    private static boolean IS_FIRST_TIME_CONNECT;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -346,6 +347,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // mSocket.on("echo", onEchoMessage);
         mSocket.connect();
 
+
         // Set the UI
         setContentView(R.layout.activity_main);
         (findViewById(R.id.wearable_list_layout)).setVisibility(View.GONE);
@@ -423,6 +425,31 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         Log.d(TAG, "onStart()");
         super.onStart();
+
+        //resetconnectedHostIds
+        connectedHostIds.clear();
+        final String CAPABILITY_1 = "capability_1";
+        Task<Map<String, CapabilityInfo>> capabilitiesTask =
+                Wearable.getCapabilityClient(this)
+                        .getAllCapabilities(CapabilityClient.FILTER_REACHABLE);
+
+        capabilitiesTask.addOnSuccessListener(
+                new OnSuccessListener<Map<String, CapabilityInfo>>() {
+                    @Override
+                    public void onSuccess(Map<String, CapabilityInfo> capabilityInfoMap) {
+                        Set<Node> nodes = new HashSet<>();
+
+                        if (capabilityInfoMap.isEmpty()) {
+                            showDiscoveredNodes(nodes);
+                            return;
+                        }
+                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY_1);
+                        if (capabilityInfo != null) {
+                            nodes.addAll(capabilityInfo.getNodes());
+                        }
+                        showDiscoveredNodes(nodes);
+                    }
+                });
     }
     @Override
     protected void onStop(){
@@ -477,7 +504,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         capabilitiesTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_SHORT).show();
+                LayoutInflater inflater = getLayoutInflater();
+                View toastRoot = inflater.inflate(R.layout.custom_toast_error, null);
+                TextView tv = toastRoot.findViewById(R.id.toast_text);
+                tv.setText("Cannot connect to phone");
+//                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_SHORT).show();
+                showToast(main, toastRoot);
             }
         });
     }
@@ -517,14 +549,21 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         } else {
             if (!isRecording) {
                 startRecording(this);
-                // Update deprecated method from API 22 (getDrawable)
                 imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
-                imageView.setImageResource(R.drawable.ic_pause_black_32dp);
-                pulseLayout.startPulse();
-                // Change the instruction text
+                // change the instructional text based on the the number of device connect
+                if (connectedHostIds == null || connectedHostIds.isEmpty()) {
+                    imageView.setImageResource(R.drawable.ic_full_cancel);
+                    soundTextView.setText("Not Listening");
+                    textView.setText("No device connected.\n Reconnect your watch \n or read FAQ");
+                } else {
+                    imageView.setImageResource(R.drawable.ic_pause_black_32dp);
+                    soundTextView.setText("Listening...");
+                    textView.setText("Press Side Button and \n wait for notifications");
+                    pulseLayout.startPulse();
+                }
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 locationTextView.setText("");
-                soundTextView.setText("Listening...");
-                textView.setText("Press Side Button and \n wait for notifications");
+                // Change the instruction text
                 IS_RECORDING = true;
             } else {
                 imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
@@ -719,7 +758,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                             TextView soundDisplay = findViewById(R.id.soundDisplay);
                             TextView locationDisplay = findViewById(R.id.locationDisplay);
                             TextView fTextView = (findViewById(R.id.dontshowDisplay));
-                            fTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             if (IS_RECORDING) {
                                 soundDisplay.setText("Listening...");
                                 fTextView.setText("Press Side Button and wait for notifications");
@@ -731,6 +769,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                                 soundDisplay.setText("");
                                 fTextView.setText("Click the button above \n to begin listening");
                             }
+                            fTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             locationDisplay.setText("");
 
                         }
@@ -831,6 +870,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     }
 
     private void showDiscoveredNodes(Set<Node> nodes) {
+        Log.d(TAG, "showDiscoveredNodes called");
+        //resetconnectedHostIds
+        connectedHostIds.clear();
         List<String> nodesList = new ArrayList<>();
         for (Node node : nodes) {
             connectedHostIds.add(node.getId());
