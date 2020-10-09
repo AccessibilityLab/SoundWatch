@@ -49,6 +49,7 @@ public class HelpFragment extends Fragment {
         ConstraintLayout constraintLayout = view.findViewById(R.id.help_layout);
         ViewGroup.LayoutParams layoutParams = constraintLayout.getLayoutParams();
         layoutParams.width = point.x;
+        if (false)
         layoutParams.height = (int)(point.y * 0.86);
         constraintLayout.setLayoutParams(layoutParams);
         return view;

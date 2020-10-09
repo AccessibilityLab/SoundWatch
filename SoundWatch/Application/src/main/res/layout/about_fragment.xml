@@ -15,7 +15,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_large"
             android:layout_marginEnd="@dimen/_25sdp"
             android:autoLink="web|email"
             android:linksClickable="true"
