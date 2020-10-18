@@ -13,24 +13,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableListView;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +43,6 @@ import com.google.android.gms.tasks.Task;
 import com.kuassivi.component.RipplePulseRelativeLayout;
 import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
-import com.wearable.sound.datalayer.DataLayerListenerService;
 import com.wearable.sound.models.AudioLabel;
 import com.wearable.sound.models.SoundPrediction;
 import com.wearable.sound.service.ForegroundService;
@@ -84,7 +77,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.TypefaceCompat;
 
 import static com.wearable.sound.utils.Constants.*;
 
@@ -94,7 +86,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
 
     public static boolean notificationChannelIsCreated = false;
-    public static final String TAG = "HomeSoundDebug";
+    public static final String TAG = "Watch/MainActivity";
     public static final String DEBUG_TAG = "FromSoftware";
     private String audioLabel = "";
     private String confidence = "";
@@ -108,6 +100,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static Set<String> connectedHostIds = new HashSet<>();
     private long absolutelastTime = 0;
     public static final double PREDICTION_THRESHOLD = 0.4;
+    private static Toast mToast;
+    public static boolean IS_FOREGROUND_DISABLED;
+    private static boolean IS_FIRST_TIME_CONNECT;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -119,6 +114,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
+    public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
+    public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningstatus";
     private IntentFilter mIntentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -157,6 +154,36 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 List<SoundPrediction> predictions = parsePredictions(soundPredictions);
                 AudioLabel audioLabel = filterTopSoundLabel(predictions, time, db);
                 createAudioLabelNotification(audioLabel);
+            } else if (intent.getAction().equals(mBroadcastForegroundService)) {
+                String data  = intent.getStringExtra(FOREGROUND_LABEL);
+                Log.i(TAG, "Received Foreground Service status from phone: " + data);
+
+                assert data != null;
+                if (data.contains("foreground_enabled")) {
+                    IS_FOREGROUND_DISABLED = false;
+                    IS_RECORDING = true;
+                } else if (data.contains("foreground_disabled")) {
+                    IS_FOREGROUND_DISABLED = true;
+                    IS_RECORDING = true;
+                }
+                Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+                updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
+            } else if (intent.getAction().equals(mBroadcastListeningStatus)) {
+                String data  = intent.getStringExtra(WATCH_STATUS_LABEL);
+                Log.i(TAG, "Received Listening status request from phone: " + data);
+                Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+                if (!IS_FOREGROUND_DISABLED) {
+                    assert data != null;
+                    if (data.contains("start_listening")) {
+                        IS_RECORDING = false;
+//                        sendForegroundMessageToPhone("watch_start_record");
+                    } else if (data.contains("stop_listening")) {
+                        IS_RECORDING = true;
+//                        sendForegroundMessageToPhone("watch_stop_record");
+                    }
+                    updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
+                }
+
             }
         }
     };
@@ -320,6 +347,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // mSocket.on("echo", onEchoMessage);
         mSocket.connect();
 
+
         // Set the UI
         setContentView(R.layout.activity_main);
         (findViewById(R.id.wearable_list_layout)).setVisibility(View.GONE);
@@ -327,8 +355,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //Just in case the app has exited midway and started again from an intent, get data from PendingIntent
         String[] dataPassed = {"", "", ""};
         dataPassed = this.getIntent().getStringArrayExtra("audio_label");
-        if (dataPassed != null)
-        {
+        if (dataPassed != null) {
             audioLabel = dataPassed[0];
             confidence = dataPassed[1];
             audioTime = dataPassed[2];
@@ -344,14 +371,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
             TextView soundDisplay = findViewById(R.id.soundDisplay);
             TextView locationDisplay = findViewById(R.id.locationDisplay);
-//            RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
 
             locationDisplay.setText("");
-            //locationDisplay.setText(times[0] + ":" + times[1] + ", " + (int) Math.round(Double.parseDouble(confidence )*100) + "%");
-//            soundDisplay.setText(audioLabel + "," + (int) Math.round(Double.parseDouble(confidence)*100) + "%");
             soundDisplay.setText(audioLabel);
             soundDisplay.setVisibility(View.VISIBLE);
-//            pulseLayout.setVisibility(View.INVISIBLE);
             (findViewById(R.id.dontshowDisplay_layout)).setVisibility(View.GONE);
             (findViewById(R.id.wearable_list_layout)).setVisibility(View.VISIBLE);
         }
@@ -379,6 +402,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         mIntentFilter.addAction(mBroadcastAllSoundPredictions);
+        mIntentFilter.addAction(mBroadcastForegroundService);
+        mIntentFilter.addAction(mBroadcastListeningStatus);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -400,6 +425,31 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         Log.d(TAG, "onStart()");
         super.onStart();
+
+        //resetconnectedHostIds
+        connectedHostIds.clear();
+        final String CAPABILITY_1 = "capability_1";
+        Task<Map<String, CapabilityInfo>> capabilitiesTask =
+                Wearable.getCapabilityClient(this)
+                        .getAllCapabilities(CapabilityClient.FILTER_REACHABLE);
+
+        capabilitiesTask.addOnSuccessListener(
+                new OnSuccessListener<Map<String, CapabilityInfo>>() {
+                    @Override
+                    public void onSuccess(Map<String, CapabilityInfo> capabilityInfoMap) {
+                        Set<Node> nodes = new HashSet<>();
+
+                        if (capabilityInfoMap.isEmpty()) {
+                            showDiscoveredNodes(nodes);
+                            return;
+                        }
+                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY_1);
+                        if (capabilityInfo != null) {
+                            nodes.addAll(capabilityInfo.getNodes());
+                        }
+                        showDiscoveredNodes(nodes);
+                    }
+                });
     }
     @Override
     protected void onStop(){
@@ -419,8 +469,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     }
 
     private void startRecording(final Context main) {
+        Log.i(TAG, "startRecording called");
         // Refresh list of connected nodes
-        final String CAPABILITY = "capability_1";
+        final String CAPABILITY_1 = "capability_1";
         Task<Map<String, CapabilityInfo>> capabilitiesTask =
                 Wearable.getCapabilityClient(this)
                         .getAllCapabilities(CapabilityClient.FILTER_REACHABLE);
@@ -435,7 +486,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                             showDiscoveredNodes(nodes);
                             return;
                         }
-                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY);
+                        CapabilityInfo capabilityInfo = capabilityInfoMap.get(CAPABILITY_1);
                         if (capabilityInfo != null) {
                             nodes.addAll(capabilityInfo.getNodes());
                         }
@@ -453,49 +504,83 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         capabilitiesTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_LONG).show();
+                LayoutInflater inflater = getLayoutInflater();
+                View toastRoot = inflater.inflate(R.layout.custom_toast_error, null);
+                TextView tv = toastRoot.findViewById(R.id.toast_text);
+                tv.setText("Cannot connect to phone");
+//                Toast.makeText(main, "Cannot connect to phone", Toast.LENGTH_SHORT).show();
+                showToast(main, toastRoot);
             }
         });
     }
 
     @SuppressLint("SetTextI18n")
     public void onRecordClick(View view) {
+        Log.i(TAG, "onRecordClick: " + view);
+        // Change the image to STOP icon
+        Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+        updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
+    }
+
+    private void updateMicView(boolean isRecording, boolean isForegroundDisabled) {
         // Change the image to STOP icon
         ImageButton imageView = findViewById(R.id.mic);
         TextView textView = findViewById(R.id.dontshowDisplay);
         TextView soundTextView = findViewById(R.id.soundDisplay);
         TextView locationTextView = findViewById(R.id.locationDisplay);
+        LayoutInflater inflater = getLayoutInflater();
+        View toastRoot = inflater.inflate(R.layout.custom_toast_warning, null);
+        TextView tv = toastRoot.findViewById(R.id.toast_text);
+
+        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         // add ripple effect for better readability
         RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
-        if (!IS_RECORDING) {
-            startRecording(this);
-//            if (connectedHostIds.isEmpty()) {
-//                return;
-//            }
-            // Update deprecated method from API 22 (getDrawable)
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
-            imageView.setImageResource(R.drawable.ic_pause_black_32dp);
-            pulseLayout.startPulse();
-            // Change the instruction text
+        if (isForegroundDisabled) {
+            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_grey, null));
+            imageView.setImageResource(R.drawable.ic_baseline_mic_off_48);
             locationTextView.setText("");
-            soundTextView.setText("Listening...");
-            textView.setText("Press Side Button and \n wait for notifications");
-            IS_RECORDING = true;
-        } else {
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
-            imageView.setImageResource(R.drawable.ic_mic_32dp);
+            soundTextView.setText("Sleep Mode is ON");
+            textView.setText("Turn off Sleep Mode on \n phone to enable listening");
             pulseLayout.stopPulse();
+            tv.setText("Listening is disabled");
+            showToast(this, toastRoot);
             IS_RECORDING = false;
-            onStopClick(view);
-            // Change the instruction text
-            locationTextView.setText("Welcome to");
-            soundTextView.setText("SoundWatch");
-            textView.setText("Click the button above \n to begin listening");
+            onStopClick();
+        } else {
+            if (!isRecording) {
+                startRecording(this);
+                imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
+                // change the instructional text based on the the number of device connect
+                if (connectedHostIds == null || connectedHostIds.isEmpty()) {
+                    imageView.setImageResource(R.drawable.ic_full_cancel);
+                    soundTextView.setText("Not Listening");
+                    textView.setText("No device connected.\n Reconnect your watch \n or read FAQ");
+                } else {
+                    imageView.setImageResource(R.drawable.ic_pause_black_32dp);
+                    soundTextView.setText("Listening...");
+                    textView.setText("Press Side Button and \n wait for notifications");
+                    pulseLayout.startPulse();
+                }
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                locationTextView.setText("");
+                // Change the instruction text
+                IS_RECORDING = true;
+            } else {
+                imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
+                imageView.setImageResource(R.drawable.ic_mic_32dp);
+                pulseLayout.stopPulse();
+                IS_RECORDING = false;
+                onStopClick();
+                // Change the instruction text
+                locationTextView.setText("Welcome to");
+                soundTextView.setText("SoundWatch");
+                textView.setText("Click the button above \n to begin listening");
+            }
         }
-
     }
 
-    public void onStopClick(View view) {
+    public void onStopClick() {
+        Log.i(TAG, "onStopClick called");
         Intent serviceIntent = new Intent(this, ForegroundService.class);
         stopService(serviceIntent);
     }
@@ -550,6 +635,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         }
     }
 
+    // Use Wearable getMessageClient to send a message to phone and tell it to mute a certain sound
     private void sendSnoozeSoundMessageToPhone(String soundLabel) {
         ByteArrayOutputStream bas = new ByteArrayOutputStream();
         DataOutputStream ds = new DataOutputStream(bas);
@@ -562,6 +648,19 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             Task<Integer> sendMessageTask =
                     Wearable.getMessageClient(this.getApplicationContext())
                             .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
+        }
+    }
+
+    private void sendForegroundMessageToPhone(String connectStatus) { ;
+        if (connectedHostIds == null) {
+            // No phone connected to send the message right now
+            return;
+        }
+        for (String connectedHostId : connectedHostIds) {
+            Log.d(TAG, "Sending connected signal to phone:" + connectStatus);
+            Task<Integer> sendMessageTask =
+                    Wearable.getMessageClient(this.getApplicationContext())
+                            .sendMessage(connectedHostId, WATCH_CONNECT_STATUS, connectStatus.getBytes());
         }
     }
 
@@ -658,14 +757,21 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         public void run() {
                             TextView soundDisplay = findViewById(R.id.soundDisplay);
                             TextView locationDisplay = findViewById(R.id.locationDisplay);
-                            locationDisplay.setText("");
+                            TextView fTextView = (findViewById(R.id.dontshowDisplay));
                             if (IS_RECORDING) {
                                 soundDisplay.setText("Listening...");
+                                fTextView.setText("Press Side Button and wait for notifications");
+                            } else if (IS_FOREGROUND_DISABLED){
+                                soundDisplay.setText("Sleep Mode is ON");
+                                fTextView.setText("Turn off Sleep Mode on \n phone to enable listening");
+
                             } else {
                                 soundDisplay.setText("");
+                                fTextView.setText("Click the button above \n to begin listening");
                             }
-                            TextView fTextView = (findViewById(R.id.dontshowDisplay));
-                            fTextView.setText("Press Side Button and wait for notifications");
+                            fTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            locationDisplay.setText("");
+
                         }
                     });
 
@@ -764,21 +870,38 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     }
 
     private void showDiscoveredNodes(Set<Node> nodes) {
+        Log.d(TAG, "showDiscoveredNodes called");
+        //resetconnectedHostIds
+        connectedHostIds.clear();
         List<String> nodesList = new ArrayList<>();
         for (Node node : nodes) {
             connectedHostIds.add(node.getId());
             nodesList.add(node.getDisplayName());
         }
+        LayoutInflater inflater = getLayoutInflater();
+        View toastRoot = inflater.inflate(R.layout.custom_toast, null);
+
         String msg;
         if (!nodesList.isEmpty()) {
             msg = getString(R.string.connected_nodes, TextUtils.join(", ", nodesList));
             Log.i(TAG, "Connect phones names: " + nodesList);
         } else {
+            toastRoot = inflater.inflate(R.layout.custom_toast_error, null);
             msg = getString(R.string.no_device);
         }
-        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL, 0, 60);
-        toast.show();
+        TextView tv = toastRoot.findViewById(R.id.toast_text);
+        tv.setText(msg);
+        showToast(this, toastRoot);
+    }
+
+    public static void showToast(Context context, View view){
+        if(null == mToast){
+            mToast = new Toast(context);
+        }
+        mToast.setDuration(Toast.LENGTH_SHORT);
+        mToast.setView(view);
+        mToast.setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL, 0, 0);
+        mToast.show();
     }
 
     private void configureTestingAudioLabelNotification(AudioLabel audioLabel) {
@@ -886,7 +1009,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.notification_icon)
+                .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
 //                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
                 .setContentTitle(audioLabel.label)
                 .setContentText("(" + db + " dB)")

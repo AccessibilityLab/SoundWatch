@@ -18,8 +18,8 @@ android {
         applicationId 'com.wearable.sound'
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "1.03"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         python {
             // If Chaquopy fails to find Python on your build machine, enable the following
@@ -75,6 +75,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.preference:preference:1.1.1'
 
     wearApp project(':Wearable')
 
