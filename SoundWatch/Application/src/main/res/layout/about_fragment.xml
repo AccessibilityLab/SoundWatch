@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,19 +12,67 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/question_1"
+            android:id="@+id/about_1"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginEnd="@dimen/_25sdp"
             android:autoLink="web|email"
             android:linksClickable="true"
             android:paddingBottom="@dimen/_15sdp"
             android:text="@string/about_description"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textColor="@color/colorTextDefault"
             android:textColorLink="@color/wl_blue"
             android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/about_2"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:autoLink="web|email"
+            android:linksClickable="true"
+            android:paddingBottom="@dimen/_15sdp"
+            android:text="@string/email"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textColorLink="@color/colorTextDefault"
+            android:textSize="@dimen/_12ssp"
+            app:drawableTint="@color/colorTextDefault"
+            app:drawableStartCompat="@drawable/ic_baseline_contact_mail_24" />
+
+        <TextView
+            android:id="@+id/about_3"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:autoLink="web|email"
+            android:linksClickable="true"
+            android:paddingBottom="@dimen/_15sdp"
+            android:text="@string/website"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textColorLink="@color/colorTextDefault"
+            android:textSize="@dimen/_12ssp"
+            app:drawableTint="@color/colorTextDefault"
+            app:drawableStartCompat="@drawable/ic_baseline_laptop_mac_24" />
+
+        <TextView
+            android:id="@+id/about_4"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:autoLink="web|email"
+            android:linksClickable="true"
+            android:paddingBottom="@dimen/_15sdp"
+            android:text="@string/version"
+            android:textColor="@color/colorTextDefault"
+            android:textColorLink="@color/colorTextDefault"
+            android:textSize="@dimen/_12ssp"
+            />
+
     </LinearLayout>
 
 

@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity
     private static final String IMAGE_PATH = "/image";
     private static final String IMAGE_KEY = "photo";
     private static final String COUNT_KEY = "count";
+    private static final String MY_PREF = "my_preferences";
 
     private boolean mCameraSupported = false;
     int BufferElements2Rec = 16000;
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity
     private Bitmap mImageBitmap;
     private View mStartActivityBtn;
     private DataItemAdapter mDataItemListAdapter;
+
 
     // Send DataItem
     private ScheduledExecutorService mGeneratorExecutor;
@@ -511,6 +513,17 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public static boolean isFirst(Context context){
+        final SharedPreferences reader = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
+        final boolean first = reader.getBoolean("is_first", true);
+        if(first){
+            final SharedPreferences.Editor editor = reader.edit();
+            editor.putBoolean("is_first", false);
+            editor.apply();
+        }
+        return first;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -589,6 +602,13 @@ public class MainActivity extends AppCompatActivity
 //        mDataItemList.setAdapter(mDataItemListAdapter);
 
         mGeneratorExecutor = new ScheduledThreadPoolExecutor(1);
+        // Create a SharedPreference for checking if the app is opening for the first time
+        boolean isFirstTime = isFirst(MainActivity.this);
+        if (isFirstTime) {
+            bottomNavView.setSelectedItemId(R.id.bottom_navigation_item_help);
+            Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
+            startActivity(tutorial);
+        }
         // Create a SharedPreference for root_preferences to update and use value from the setting tab
         SharedPreferences sharedPref = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -702,7 +722,7 @@ public class MainActivity extends AppCompatActivity
                             scrollView.setVisibility(View.GONE);
                             break;
                         case R.id.bottom_navigation_item_help:
-                            titleView.setText(R.string.help);
+                            titleView.setText("");
                             fragment = new HelpFragment();
                             frameLayout.setVisibility(View.VISIBLE);
                             instructionalView.setVisibility(View.GONE);

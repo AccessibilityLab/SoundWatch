@@ -37,8 +37,18 @@ public class HelpFragment extends Fragment {
         tutorialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ScrollingFragment2", "onClick called");
+                Log.d("HelpFragment", "onClick called");
                 Intent tutorial = new Intent(HelpFragment.this.getActivity(), Tutorial.class);
+                startActivity(tutorial);
+            }
+        });
+
+        final Button watchTutorialBtn = view.findViewById(R.id.watch_tutorial_btn);
+        watchTutorialBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("HelpFragment", "onClick called");
+                Intent tutorial = new Intent(HelpFragment.this.getActivity(), WatchTutorial.class);
                 startActivity(tutorial);
             }
         });
@@ -49,8 +59,7 @@ public class HelpFragment extends Fragment {
         ConstraintLayout constraintLayout = view.findViewById(R.id.help_layout);
         ViewGroup.LayoutParams layoutParams = constraintLayout.getLayoutParams();
         layoutParams.width = point.x;
-        if (false)
-        layoutParams.height = (int)(point.y * 0.86);
+        layoutParams.height = (int)(point.y * 0.95);
         constraintLayout.setLayoutParams(layoutParams);
         return view;
     }
