@@ -18,7 +18,7 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 1. [Screenshots](#Screenshots)
 2. [Setup](#setup)
 3. [Architecture performance test](#Architecture%20performance%20test)
-4. [Field usage images](#field%20usage%20images)
+4. [Scenarios](#Scenarios)
 5. [Acknowledgement](#acknowledgement)
 6. [Support](#support)
 
@@ -82,7 +82,7 @@ Configuration
 
 After enabling the boolean flags, just run the watch and phone app like usual. The test results will be output as `*.txt` (i.e: `watch_model.txt`, `e2e_latency.txt`) to local device directory (phone or watch) inside the `com.wearable.sound` folder.
 
-## Field usage images ##
+## Scenarios ##
 -------
 
 ![SoundWatch system mockup 3](images/SoundWatch_mockups.png?raw=true "Title")
