@@ -15,11 +15,12 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 ## Table Of Contents ##
 
 0. [Prerequisite](#prerequisites)
-1  [Screenshots](#Screenshots)
+1. [Screenshots](#Screenshots)
 2. [Setup](#setup)
-3. [Architecture performance test](#test)
-4. [Acknowledgement](#acknowledgement)
-5. [Support](#support)
+3. [Architecture performance test](#Architecture%20performance%20test)
+4. [Field usage images](#field%20usage%20images)
+5. [Acknowledgement](#acknowledgement)
+6. [Support](#support)
 
 ## Prerequisites ##
 --------------
@@ -33,7 +34,7 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 -------------
 ![SoundWatch system mockup](images/mockup.png?raw=true "Title")
 ![SoundWatch system mockup 2](images/mockup_2.png?raw=true "Title")
-![SoundWatch system mockup 3](images/SoundWatch_mockups.png?raw=true "Title")
+
 
 
 Folder Structure
@@ -73,7 +74,7 @@ Configuration
 - WARNING: If using the `WATCH_ONLY_ARCHITECTURE`, please copy the tflite model into assets folder in Wearable src folder, and specify the filename inside `MODEL_FILENAME` in SoundRecorder
 - Change `AUDIO_TRANMISSION_STYLE` in `MainActivity.java` for both Phone and Watch to change the Audio Transmission Style ("Raw Audio" which is faster to process and transmit vs. "Audio Features" which are more private)
 
-## Test ##
+## Architecture performance test ##
 -------
 
 - For Model Latency, enable "TEST_MODEL_LATENCY" in MainActivity for both Watch and Phone to test the model prediction time.
@@ -81,12 +82,16 @@ Configuration
 
 After enabling the boolean flags, just run the watch and phone app like usual. The test results will be output as `*.txt` (i.e: `watch_model.txt`, `e2e_latency.txt`) to local device directory (phone or watch) inside the `com.wearable.sound` folder.
 
+## Field usage images ##
+-------
+
+![SoundWatch system mockup 3](images/SoundWatch_mockups.png?raw=true "Title")
+
 ## Support ##
 -------
 - Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at [MakeabilityLab](https://makeabilitylab.cs.washington.edu/)
 - Contact [Khoa Nguyen](https://www.linkedin.com/in/akka/) @MakeabilityLab through email `akhoa99` at cs.washington.edu
 - Contact [Hung V Ngo](www.hungvngo.com) @MakeabilityLab through email `hvn297` at cs.washington.edu
-
 
 
 
