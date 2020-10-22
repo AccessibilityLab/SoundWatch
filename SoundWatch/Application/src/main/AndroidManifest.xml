@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.activity.Tutorial" />
+        <activity android:name=".ui.activity.WatchTutorial" />
 
         <meta-data
             android:name="com.google.android.gms.version"

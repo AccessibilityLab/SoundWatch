@@ -14,13 +14,14 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 
 ## Table Of Contents ##
 
-0. [Prerequesites](#prerequesites)
-1. [Setup](#setup)
-2. [Architecture performance test](#test)
-3. [Acknowledgement](#acknowledgement)
-4. [Support](#support)
+0. [Prerequisite](#prerequisites)
+1  [Screenshots](#Screenshots)
+2. [Setup](#setup)
+3. [Architecture performance test](#test)
+4. [Acknowledgement](#acknowledgement)
+5. [Support](#support)
 
-## Pre-requisites ##
+## Prerequisites ##
 --------------
 - Latest Android Studio (The project is developed with Android Studio 4.0)
 - Android SDK 28
@@ -28,7 +29,7 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 - Android Support Repository
 - Get the sound classification Tensorflow lite model and the label files that are open sourced [here](https://www.dropbox.com/sh/wngu1kuufwdk8nr/AAC1rm5QR-amL_HBzTOgsZnca?dl=0)
 
-Screenshots
+## Screenshots ##
 -------------
 ![SoundWatch system mockup](images/mockup.png?raw=true "Title")
 ![SoundWatch system mockup 2](images/mockup_2.png?raw=true "Title")

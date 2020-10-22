@@ -15,74 +15,94 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/help_layout"
             android:layout_width="match_parent"
-            android:layout_height="664dp"
+            android:layout_height="750dp"
             android:background="#000"
             android:paddingBottom="@dimen/_100sdp"
             tools:context=".ui.activity.HelpFragment">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/tutorial_btn"
-                android:layout_width="wrap_content"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="@dimen/_135sdp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="55dp"
+                android:layout_marginStart="16dp"
                 android:backgroundTint="@color/colorPrimary"
-                android:text="@string/get_started"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/phone_tutorial"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="14sp"
+                android:theme="@style/Theme.MaterialComponents"
+                app:cornerRadius="10dp"
+                app:elevation="30dp"
+                app:icon="@drawable/ic_baseline_phone_android_24"
+                app:iconSize="45sp"
+                app:iconTint="@color/colorTextDefault"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.20"/>
 
-            <!--            <Button-->
-            <!--                android:id="@+id/feedback_btn"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="16dp"-->
-            <!--                android:backgroundTint="@color/colorFeedback"-->
-            <!--                android:text="@string/feedback"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/tutorial_btn" />-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/watch_tutorial_btn"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="@dimen/_135sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/watch_tutorial"
+                android:textColor="@color/colorTextDefault"
 
-            <Button
+                android:textSize="14sp"
+                android:theme="@style/Theme.MaterialComponents"
+                app:backgroundTint="#2a2a2a"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_baseline_watch_24"
+                app:iconSize="45sp"
+                app:iconTint="@color/colorTextDefault"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.20"/>
+
+            <TextView
                 android:id="@+id/troubleshoot_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/_24sdp"
                 android:background="#000"
                 android:text="@string/troubleshoot"
-                android:textColor="@android:color/white"
+                android:textAlignment="center"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tutorial_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/watch_tutorial_btn" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/textView1"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="@string/welcome"-->
+            <!--                android:textColor="@color/colorTextDefault"-->
+            <!--                android:textSize="@dimen/_18ssp"-->
+            <!--                android:textStyle="bold"-->
+            <!--                app:layout_constraintBottom_toTopOf="@+id/textView"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="0.951" />-->
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+
                 android:contentDescription="@string/logo"
-                android:scaleX="1.8"
-                android:scaleY="1.8"
                 android:src="@drawable/welcome_screen_logo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
-                app:layout_constraintVertical_bias="0.090" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-                android:textSize="@dimen/_18ssp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/textView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.951" />
+                app:layout_constraintVertical_bias="0.054" />
 
             <TextView
                 android:id="@+id/textView"
@@ -90,19 +110,20 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/soundwatch"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_27ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.259" />
+                app:layout_constraintVertical_bias="0.209" />
 
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:contentDescription="@string/arrow"
                 android:rotation="89"
                 android:src="@drawable/ic_baseline_arrow_forward_ios_24"
@@ -111,7 +132,7 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/troubleshoot_btn"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.106" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -121,20 +142,20 @@
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/margin_tiny"
+            android:textColor="@color/colorTextDefault"
             android:text="@string/faq"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-            android:textSize="@dimen/_22ssp"
+            android:textSize="@dimen/_20ssp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/question_1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_tiny"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:textColor="@color/colorTextDefault"
             android:text="@string/question_1"
             android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textSize="@dimen/_14ssp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             />
 
         <TextView
@@ -143,8 +164,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_1"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="#DCDCDC"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_12ssp"
             android:paddingBottom="@dimen/_15sdp"/>
 
@@ -155,9 +177,10 @@
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_2"
             android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_14ssp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             />
 
         <TextView
@@ -166,8 +189,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_2"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="#DCDCDC"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_12ssp"
             android:paddingBottom="@dimen/_15sdp"/>
 
@@ -178,9 +202,10 @@
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_3"
             android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_14ssp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             />
 
         <TextView
@@ -189,8 +214,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_3"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="#DCDCDC"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_12ssp"
             android:paddingBottom="@dimen/_15sdp"/>
 
@@ -201,9 +227,10 @@
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_4"
             android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_14ssp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             />
 
         <TextView
@@ -212,8 +239,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_4"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="#DCDCDC"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_12ssp"
             android:paddingBottom="@dimen/_15sdp"/>
 
@@ -224,9 +252,10 @@
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_5"
             android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_14ssp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             />
 
         <TextView
@@ -235,8 +264,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_5"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="#DCDCDC"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_12ssp"
             android:paddingBottom="@dimen/_15sdp"/>
 
@@ -247,9 +277,10 @@
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/question_6"
             android:layout_marginStart="@dimen/_15sdp"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_14ssp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             />
 
         <TextView
@@ -258,8 +289,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_tiny"
             android:text="@string/answer_6"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="#DCDCDC"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_12ssp"
             android:paddingBottom="@dimen/_15sdp"/>
 

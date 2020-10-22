@@ -24,7 +24,7 @@
     <string name="speech">Speech</string>
     <string name="knocking">Knocking</string>
     <string name="door_in_use">Door In-Use</string>
-    <string name="fire_smoke_alarm">Fire Smoke Alarm</string>
+    <string name="fire_smoke_alarm">Fire/Smoke Alarm</string>
     <string name="phone_ring">Phone Ring</string>
     <string name="water_running">Water Running</string>
     <string name="microwave">Microwave</string>
@@ -62,11 +62,12 @@
     <string name="help">Help</string>
     <string name="coughing">Coughing</string>
     <string name="typing">Typing</string>
-    <string name="get_started">Start Tutorial</string>
-    <string name="troubleshoot">Scroll down for FAQ &amp; Troubleshooting</string>
+    <string name="phone_tutorial">Phone App Tutorial</string>
+    <string name="watch_tutorial">Watch App Tutorial</string>
+    <string name="troubleshoot">Scroll down for Help and Troubleshooting</string>
     <string name="logo">Logo</string>
     <string name="welcome">Welcome To</string>
-    <string name="faq">FAQ &amp; Troubleshooting: </string>
+    <string name="faq">Help &amp; Troubleshooting: </string>
     <string name="question_1">My phone and watch have become unpaired. How do I fix this?</string>
     <string name="answer_1">Frequently, phones and watches become unpaired due to a bug for Google WearOS. Simply reopen the WearOS app on your phone, wait until the app said "Connected via Bluetooth|Wifi" then return to your watch and re-click the listen microphone icon. A pop-up should come up that tells you that your device is reconnected.</string>
 
@@ -91,9 +92,11 @@
     <string name="answer_6">If your watch is vibrating but no messages are popping up,
         you can swipe up on your watchface and the current and past notifications will display. </string>
     <string name="about_description">"SoundWatch is a smartwatch-based app that provides glanceable, always-available sound feedback.
-        \nIt began on September 1st, 2018, and is led by a hard of hearing University of Washington PhD student who wanted to build for his community. Thus, SoundWatch has involved the DHH communities at many stages of its development, along with faculty advisors, student developers, programmers, and UI/UX designers.
-        \nThe project is part of the Makeability Lab at the University of Washington whose mission is to “design, build and study interactive tools and techniques to address pressing societal challenges.” Sponsored by the National Science Foundation, SoundWatch app is freely available and the code is open-sourced for anyone wanting to learn more and contribute to its development.\n\nThank you for using SoundWatch. This is a beta release, so always feel free to connect with us (at soundwatch@cs.uw.edu) to provide feedback so we can improve or say hi!
-        \nFor more details, please visit: https://makeabilitylab.cs.washington.edu/project/soundwatch/"</string>
+        \nIt began on September 1st, 2018, and is led by a hard of hearing University of Washington doctoral student who wanted to build for his community. Thus, SoundWatch has involved the DHH communities at many stages of its development, along with faculty advisors, student developers, programmers, and UI/UX designers.
+        \nThe project is part of the Makeability Lab at the University of Washington whose mission is to “design, build and study interactive tools and techniques to address pressing societal challenges.” Sponsored by the National Science Foundation, SoundWatch app is freely available and the code is open-sourced for anyone wanting to learn more and contribute to its development.
+        \n\nThank you for using SoundWatch!
+        \nThis is a beta release, so always feel free to connect with us to provide feedback so we can improve or to just say Hi!
+    </string>
     <string name="feedback">Send us Feedback!</string>
     <string name="arrow">Arrow</string>
     <!-- Preference Titles -->
@@ -118,4 +121,7 @@
     <string name="foreground_summary_off"> Sleep Mode is OFF"</string>
     <string name="connect_status_summary">Sound Watch will be unable to start listening if Sleep Mode is ON</string>
     <string name="sleep_mode_description">Sleep Mode will put the application into sleep, which effectively stop listening (if turned ON) and disable Listening Mode on the watch</string>
+    <string name="email">" " soundwatch@cs.uw.edu</string>
+    <string name="website">" " soundwatch.cs.washington.edu</string>
+    <string name="version"><b>Version 1.05</b></string>
 </resources>

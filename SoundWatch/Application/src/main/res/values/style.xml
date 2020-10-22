@@ -25,6 +25,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/ic_launcher_background</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">#FFF</item>
+        <item name="android:textColor">#DADADA</item>
+<!--        <item name="fontFamily">@font/open_sans</item>-->
     </style>
 </resources>

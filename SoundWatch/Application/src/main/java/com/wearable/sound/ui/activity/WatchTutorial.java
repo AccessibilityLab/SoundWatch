@@ -9,58 +9,37 @@ import com.hololo.tutorial.library.Step;
 import com.hololo.tutorial.library.TutorialActivity;
 import com.wearable.sound.R;
 
-public class Tutorial extends TutorialActivity {
+public class WatchTutorial extends TutorialActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("TutorialActivity", "onCreated called");
 
-        addFragment(new Step.Builder().setTitle("INSTRUCTIONS")
+        addFragment( new Step.Builder().setTitle("WearOS Tutorial 1")
                 .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.warning)
+                .setDrawable(R.drawable.watch_tutorial_1)
                 .build());
 
-        addFragment(new Step.Builder().setTitle("INSTRUCTIONS")
+        addFragment( new Step.Builder().setTitle("WearOS Tutorial 2")
                 .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.data_privacy)
+                .setDrawable(R.drawable.watch_tutorial_2)
                 .build());
 
-        addFragment(new Step.Builder().setTitle("INSTRUCTIONS")
+        addFragment( new Step.Builder().setTitle("WearOS Tutorial 3")
                 .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.important_notice)
+                .setDrawable(R.drawable.watch_tutorial_3)
                 .build());
 
-        addFragment(new Step.Builder().setTitle("Tutorial 1")
+        addFragment( new Step.Builder().setTitle("WearOS Tutorial 4")
                 .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.tutorial_1)
+                .setDrawable(R.drawable.watch_tutorial_4)
                 .build());
 
-        addFragment(new Step.Builder().setTitle("Tutorial 2")
+        addFragment( new Step.Builder().setTitle("WearOS Tutorial 5")
                 .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.tutorial_2)
+                .setDrawable(R.drawable.watch_tutorial_5)
                 .build());
-
-        addFragment(new Step.Builder().setTitle("Tutorial 3")
-                .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.tutorial_3)
-                .build());
-
-        addFragment(new Step.Builder().setTitle("Tutorial 4")
-                .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.tutorial_4)
-                .build());
-
-        addFragment(new Step.Builder().setTitle("Tutorial 5")
-                .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.tutorial_5)
-                .build());
-
-        addFragment(new Step.Builder().setTitle("Tutorial 5")
-                .setBackgroundColor(Color.parseColor("#000000"))
-                .setDrawable(R.drawable.tutorial_6)
-                .build());
-
     }
 
     @Override

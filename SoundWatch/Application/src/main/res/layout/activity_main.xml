@@ -8,7 +8,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="#000000"
-    android:textColor="@color/common_google_signin_btn_text_dark_pressed">
+    android:textColor="@color/colorTextDefault">
 
     <LinearLayout
         android:id="@+id/title"
@@ -22,7 +22,7 @@
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:text="@string/soundwatch"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+            android:textColor="@color/colorTextDefault"
             android:textSize="@dimen/_25ssp"
             android:textStyle="bold" />
 
@@ -97,7 +97,7 @@
                 android:text="@string/category_1"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
                 android:id="@+id/car_honk"
@@ -109,7 +109,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/car_honk"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -122,7 +122,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/fire_smoke_alarm"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
@@ -132,7 +132,7 @@
                 android:text="@string/category_2"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
 
             <CheckBox
@@ -145,7 +145,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/alarm_clock"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -158,7 +158,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/blender"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -171,7 +171,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/chopping"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -184,7 +184,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/coughing"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -197,7 +197,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/dishwasher"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -210,7 +210,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/door_bell"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -223,7 +223,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/door_in_use"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -236,7 +236,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/hair_dryer"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -249,7 +249,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/knocking"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -262,7 +262,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/microwave"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -275,7 +275,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/phone_ring"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -288,7 +288,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/water_running"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/shaver"
@@ -300,7 +300,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/shaver"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/utensils_and_cutlery"
@@ -312,7 +312,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/utensils_and_cutlery"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/toilet_flush"
@@ -324,7 +324,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/toilet_flush"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/tooth_brush"
@@ -336,7 +336,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/tooth_brush"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -349,7 +349,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/typing"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -362,7 +362,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/vacuum"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
@@ -372,7 +372,7 @@
                 android:text="@string/category_3"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
             <CheckBox
                 android:id="@+id/baby_crying"
@@ -384,7 +384,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/baby_cry"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/dog_bark"
@@ -396,7 +396,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/dog_bark"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/cat_meow"
@@ -408,7 +408,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/cat_meow"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/snoring"
@@ -420,7 +420,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/snoring"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/speech"
@@ -432,7 +432,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/speech"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/laughing"
@@ -444,7 +444,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/laughing"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
@@ -454,7 +454,7 @@
                 android:text="@string/category_4"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
 
             <CheckBox
@@ -467,7 +467,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/vehicle"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <TextView
@@ -477,7 +477,7 @@
                 android:text="@string/category_5"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
 
             <CheckBox
@@ -490,7 +490,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/saw"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <CheckBox
                 android:id="@+id/drill"
@@ -502,7 +502,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/drill"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
@@ -515,7 +515,7 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/hammering"
-                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
             <TextView
                 android:id="@+id/padding_bottom"
