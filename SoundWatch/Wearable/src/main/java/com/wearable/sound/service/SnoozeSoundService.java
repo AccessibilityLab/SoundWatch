@@ -91,7 +91,7 @@ public class SnoozeSoundService extends IntentService {
                 return;
             }
             for (String connectedHostId : connectedHostIds) {
-                Log.d(TAG, "Sending snooze sound data to phone:" + soundLabel);
+                Log.d(TAG, "Sending snooze sound data to phone: " + soundLabel);
                 Task<Integer> sendMessageTask =
                         Wearable.getMessageClient(this.getApplicationContext())
                                 .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());

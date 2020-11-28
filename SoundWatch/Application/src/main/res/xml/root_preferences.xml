@@ -1,5 +1,6 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory app:title="@string/first_preference">
 
 
@@ -13,7 +14,19 @@
             app:key="sleep_mode_description"
             app:title=""
             app:summary="@string/sleep_mode_description"/>
-    </PreferenceCategory>
+        <SeekBarPreference
+            app:key="db_threshold"
+            app:title="Base Sound Level"
+            app:summary=""
+            app:defaultValue="@integer/seek_bar_default"
+            app:showSeekBarValue="true"
+            app:min="@integer/seek_bar_min"
+            android:max="@integer/seek_bar_max"/>
+        <Preference
+            app:key="db_description"
+            app:title=""
+            app:summary="@string/db_threshold_description"/>
+        </PreferenceCategory>
 <!--    enable this for Listening MODE: 3 out of 3-->
 <!--    <PreferenceCategory app:title="@string/second_preference">-->
 

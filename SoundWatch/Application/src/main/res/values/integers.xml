@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="seek_bar_default">40</integer>
+    <integer name="seek_bar_max">70</integer>
+    <integer name="seek_bar_min">40</integer>
+</resources>
