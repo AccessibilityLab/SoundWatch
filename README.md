@@ -19,8 +19,10 @@ SoundWatch is an Android-based app designed for commercially available smartwatc
 2. [Setup](#setup)
 3. [Architecture performance test](#Architecture%20performance%20test)
 4. [Scenarios](#Scenarios)
-5. [Acknowledgement](#acknowledgement)
-6. [Support](#support)
+5. [Lists of recommended/compatible watches](#Lists%20of%20recommended/compatible%20watches)
+6. [Frequently Asked Questions](#Frequently%20Asked%20Questions)
+7. [Acknowledgement](#acknowledgement)
+8. [Support](#support)
 
 ## Prerequisites ##
 --------------
@@ -87,6 +89,44 @@ After enabling the boolean flags, just run the watch and phone app like usual. T
 
 ![SoundWatch system mockup 3](images/SoundWatch_mockups.png?raw=true "Title")
 
+## Lists of recommended/compatible watches ##
+-------
+
+Under $200
+- Fossil Sport
+- Ticwatch E2
+- Ticwatch S2
+- Skagen Falster 3
+
+Under $300
+- Ticwatch Pro 2/3 (this is the watch we currently used for testing)
+- Fossil Gen 5
+- Moto 360
+- Oppo Watch (this one is fairly new)
+
+Above $300
+- Suunto 7
+
+## Frequently Asked Questions ##
+-------
+My phone and watch have become unpaired. How do I fix this?
+- Frequently, phones and watches become unpaired due to a bug for Google WearOS. Simply reopen the WearOS app on your phone, wait until the app said "Connected via Bluetooth|Wifi" then return to your watch and re-click the listen microphone icon. A pop-up should come up that tells you that your device is reconnected.
+
+
+How do I set SoundWatch to listen for sounds?
+- Open the SoundWatch app in your watch and click on the microphone icon. That will begin listening capabilities.
+
+My watch is not responding to touch or buttons.  How do I get it to respond?
+- Your watch might be low in battery. Recharge and try again.
+
+How do I select and deselect sounds for the watch to listen for?
+- On the phone app, open SoundWatch.  You then will have a list of sounds. Simply uncheck the sounds you do not want the watch to listen for. Leave checked or recheck the sounds you want to listen for.
+
+How do I snooze a sound on my watch?
+- In the pop-up notification, there will be a button labeled “snooze” that you can press to snooze for a specified amount of time.  If you would like more options for the timing of the snooze, simply press “open” and it will display more options for you to press.
+
+How do I see notifications if they aren’t popping up?
+- If your watch is vibrating but no messages are popping up, you can swipe up on your watchface and the current and past notifications will display. 
 ## Support ##
 -------
 - Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at [MakeabilityLab](https://makeabilitylab.cs.washington.edu/)

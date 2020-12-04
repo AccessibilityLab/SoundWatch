@@ -25,7 +25,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.firebase:firebase-messaging:20.3.0'
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
 
     implementation 'com.google.gms:google-services:4.3.4'
     implementation 'com.google.android.gms:play-services-wearable:17.0.0'
@@ -63,8 +63,8 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        versionCode 7
-        versionName "1.05"
+        versionCode 9
+        versionName "1.07"
         applicationId 'com.wearable.sound'
         minSdkVersion 28
 

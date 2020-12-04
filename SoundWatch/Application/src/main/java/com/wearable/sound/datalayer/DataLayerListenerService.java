@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.net.Uri;
@@ -58,6 +59,7 @@ import java.util.concurrent.ExecutionException;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 
 import com.github.nkzawa.socketio.client.IO;
@@ -86,7 +88,7 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
     private static final float PREDICTION_THRES = 0.4F;
-    private static final double DBLEVEL_THRES = 40;
+    private static double DBLEVEL_THRES = 40;
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     private static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
 
@@ -101,6 +103,8 @@ public class DataLayerListenerService extends WearableListenerService {
     private List<String> labels = new ArrayList<>();
     private double dbTotal = 0;
     private int counter = 0;
+
+    private SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
 
 
     protected Python py;
@@ -166,8 +170,24 @@ public class DataLayerListenerService extends WearableListenerService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        SharedPreferences sharedPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        DBLEVEL_THRES = sharedPref.getInt("db_threshold", 40);
+
+        // Add slider for adjusting db threshold
+        autoUpdate = mOnSharedPreferenceChangeListener;
+        sharedPref.registerOnSharedPreferenceChangeListener(autoUpdate);
     }
 
+    private final SharedPreferences.OnSharedPreferenceChangeListener
+            mOnSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals("db_threshold")) {
+                DBLEVEL_THRES = sharedPreferences.getInt(key, 40);
+            }
+        }
+    };
 
     @Override
     public void onDestroy() {
@@ -745,8 +765,9 @@ public class DataLayerListenerService extends WearableListenerService {
         soundBuffer = new ArrayList<>();
         try {
             double decibel = db(sData);
+            Log.d(TAG, "2. DB of data: " + decibel + "|DB_thresh: " + DBLEVEL_THRES);
             if (decibel >= DBLEVEL_THRES && sData.length > 0) {
-                Log.i(TAG, "2. DB of data: " + decibel);
+                Log.d(TAG, "Within threshold.");
                 //Log.i(TAG, "Time elapsed before Running chaquopy" + (System.currentTimeMillis() - recordTime));
                 long startTimePython = System.currentTimeMillis();
                 if (py == null || pythonModule == null) {

@@ -83,7 +83,7 @@
     Simply uncheck the sounds you do not want the watch to listen for.
         Leave checked or recheck the sounds you want to listen for.</string>
 
-    <string name="question_5">How do I snooze a sound?</string>
+    <string name="question_5">How do I snooze a sound on my watch?</string>
     <string name="answer_5">In the pop-up notification, there will be a button labeled “snooze”
         that you can press to snooze for a specified amount of time.  If you would like more options
         for the timing of the snooze, simply press “open” and it will display more options for you to press.</string>
@@ -124,4 +124,5 @@
     <string name="email">" " soundwatch@cs.uw.edu</string>
     <string name="website">" " soundwatch.cs.washington.edu</string>
     <string name="version"><b>Version 1.05</b></string>
+    <string name="db_threshold_description">You can adjust the base sound level by moving the button to the right.  This cuts the background noise in loud areas but some sounds of lower volume may not be recognized.</string>
 </resources>

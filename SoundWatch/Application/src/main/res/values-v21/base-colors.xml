@@ -22,9 +22,10 @@
     <color name="colorSecondary">#8E8E93</color>
     <color name="colorPrimaryDark">#3700B3</color>
 <!--    <color name="colorAccent">#03DAC5</color>-->
-    <color name="colorAccent">#4285F4</color>
+    <color name="colorAccent">#0A84FF</color>
     <color name="colorFeedback">#C79324</color>
     <color name="colorNavBar">#19191E</color>
     <color name="colorTextDefault">#DADADA</color>
+    <color name="colorTextSecondary">#BABABA</color>
     <color name="colorTutorialBackground">#000000</color>
 </resources>

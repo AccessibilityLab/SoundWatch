@@ -81,6 +81,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.wearable.sound.datalayer.DataLayerListenerService;
 import com.wearable.sound.R;
 import com.wearable.sound.models.SoundNotification;
@@ -100,6 +101,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,6 +128,12 @@ public class MainActivity extends AppCompatActivity
             CapabilityClient.OnCapabilityChangedListener {
 
     private static final String TAG = "MainActivity";
+    /**
+     * The {@code FirebaseAnalytics} used to record screen views.
+     */
+    // [START declare_analytics]
+    private FirebaseAnalytics mFirebaseAnalytics;
+    // [END declare_analytics]
 
     /**
      * Different Mode configuration
@@ -235,6 +243,11 @@ public class MainActivity extends AppCompatActivity
             MICROWAVE, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
             KNOCKING, COUGHING, TYPING);
 
+    // List of only high accuracy sounds
+    public List<String> highAccSounds = Arrays.asList(CAT_MEOW, VEHICLE, CAR_HONK, DOG_BARK,
+            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM, SPEECH,
+            KNOCKING);
+
     // List of IDs of only high accuracy sounds (11 sounds)
     private static List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm, R.id.speech,
             R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.microwave, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
@@ -250,7 +263,8 @@ public class MainActivity extends AppCompatActivity
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
     public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
 
-    public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<String, SoundNotification>();
+    public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<>();
+    public static Map<String, Integer> CHECKBOX_MAP = new HashMap<>();
 
     public SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
 
@@ -258,6 +272,20 @@ public class MainActivity extends AppCompatActivity
         for (String sound : sounds) {
             SOUNDS_MAP.put(sound, new SoundNotification(sound, true, false));
         }
+    }
+
+    {
+        CHECKBOX_MAP.put(CAT_MEOW, R.id.cat_meow);
+        CHECKBOX_MAP.put(DOG_BARK, R.id.dog_bark);
+        CHECKBOX_MAP.put(VEHICLE, R.id.vehicle);
+        CHECKBOX_MAP.put(CAR_HONK, R.id.car_honk);
+        CHECKBOX_MAP.put(MICROWAVE, R.id.microwave);
+        CHECKBOX_MAP.put(WATER_RUNNING, R.id.water_running);
+        CHECKBOX_MAP.put(DOOR_IN_USE, R.id.door_in_use);
+        CHECKBOX_MAP.put(BABY_CRY, R.id.baby_crying);
+        CHECKBOX_MAP.put(FIRE_SMOKE_ALARM, R.id.fire_smoke_alarm);
+        CHECKBOX_MAP.put(SPEECH, R.id.speech);
+        CHECKBOX_MAP.put(KNOCKING, R.id.knocking);
     }
 
     public void onCheckBoxClick(View view) {
@@ -357,6 +385,7 @@ public class MainActivity extends AppCompatActivity
             default:
                 break;
         }
+        // Change the text according to the text label
         if (currentSound != null) {
             boolean isEnabled = ((CheckBox) view).isChecked();
             CheckBox checkBox = ((CheckBox) view);
@@ -369,6 +398,16 @@ public class MainActivity extends AppCompatActivity
             }
             currentSound.isEnabled = isEnabled;
             new sendSoundEnableMessageToWatchTask(currentSound).execute();
+
+        }
+        // Put current sound value into SharedPreference
+        if (currentSound != null) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(currentSound.label, currentSound.isEnabled);
+            FirebaseLogging(currentSound.label, String.valueOf(currentSound.isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+
+            editor.apply();
         }
     }
 
@@ -570,24 +609,10 @@ public class MainActivity extends AppCompatActivity
         mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
 
-//        RelativeLayout parent = findViewById(R.id.main_layout);
-
-        // inflate help_fragment into main_layout
-
-//        LayoutInflater inflater =
-//                (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View convertView = inflater.inflate(R.layout.help_fragment, parent);
-//        tutorialLayout = convertView.findViewById(R.id.tutorial_layout);
-//        tutorialLayout.setVisibility(View.GONE);
-//        tutorialBtn = convertView.findViewById(R.id.tutorial_btn);
-//        tutorialBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick called");
-//                Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
-//                startActivity(tutorial);
-//            }
-//        });
+        // [START shared_app_measurement]
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        // [END shared_app_measurement]
 
         // create Bottom Navigation View for switch between tabs
         LOGD(TAG, "create BottomNavigationView");
@@ -602,16 +627,39 @@ public class MainActivity extends AppCompatActivity
 //        mDataItemList.setAdapter(mDataItemListAdapter);
 
         mGeneratorExecutor = new ScheduledThreadPoolExecutor(1);
+
+        SharedPreferences sharedPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
         // Create a SharedPreference for checking if the app is opening for the first time
         boolean isFirstTime = isFirst(MainActivity.this);
         if (isFirstTime) {
             bottomNavView.setSelectedItemId(R.id.bottom_navigation_item_help);
             Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
             startActivity(tutorial);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            for (String sound : highAccSounds) {
+                editor.putBoolean(sound, true);
+                FirebaseLogging(sound, "T" + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+            }
+            editor.apply();
         }
+        for (String sound : highAccSounds) {
+            boolean isEnabled = sharedPref.getBoolean(sound, true);
+            SoundNotification currentSound = new SoundNotification(sound, isEnabled, false);
+            Log.e(TAG, currentSound.toString());
+            new sendSoundEnableMessageToWatchTask(currentSound).execute();
+            CheckBox checkBox = (CheckBox) findViewById(CHECKBOX_MAP.get(sound));
+            checkBox.setChecked(isEnabled);
+            FirebaseLogging(sound, String.valueOf(isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+        }
+
+//        int defaultValue = getResources().getInteger(R.integer.saved_high_score_default_key);
+//        int highScore = sharedPref.getInt(getString(R.string.saved_high_score_key), defaultValue);
+
+
         // Create a SharedPreference for root_preferences to update and use value from the setting tab
-        SharedPreferences sharedPref = PreferenceManager
-                .getDefaultSharedPreferences(this);
+
         boolean isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
         Log.d(TAG, "isSleepModeOn1" + isSleepModeOn);
         if (!isSleepModeOn) {
@@ -626,10 +674,11 @@ public class MainActivity extends AppCompatActivity
 //        SharedPreferences.Editor editor = sharedPref.edit();
 //        editor.clear().apply();
 
+
         // // Turn this to true to reset Preference every time the app open (2/2)
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
         isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
-        
+
 //         Start the service once by default
         Log.i(TAG, "Starting foreground service first time");
         Intent serviceIntent = new Intent(MainActivity.this, DataLayerListenerService.class);
@@ -743,6 +792,13 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
+    private void FirebaseLogging(String id, String name, String content_type) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
     private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
         StringBuilder result = new StringBuilder();
         for (String connectedHostId: connectedHostIds) {
@@ -762,6 +818,11 @@ public class MainActivity extends AppCompatActivity
         stopService(serviceIntent);
         mSocket.disconnect();
         mSocket.off("audio_label", onNewMessage);
+
+        // Logging
+        for (String sound : highAccSounds) {
+            FirebaseLogging(sound, "F" + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+        }
     }
 
     private double db(short[] data) {
@@ -852,7 +913,7 @@ public class MainActivity extends AppCompatActivity
         } catch (PyException e) {
             return "Something went wrong parsing to MFCC feature";
         }
-        return "Unrecognized sound" + "                           " + LocalTime.now();
+        return "Unrecognized sound. " + LocalTime.now();
     }
 
     @Override
