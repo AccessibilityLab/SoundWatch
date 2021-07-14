@@ -75,6 +75,7 @@ android {
         python {
             // If Chaquopy fails to find Python on your build machine, enable the following
             // line and edit it to point to Python 3.4 or later.
+            buildPython "/opt/homebrew/Cellar/python@3.9/3.9.6/bin/python3.9"
 //           buildPython "C:/Python36/python3.exe"
 //            buildPython "C:\\Users\\ak_ka\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
 //            buildPython "C:\\Python38\\python.exe"
@@ -89,8 +90,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     sourceSets {
