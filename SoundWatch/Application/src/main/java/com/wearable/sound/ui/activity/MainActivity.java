@@ -118,6 +118,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import static com.wearable.sound.utils.Constants.*;
+
+
 /**
  * Receives its own events using a listener API designed for foreground activities. Updates a data
  * item every second while it is open. Also allows user to take a photo and send that as an asset to
@@ -179,7 +182,7 @@ public class MainActivity extends AppCompatActivity
     private static final String MY_PREF = "my_preferences";
 
     private boolean mCameraSupported = false;
-    int BufferElements2Rec = 16000;
+//    int BufferElements2Rec = 16000;
 
     private ConstraintLayout tutorialLayout;
     private ListView mDataItemList;
@@ -200,46 +203,16 @@ public class MainActivity extends AppCompatActivity
     //private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     //private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    private static final float PREDICTION_THRES = 0.5F;
-    private static final double DBLEVEL_THRES = 45.0;
-    private Interpreter tfLite;
-    private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
-    private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
-
-    private static final String SPEECH = "Speech";
-    private static final String KNOCKING = "Knocking";
-    private static final String PHONE_RING = "Phone Ring";
-    private static final String DOG_BARK = "Dog Bark";
-    private static final String DRILL = "Drill";
-    private static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm";
-    private static final String VACUUM = "Vacuum";
-    private static final String BABY_CRY = "Baby Cry";
-    private static final String CHOPPING = "Chopping";
-    private static final String DOOR_IN_USE = "Door In Use";
-    private static final String WATER_RUNNING = "Water Running";
-    private static final String MICROWAVE= "Microwave";
-    private static final String SHAVER= "Shaver";
-    private static final String TOOTHBRUSH= "Toothbrush";
-    private static final String BLENDER = "Blender";
-    private static final String DISHWASHER = "Dishwasher";
-    private static final String DOORBELL = "Doorbell";
-    private static final String TOILET_FLUSH = "Toilet Flush";
-    private static final String HAIR_DRYER= "Hair Dryer";
-    private static final String LAUGHING= "Laughing";
-    private static final String SNORING= "Snoring";
-    private static final String HAMMERING= "Hammering";
-    private static final String CAR_HONK= "Car Honk";
-    private static final String VEHICLE= "Vehicle";
-    private static final String SAW= "Saw";
-    private static final String CAT_MEOW= "Cat Meow";
-    private static final String ALARM_CLOCK= "Alarm Clock";
-    private static final String UTENSILS_AND_CUTLERY= "Utensils and Cutlery";
-    private static final String COUGHING = "Coughing";
-    private static final String TYPING = "Typing";
+//    private static final float PREDICTION_THRES = 0.5F;
+//    private static final double DBLEVEL_THRES = 45.0;
+//    private Interpreter tfLite;
+//    private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
+//    private static final String MODEL_FILENAME = "file:///android_asset/sw_v2_320ms.tflite";
+//    private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
 
     // List of all sounds
-    public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, SAW, VEHICLE, CAR_HONK,
-            HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, DISHWASHER, BLENDER, TOOTHBRUSH,DOG_BARK,
+    public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, VEHICLE, CAR_HONK,
+            HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, TOOTHBRUSH,DOG_BARK,
             MICROWAVE, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
             KNOCKING, COUGHING, TYPING);
 
@@ -249,11 +222,12 @@ public class MainActivity extends AppCompatActivity
             KNOCKING);
 
     // List of IDs of only high accuracy sounds (11 sounds)
-    private static List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm, R.id.speech,
+    private static final List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm, R.id.speech,
             R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.microwave, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
             R.id.vehicle, R.id.baby_crying));
+
     // List of IDs of only low accuracy sounds (19 sounds)
-    private static List<Integer> lowAccuracyList = new ArrayList<>(Arrays.asList(R.id.utensils_and_cutlery, R.id.alarm_clock,
+    private static final List<Integer> lowAccuracyList = new ArrayList<>(Arrays.asList(R.id.utensils_and_cutlery, R.id.alarm_clock,
             R.id.saw, R.id.hammering, R.id.snoring, R.id.laughing, R.id.hair_dryer, R.id.toilet_flush, R.id.door_bell,
             R.id.dishwasher, R.id.blender, R.id.tooth_brush, R.id.shaver, R.id.chopping, R.id.vacuum, R.id.drill, R.id.phone_ring,
             R.id.coughing, R.id.typing));
@@ -298,9 +272,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.knocking:
                 currentSound = SOUNDS_MAP.get(KNOCKING);
                 break;
-            case R.id.phone_ring:
-                currentSound = SOUNDS_MAP.get(PHONE_RING);
-                break;
+//            case R.id.phone_ring:
+//                currentSound = SOUNDS_MAP.get(PHONE_RING);
+//                break;
             case R.id.vehicle:
                 currentSound = SOUNDS_MAP.get(VEHICLE);
                 break;
@@ -319,9 +293,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.door_in_use:
                 currentSound = SOUNDS_MAP.get(DOOR_IN_USE);
                 break;
-            case R.id.dishwasher:
-                currentSound = SOUNDS_MAP.get(DISHWASHER);
-                break;
+//            case R.id.dishwasher:
+//                currentSound = SOUNDS_MAP.get(DISHWASHER);
+//                break;
             case R.id.door_bell:
                 currentSound = SOUNDS_MAP.get(DOORBELL);
                 break;
@@ -340,9 +314,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.chopping:
                 currentSound = SOUNDS_MAP.get(CHOPPING);
                 break;
-            case R.id.blender:
-                currentSound = SOUNDS_MAP.get(BLENDER);
-                break;
+//            case R.id.blender:
+//                currentSound = SOUNDS_MAP.get(BLENDER);
+//                break;
             case R.id.hair_dryer:
                 currentSound = SOUNDS_MAP.get(HAIR_DRYER);
                 break;
@@ -352,9 +326,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.hammering:
                 currentSound = SOUNDS_MAP.get(HAMMERING);
                 break;
-            case R.id.saw:
-                currentSound = SOUNDS_MAP.get(SAW);
-                break;
+//            case R.id.saw:
+//                currentSound = SOUNDS_MAP.get(SAW);
+//                break;
             case R.id.cat_meow:
                 currentSound = SOUNDS_MAP.get(CAT_MEOW);
                 break;
@@ -430,8 +404,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private List<Short> soundBuffer = new ArrayList<>();
+//    private List<Short> soundBuffer = new ArrayList<>();
 
     /** Memory-map the model file in Assets. */
     private static ByteBuffer loadModelFile(AssetManager assets, String modelFilename)
@@ -444,20 +417,21 @@ public class MainActivity extends AppCompatActivity
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 
-    private List<String> labels = new ArrayList<String>();
+//    private List<String> labels = new ArrayList<>();
+//
+//    int BytesPerElement = 2; // 2 bytes in 16bit format
+//
+//    private AudioRecord recorder = null;
+//    private Thread recordingThread = null;
+//    private boolean isRecording = false;
+//
+//    protected Python py;
+//    PyObject pythonModule;
 
-    int BytesPerElement = 2; // 2 bytes in 16bit format
-
-    private AudioRecord recorder = null;
-    private Thread recordingThread = null;
-    private boolean isRecording = false;
-
-    protected Python py;
-    PyObject pythonModule;
-
-    private float [] input1D = new float [6144];
-    private float [][][][] input4D = new float [1][96][64][1];
-    private float[][] output = new float[1][30];
+    //    private float [] input1D = new float [6144];
+////    private float [][][][] input4D = new float [1][96][64][1];
+//    private float [][][] input3D = new float [1][96][64];
+//    private float[][] output = new float[1][30];
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastSnoozeSound = "com.wearable.sound.broadcast.snoozeSound";
     public static final String mBroadcastUnsnoozeSound = "com.wearable.sound.broadcast.unsnoozeSound";
@@ -576,35 +550,35 @@ public class MainActivity extends AppCompatActivity
             //            Toast.makeText(this, "socket connected", Toast.LENGTH_SHORT).show();
         }
 
-        //Initialize python module
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
+//        //Initialize python module
+//        if (! Python.isStarted()) {
+//            Python.start(new AndroidPlatform(this));
+//
+//        }
+//        py = Python.getInstance();
+//        pythonModule = py.getModule("main");
 
-        }
-        py = Python.getInstance();
-        pythonModule = py.getModule("main");
+//        // Load labels
+//        String actualLabelFilename = LABEL_FILENAME.split("file:///android_asset/", -1)[1];
+//        BufferedReader br = null;
+//        try {
+//            br = new BufferedReader(new InputStreamReader(getAssets().open(actualLabelFilename)));
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                labels.add(line);
+//            }
+//            br.close();
+//        } catch (IOException e) {
+//            throw new RuntimeException("Problem reading label file!", e);
+//        }
 
-        //Load labels
-        String actualLabelFilename = LABEL_FILENAME.split("file:///android_asset/", -1)[1];
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(getAssets().open(actualLabelFilename)));
-            String line;
-            while ((line = br.readLine()) != null) {
-                labels.add(line);
-            }
-            br.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Problem reading label file!", e);
-        }
-
-        //Load model
-        String actualModelFilename = MODEL_FILENAME.split("file:///android_asset/", -1)[1];
-        try {
-            tfLite = new Interpreter(loadModelFile(getAssets(), actualModelFilename));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        // Load model
+//        String actualModelFilename = MODEL_FILENAME.split("file:///android_asset/", -1)[1];
+//        try {
+//            tfLite = new Interpreter(loadModelFile(getAssets(), actualModelFilename));
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
         mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
@@ -640,7 +614,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor editor = sharedPref.edit();
             for (String sound : highAccSounds) {
                 editor.putBoolean(sound, true);
-                FirebaseLogging(sound, "T" + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+                FirebaseLogging(sound, "T" + Instant.now().getEpochSecond(), "sound_type");
             }
             editor.apply();
         }
@@ -821,100 +795,100 @@ public class MainActivity extends AppCompatActivity
 
         // Logging
         for (String sound : highAccSounds) {
-            FirebaseLogging(sound, "F" + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+            FirebaseLogging(sound, "F" + Instant.now().getEpochSecond(), "sound_type");
         }
     }
 
-    private double db(short[] data) {
-        double rms = 0.0;
-        int dataLength = 0;
-        for (short datum : data) {
-            if (datum != 0) {
-                dataLength++;
-            }
-            rms += datum * datum;
-        }
-        rms = rms / dataLength;
-        return 10 * Math.log10(rms);
-    }
+//    private double db(short[] data) {
+//        double rms = 0.0;
+//        int dataLength = 0;
+//        for (short datum : data) {
+//            if (datum != 0) {
+//                dataLength++;
+//            }
+//            rms += datum * datum;
+//        }
+//        rms = rms / dataLength;
+//        return 10 * Math.log10(rms);
+//    }
 
-    private short[] convertByteArrayToShortArray(byte[] bytes) {
-        short[] result = new short[bytes.length / 2];
-        ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(result);
-        return result;
-    }
+//    private short[] convertByteArrayToShortArray(byte[] bytes) {
+//        short[] result = new short[bytes.length / 2];
+//        ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(result);
+//        return result;
+//    }
 
-    private byte[] convertShortArrayToByteArray(short[] shorts) {
-        byte[] result = new byte[shorts.length * 2];
-        ByteBuffer.wrap(result).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(shorts);
-        return result;
-    }
+//    private byte[] convertShortArrayToByteArray(short[] shorts) {
+//        byte[] result = new byte[shorts.length * 2];
+//        ByteBuffer.wrap(result).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(shorts);
+//        return result;
+//    }
 
-    private String predictSounds() {
-        if (soundBuffer.size() != 16000) {
-            return "Invalid audio size";
-        }
-        short[] sData = new short[BufferElements2Rec];
-        for (int i = 0; i < soundBuffer.size(); i++) {
-            sData[i] = soundBuffer.get(i);
-        }
-        soundBuffer = new ArrayList<>();
-        try {
-            Log.i(TAG, "DB of data: " + db(sData));
-            if (db(sData) >= DBLEVEL_THRES && sData.length > 0) {
-
-                //Get MFCC features
-                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));   //System.out.println("Sending to python: " + Arrays.toString(sData));
-
-                //Parse features into a float array
-                String inputString = mfccFeatures.toString();
-                if (inputString.isEmpty()) {
-                    return "Empty MFCC feature";
-                }
-                inputString = inputString.replace("jarray('F')([", "").replace("])", "");
-                String[] inputStringArr = inputString.split(", ");
-                for (int i = 0; i < 6144; i++) {
-                    if (inputStringArr[i].isEmpty()) {
-                        return "Empty MFCC feature";
-                    }
-                    input1D[i] = Float.parseFloat(inputStringArr[i]);
-                }
-
-                // Resize to dimensions of model input
-                int count = 0;
-                for (int j = 0; j < 96; j++) {
-                    for (int k = 0; k < 64; k++) {
-                        input4D[0][j][k][0] = input1D[count];
-                        count++;
-                    }
-                }
-
-                //Run inference
-                tfLite.run(input4D, output);
-
-                //Find max and argmax
-                float max = output[0][0];
-                int argmax = 0;
-                for (int i = 0; i < 30; i++) {
-                    if (max < output[0][i]) {
-                        max = output[0][i];
-                        argmax = i;
-                    }
-                }
-
-                if (max > PREDICTION_THRES) {
-                    //Get label and confidence
-                    final String prediction = labels.get(argmax);
-                    final String confidence = String.format("%,.2f", max);
-                    new SendAudioLabelToWearTask(prediction, confidence, Double.toString(db(sData)), null).execute();
-                    return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
-                }
-            }
-        } catch (PyException e) {
-            return "Something went wrong parsing to MFCC feature";
-        }
-        return "Unrecognized sound. " + LocalTime.now();
-    }
+//    private String predictSounds() {
+//        if (soundBuffer.size() != 16000) {
+//            return "Invalid audio size";
+//        }
+//        short[] sData = new short[BufferElements2Rec];
+//        for (int i = 0; i < soundBuffer.size(); i++) {
+//            sData[i] = soundBuffer.get(i);
+//        }
+//        soundBuffer = new ArrayList<>();
+//        try {
+//            Log.i(TAG, "DB of data: " + db(sData));
+//            if (db(sData) >= DBLEVEL_THRES && sData.length > 0) {
+//
+//                //Get MFCC features
+//                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));   //System.out.println("Sending to python: " + Arrays.toString(sData));
+//
+//                //Parse features into a float array
+//                String inputString = mfccFeatures.toString();
+//                if (inputString.isEmpty()) {
+//                    return "Empty MFCC feature";
+//                }
+//                inputString = inputString.replace("jarray('F')([", "").replace("])", "");
+//                String[] inputStringArr = inputString.split(", ");
+//                for (int i = 0; i < 6144; i++) {
+//                    if (inputStringArr[i].isEmpty()) {
+//                        return "Empty MFCC feature";
+//                    }
+//                    input1D[i] = Float.parseFloat(inputStringArr[i]);
+//                }
+//
+//                // Resize to dimensions of model input
+//                int count = 0;
+//                for (int j = 0; j < 96; j++) {
+//                    for (int k = 0; k < 64; k++) {
+//                        input3D[0][j][k] = input1D[count];
+//                        count++;
+//                    }
+//                }
+//
+//                //Run inference
+//                tfLite.run(input3D, output);
+//
+//                //Find max and argmax
+//                float max = output[0][0];
+//                int argmax = 0;
+//                for (int i = 0; i < 30; i++) {
+//                    if (max < output[0][i]) {
+//                        max = output[0][i];
+//                        argmax = i;
+//                    }
+//                }
+//
+//                if (max > PREDICTION_THRES) {
+//                    //Get label and confidence
+//                    final String prediction = labels.get(argmax);
+//                    final String confidence = String.format("%,.2f", max);
+//                    new SendAudioLabelToWearTask(prediction, confidence, Double.toString(db(sData)), null).execute();
+//                    return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
+//                }
+//            }
+//        } catch (PyException e) {
+//            return "Something went wrong parsing to MFCC feature";
+//        }
+//        return "Unrecognized sound. " + LocalTime.now();
+//    }
 
     @Override
     public void onResume() {
@@ -978,8 +952,8 @@ public class MainActivity extends AppCompatActivity
                 return (CheckBox) findViewById(R.id.speech);
             case KNOCKING:
                 return (CheckBox) findViewById(R.id.knocking);
-            case PHONE_RING:
-                return (CheckBox) findViewById(R.id.phone_ring);
+//            case PHONE_RING:
+//                return (CheckBox) findViewById(R.id.phone_ring);
             case UTENSILS_AND_CUTLERY:
                 return (CheckBox) findViewById(R.id.utensils_and_cutlery);
             case CHOPPING:
@@ -996,8 +970,8 @@ public class MainActivity extends AppCompatActivity
                 return (CheckBox) findViewById(R.id.water_running);
             case DOOR_IN_USE:
                 return (CheckBox) findViewById(R.id.door_in_use);
-            case DISHWASHER:
-                return (CheckBox) findViewById(R.id.dishwasher);
+//            case DISHWASHER:
+//                return (CheckBox) findViewById(R.id.dishwasher);
             case LAUGHING:
                 return (CheckBox) findViewById(R.id.laughing);
             case DOG_BARK:
@@ -1012,8 +986,8 @@ public class MainActivity extends AppCompatActivity
                 return (CheckBox) findViewById(R.id.shaver);
             case TOOTHBRUSH:
                 return (CheckBox) findViewById(R.id.tooth_brush);
-            case BLENDER:
-                return (CheckBox) findViewById(R.id.blender);
+//            case BLENDER:
+//                return (CheckBox) findViewById(R.id.blender);
             case DOORBELL:
                 return (CheckBox) findViewById(R.id.door_bell);
             case TOILET_FLUSH:
@@ -1022,8 +996,8 @@ public class MainActivity extends AppCompatActivity
                 return (CheckBox) findViewById(R.id.snoring);
             case HAMMERING:
                 return (CheckBox) findViewById(R.id.hammering);
-            case SAW:
-                return (CheckBox) findViewById(R.id.saw);
+//            case SAW:
+//                return (CheckBox) findViewById(R.id.saw);
             case CAT_MEOW:
                 return (CheckBox) findViewById(R.id.cat_meow);
             case HAIR_DRYER:
@@ -1039,7 +1013,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-        @Override
+    @Override
     public void onPause() {
         super.onPause();
     }
@@ -1075,9 +1049,8 @@ public class MainActivity extends AppCompatActivity
         // "start-activity" message to each connected node.
         new StartWearableActivityTask().execute();
     }
-    public void onLocationAwarenessClick(View view) {
 
-    }
+    public void onLocationAwarenessClick(View view) { }
 
     @WorkerThread
     private void sendMessageWithData(String node, String title, byte[] data) {
@@ -1120,60 +1093,60 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * Dispatches an {@link Intent} to take a photo. Result will be returned back in
-     * onActivityResult().
-     */
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    /**
-     * Builds an {@link Asset} from a bitmap. The image that we get
-     * back from the camera in "data" is a thumbnail size. Typically, your image should not exceed
-     * 320x320 and if you want to have zoom and parallax effect in your app, limit the size of your
-     * image to 640x400. Resize your image before transferring to your wearable device.
-     */
-    private static Asset toAsset(Bitmap bitmap) {
-        ByteArrayOutputStream byteStream = null;
-        try {
-            byteStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
-            return Asset.createFromBytes(byteStream.toByteArray());
-        } finally {
-            if (null != byteStream) {
-                try {
-                    byteStream.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
-    }
-
-    /**
-     * Sends the asset that was created from the photo we took by adding it to the Data Item store.
-     */
-    private void sendPhoto(Asset asset) {
-        PutDataMapRequest dataMap = PutDataMapRequest.create(IMAGE_PATH);
-        dataMap.getDataMap().putAsset(IMAGE_KEY, asset);
-        dataMap.getDataMap().putLong("time", new Date().getTime());
-        PutDataRequest request = dataMap.asPutDataRequest();
-        request.setUrgent();
-
-        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
-
-        dataItemTask.addOnSuccessListener(
-                new OnSuccessListener<DataItem>() {
-                    @Override
-                    public void onSuccess(DataItem dataItem) {
-                        LOGD(TAG, "Sending image was successful: " + dataItem);
-                    }
-                });
-    }
+//    /**
+//     * Dispatches an {@link Intent} to take a photo. Result will be returned back in
+//     * onActivityResult().
+//     */
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
+//
+//    /**
+//     * Builds an {@link Asset} from a bitmap. The image that we get
+//     * back from the camera in "data" is a thumbnail size. Typically, your image should not exceed
+//     * 320x320 and if you want to have zoom and parallax effect in your app, limit the size of your
+//     * image to 640x400. Resize your image before transferring to your wearable device.
+//     */
+//    private static Asset toAsset(Bitmap bitmap) {
+//        ByteArrayOutputStream byteStream = null;
+//        try {
+//            byteStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+//            return Asset.createFromBytes(byteStream.toByteArray());
+//        } finally {
+//            if (null != byteStream) {
+//                try {
+//                    byteStream.close();
+//                } catch (IOException e) {
+//                    // ignore
+//                }
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Sends the asset that was created from the photo we took by adding it to the Data Item store.
+//     */
+//    private void sendPhoto(Asset asset) {
+//        PutDataMapRequest dataMap = PutDataMapRequest.create(IMAGE_PATH);
+//        dataMap.getDataMap().putAsset(IMAGE_KEY, asset);
+//        dataMap.getDataMap().putLong("time", new Date().getTime());
+//        PutDataRequest request = dataMap.asPutDataRequest();
+//        request.setUrgent();
+//
+//        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
+//
+//        dataItemTask.addOnSuccessListener(
+//                new OnSuccessListener<DataItem>() {
+//                    @Override
+//                    public void onSuccess(DataItem dataItem) {
+//                        LOGD(TAG, "Sending image was successful: " + dataItem);
+//                    }
+//                });
+//    }
 
     @WorkerThread
     private Collection<String> getNodes() {
