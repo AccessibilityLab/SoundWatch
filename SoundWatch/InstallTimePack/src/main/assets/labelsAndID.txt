@@ -1,0 +1,2108 @@
+{
+ id: 0
+ name: "Speech"
+}
+{
+ id: 1
+ name: "Male speech, man speaking"
+}
+{
+ id: 2
+ name: "Female speech, woman speaking"
+}
+{
+ id: 3
+ name: "Child speech, kid speaking"
+}
+{
+ id: 4
+ name: "Conversation"
+}
+{
+ id: 5
+ name: "Narration, monologue"
+}
+{
+ id: 6
+ name: "Babbling"
+}
+{
+ id: 7
+ name: "Speech synthesizer"
+}
+{
+ id: 8
+ name: "Shout"
+}
+{
+ id: 9
+ name: "Bellow"
+}
+{
+ id: 10
+ name: "Whoop"
+}
+{
+ id: 11
+ name: "Yell"
+}
+{
+ id: 12
+ name: "Battle cry"
+}
+{
+ id: 13
+ name: "Children shouting"
+}
+{
+ id: 14
+ name: "Screaming"
+}
+{
+ id: 15
+ name: "Whispering"
+}
+{
+ id: 16
+ name: "Laughter"
+}
+{
+ id: 17
+ name: "Baby laughter"
+}
+{
+ id: 18
+ name: "Giggle"
+}
+{
+ id: 19
+ name: "Snicker"
+}
+{
+ id: 20
+ name: "Belly laugh"
+}
+{
+ id: 21
+ name: "Chuckle, chortle"
+}
+{
+ id: 22
+ name: "Crying, sobbing"
+}
+{
+ id: 23
+ name: "Baby cry, infant cry"
+}
+{
+ id: 24
+ name: "Whimper"
+}
+{
+ id: 25
+ name: "Wail, moan"
+}
+{
+ id: 26
+ name: "Sigh"
+}
+{
+ id: 27
+ name: "Singing"
+}
+{
+ id: 28
+ name: "Choir"
+}
+{
+ id: 29
+ name: "Yodeling"
+}
+{
+ id: 30
+ name: "Chant"
+}
+{
+ id: 31
+ name: "Mantra"
+}
+{
+ id: 32
+ name: "Male singing"
+}
+{
+ id: 33
+ name: "Female singing"
+}
+{
+ id: 34
+ name: "Child singing"
+}
+{
+ id: 35
+ name: "Synthetic singing"
+}
+{
+ id: 36
+ name: "Rapping"
+}
+{
+ id: 37
+ name: "Humming"
+}
+{
+ id: 38
+ name: "Groan"
+}
+{
+ id: 39
+ name: "Grunt"
+}
+{
+ id: 40
+ name: "Whistling"
+}
+{
+ id: 41
+ name: "Breathing"
+}
+{
+ id: 42
+ name: "Wheeze"
+}
+{
+ id: 43
+ name: "Snoring"
+}
+{
+ id: 44
+ name: "Gasp"
+}
+{
+ id: 45
+ name: "Pant"
+}
+{
+ id: 46
+ name: "Snort"
+}
+{
+ id: 47
+ name: "Cough"
+}
+{
+ id: 48
+ name: "Throat clearing"
+}
+{
+ id: 49
+ name: "Sneeze"
+}
+{
+ id: 50
+ name: "Sniff"
+}
+{
+ id: 51
+ name: "Run"
+}
+{
+ id: 52
+ name: "Shuffle"
+}
+{
+ id: 53
+ name: "Walk, footsteps"
+}
+{
+ id: 54
+ name: "Chewing, mastication"
+}
+{
+ id: 55
+ name: "Biting"
+}
+{
+ id: 56
+ name: "Gargling"
+}
+{
+ id: 57
+ name: "Stomach rumble"
+}
+{
+ id: 58
+ name: "Burping, eructation"
+}
+{
+ id: 59
+ name: "Hiccup"
+}
+{
+ id: 60
+ name: "Fart"
+}
+{
+ id: 61
+ name: "Hands"
+}
+{
+ id: 62
+ name: "Finger snapping"
+}
+{
+ id: 63
+ name: "Clapping"
+}
+{
+ id: 64
+ name: "Heart sounds, heartbeat"
+}
+{
+ id: 65
+ name: "Heart murmur"
+}
+{
+ id: 66
+ name: "Cheering"
+}
+{
+ id: 67
+ name: "Applause"
+}
+{
+ id: 68
+ name: "Chatter"
+}
+{
+ id: 69
+ name: "Crowd"
+}
+{
+ id: 70
+ name: "Hubbub, speech noise, speech babble"
+}
+{
+ id: 71
+ name: "Children playing"
+}
+{
+ id: 72
+ name: "Animal"
+}
+{
+ id: 73
+ name: "Domestic animals, pets"
+}
+{
+ id: 74
+ name: "Dog"
+}
+{
+ id: 75
+ name: "Bark"
+}
+{
+ id: 76
+ name: "Yip"
+}
+{
+ id: 77
+ name: "Howl"
+}
+{
+ id: 78
+ name: "Bow-wow"
+}
+{
+ id: 79
+ name: "Growling"
+}
+{
+ id: 80
+ name: "Whimper (dog)"
+}
+{
+ id: 81
+ name: "Cat"
+}
+{
+ id: 82
+ name: "Purr"
+}
+{
+ id: 83
+ name: "Meow"
+}
+{
+ id: 84
+ name: "Hiss"
+}
+{
+ id: 85
+ name: "Caterwaul"
+}
+{
+ id: 86
+ name: "Livestock, farm animals, working animals"
+}
+{
+ id: 87
+ name: "Horse"
+}
+{
+ id: 88
+ name: "Clip-clop"
+}
+{
+ id: 89
+ name: "Neigh, whinny"
+}
+{
+ id: 90
+ name: "Cattle, bovinae"
+}
+{
+ id: 91
+ name: "Moo"
+}
+{
+ id: 92
+ name: "Cowbell"
+}
+{
+ id: 93
+ name: "Pig"
+}
+{
+ id: 94
+ name: "Oink"
+}
+{
+ id: 95
+ name: "Goat"
+}
+{
+ id: 96
+ name: "Bleat"
+}
+{
+ id: 97
+ name: "Sheep"
+}
+{
+ id: 98
+ name: "Fowl"
+}
+{
+ id: 99
+ name: "Chicken, rooster"
+}
+{
+ id: 100
+ name: "Cluck"
+}
+{
+ id: 101
+ name: "Crowing, cock-a-doodle-doo"
+}
+{
+ id: 102
+ name: "Turkey"
+}
+{
+ id: 103
+ name: "Gobble"
+}
+{
+ id: 104
+ name: "Duck"
+}
+{
+ id: 105
+ name: "Quack"
+}
+{
+ id: 106
+ name: "Goose"
+}
+{
+ id: 107
+ name: "Honk"
+}
+{
+ id: 108
+ name: "Wild animals"
+}
+{
+ id: 109
+ name: "Roaring cats (lions, tigers)"
+}
+{
+ id: 110
+ name: "Roar"
+}
+{
+ id: 111
+ name: "Bird"
+}
+{
+ id: 112
+ name: "Bird vocalization, bird call, bird song"
+}
+{
+ id: 113
+ name: "Chirp, tweet"
+}
+{
+ id: 114
+ name: "Squawk"
+}
+{
+ id: 115
+ name: "Pigeon, dove"
+}
+{
+ id: 116
+ name: "Coo"
+}
+{
+ id: 117
+ name: "Crow"
+}
+{
+ id: 118
+ name: "Caw"
+}
+{
+ id: 119
+ name: "Owl"
+}
+{
+ id: 120
+ name: "Hoot"
+}
+{
+ id: 121
+ name: "Bird flight, flapping wings"
+}
+{
+ id: 122
+ name: "Canidae, dogs, wolves"
+}
+{
+ id: 123
+ name: "Rodents, rats, mice"
+}
+{
+ id: 124
+ name: "Mouse"
+}
+{
+ id: 125
+ name: "Patter"
+}
+{
+ id: 126
+ name: "Insect"
+}
+{
+ id: 127
+ name: "Cricket"
+}
+{
+ id: 128
+ name: "Mosquito"
+}
+{
+ id: 129
+ name: "Fly, housefly"
+}
+{
+ id: 130
+ name: "Buzz"
+}
+{
+ id: 131
+ name: "Bee, wasp, etc."
+}
+{
+ id: 132
+ name: "Frog"
+}
+{
+ id: 133
+ name: "Croak"
+}
+{
+ id: 134
+ name: "Snake"
+}
+{
+ id: 135
+ name: "Rattle"
+}
+{
+ id: 136
+ name: "Whale vocalization"
+}
+{
+ id: 137
+ name: "Music"
+}
+{
+ id: 138
+ name: "Musical instrument"
+}
+{
+ id: 139
+ name: "Plucked string instrument"
+}
+{
+ id: 140
+ name: "Guitar"
+}
+{
+ id: 141
+ name: "Electric guitar"
+}
+{
+ id: 142
+ name: "Bass guitar"
+}
+{
+ id: 143
+ name: "Acoustic guitar"
+}
+{
+ id: 144
+ name: "Steel guitar, slide guitar"
+}
+{
+ id: 145
+ name: "Tapping (guitar technique)"
+}
+{
+ id: 146
+ name: "Strum"
+}
+{
+ id: 147
+ name: "Banjo"
+}
+{
+ id: 148
+ name: "Sitar"
+}
+{
+ id: 149
+ name: "Mandolin"
+}
+{
+ id: 150
+ name: "Zither"
+}
+{
+ id: 151
+ name: "Ukulele"
+}
+{
+ id: 152
+ name: "Keyboard (musical)"
+}
+{
+ id: 153
+ name: "Piano"
+}
+{
+ id: 154
+ name: "Electric piano"
+}
+{
+ id: 155
+ name: "Organ"
+}
+{
+ id: 156
+ name: "Electronic organ"
+}
+{
+ id: 157
+ name: "Hammond organ"
+}
+{
+ id: 158
+ name: "Synthesizer"
+}
+{
+ id: 159
+ name: "Sampler"
+}
+{
+ id: 160
+ name: "Harpsichord"
+}
+{
+ id: 161
+ name: "Percussion"
+}
+{
+ id: 162
+ name: "Drum kit"
+}
+{
+ id: 163
+ name: "Drum machine"
+}
+{
+ id: 164
+ name: "Drum"
+}
+{
+ id: 165
+ name: "Snare drum"
+}
+{
+ id: 166
+ name: "Rimshot"
+}
+{
+ id: 167
+ name: "Drum roll"
+}
+{
+ id: 168
+ name: "Bass drum"
+}
+{
+ id: 169
+ name: "Timpani"
+}
+{
+ id: 170
+ name: "Tabla"
+}
+{
+ id: 171
+ name: "Cymbal"
+}
+{
+ id: 172
+ name: "Hi-hat"
+}
+{
+ id: 173
+ name: "Wood block"
+}
+{
+ id: 174
+ name: "Tambourine"
+}
+{
+ id: 175
+ name: "Rattle (instrument)"
+}
+{
+ id: 176
+ name: "Maraca"
+}
+{
+ id: 177
+ name: "Gong"
+}
+{
+ id: 178
+ name: "Tubular bells"
+}
+{
+ id: 179
+ name: "Mallet percussion"
+}
+{
+ id: 180
+ name: "Marimba, xylophone"
+}
+{
+ id: 181
+ name: "Glockenspiel"
+}
+{
+ id: 182
+ name: "Vibraphone"
+}
+{
+ id: 183
+ name: "Steelpan"
+}
+{
+ id: 184
+ name: "Orchestra"
+}
+{
+ id: 185
+ name: "Brass instrument"
+}
+{
+ id: 186
+ name: "French horn"
+}
+{
+ id: 187
+ name: "Trumpet"
+}
+{
+ id: 188
+ name: "Trombone"
+}
+{
+ id: 189
+ name: "Bowed string instrument"
+}
+{
+ id: 190
+ name: "String section"
+}
+{
+ id: 191
+ name: "Violin, fiddle"
+}
+{
+ id: 192
+ name: "Pizzicato"
+}
+{
+ id: 193
+ name: "Cello"
+}
+{
+ id: 194
+ name: "Double bass"
+}
+{
+ id: 195
+ name: "Wind instrument, woodwind instrument"
+}
+{
+ id: 196
+ name: "Flute"
+}
+{
+ id: 197
+ name: "Saxophone"
+}
+{
+ id: 198
+ name: "Clarinet"
+}
+{
+ id: 199
+ name: "Harp"
+}
+{
+ id: 200
+ name: "Bell"
+}
+{
+ id: 201
+ name: "Church bell"
+}
+{
+ id: 202
+ name: "Jingle bell"
+}
+{
+ id: 203
+ name: "Bicycle bell"
+}
+{
+ id: 204
+ name: "Tuning fork"
+}
+{
+ id: 205
+ name: "Chime"
+}
+{
+ id: 206
+ name: "Wind chime"
+}
+{
+ id: 207
+ name: "Change ringing (campanology)"
+}
+{
+ id: 208
+ name: "Harmonica"
+}
+{
+ id: 209
+ name: "Accordion"
+}
+{
+ id: 210
+ name: "Bagpipes"
+}
+{
+ id: 211
+ name: "Didgeridoo"
+}
+{
+ id: 212
+ name: "Shofar"
+}
+{
+ id: 213
+ name: "Theremin"
+}
+{
+ id: 214
+ name: "Singing bowl"
+}
+{
+ id: 215
+ name: "Scratching (performance technique)"
+}
+{
+ id: 216
+ name: "Pop music"
+}
+{
+ id: 217
+ name: "Hip hop music"
+}
+{
+ id: 218
+ name: "Beatboxing"
+}
+{
+ id: 219
+ name: "Rock music"
+}
+{
+ id: 220
+ name: "Heavy metal"
+}
+{
+ id: 221
+ name: "Punk rock"
+}
+{
+ id: 222
+ name: "Grunge"
+}
+{
+ id: 223
+ name: "Progressive rock"
+}
+{
+ id: 224
+ name: "Rock and roll"
+}
+{
+ id: 225
+ name: "Psychedelic rock"
+}
+{
+ id: 226
+ name: "Rhythm and blues"
+}
+{
+ id: 227
+ name: "Soul music"
+}
+{
+ id: 228
+ name: "Reggae"
+}
+{
+ id: 229
+ name: "Country"
+}
+{
+ id: 230
+ name: "Swing music"
+}
+{
+ id: 231
+ name: "Bluegrass"
+}
+{
+ id: 232
+ name: "Funk"
+}
+{
+ id: 233
+ name: "Folk music"
+}
+{
+ id: 234
+ name: "Middle Eastern music"
+}
+{
+ id: 235
+ name: "Jazz"
+}
+{
+ id: 236
+ name: "Disco"
+}
+{
+ id: 237
+ name: "Classical music"
+}
+{
+ id: 238
+ name: "Opera"
+}
+{
+ id: 239
+ name: "Electronic music"
+}
+{
+ id: 240
+ name: "House music"
+}
+{
+ id: 241
+ name: "Techno"
+}
+{
+ id: 242
+ name: "Dubstep"
+}
+{
+ id: 243
+ name: "Drum and bass"
+}
+{
+ id: 244
+ name: "Electronica"
+}
+{
+ id: 245
+ name: "Electronic dance music"
+}
+{
+ id: 246
+ name: "Ambient music"
+}
+{
+ id: 247
+ name: "Trance music"
+}
+{
+ id: 248
+ name: "Music of Latin America"
+}
+{
+ id: 249
+ name: "Salsa music"
+}
+{
+ id: 250
+ name: "Flamenco"
+}
+{
+ id: 251
+ name: "Blues"
+}
+{
+ id: 252
+ name: "Music for children"
+}
+{
+ id: 253
+ name: "New-age music"
+}
+{
+ id: 254
+ name: "Vocal music"
+}
+{
+ id: 255
+ name: "A capella"
+}
+{
+ id: 256
+ name: "Music of Africa"
+}
+{
+ id: 257
+ name: "Afrobeat"
+}
+{
+ id: 258
+ name: "Christian music"
+}
+{
+ id: 259
+ name: "Gospel music"
+}
+{
+ id: 260
+ name: "Music of Asia"
+}
+{
+ id: 261
+ name: "Carnatic music"
+}
+{
+ id: 262
+ name: "Music of Bollywood"
+}
+{
+ id: 263
+ name: "Ska"
+}
+{
+ id: 264
+ name: "Traditional music"
+}
+{
+ id: 265
+ name: "Independent music"
+}
+{
+ id: 266
+ name: "Song"
+}
+{
+ id: 267
+ name: "Background music"
+}
+{
+ id: 268
+ name: "Theme music"
+}
+{
+ id: 269
+ name: "Jingle (music)"
+}
+{
+ id: 270
+ name: "Soundtrack music"
+}
+{
+ id: 271
+ name: "Lullaby"
+}
+{
+ id: 272
+ name: "Video game music"
+}
+{
+ id: 273
+ name: "Christmas music"
+}
+{
+ id: 274
+ name: "Dance music"
+}
+{
+ id: 275
+ name: "Wedding music"
+}
+{
+ id: 276
+ name: "Happy music"
+}
+{
+ id: 277
+ name: "Funny music"
+}
+{
+ id: 278
+ name: "Sad music"
+}
+{
+ id: 279
+ name: "Tender music"
+}
+{
+ id: 280
+ name: "Exciting music"
+}
+{
+ id: 281
+ name: "Angry music"
+}
+{
+ id: 282
+ name: "Scary music"
+}
+{
+ id: 283
+ name: "Wind"
+}
+{
+ id: 284
+ name: "Rustling leaves"
+}
+{
+ id: 285
+ name: "Wind noise (microphone)"
+}
+{
+ id: 286
+ name: "Thunderstorm"
+}
+{
+ id: 287
+ name: "Thunder"
+}
+{
+ id: 288
+ name: "Water"
+}
+{
+ id: 289
+ name: "Rain"
+}
+{
+ id: 290
+ name: "Raindrop"
+}
+{
+ id: 291
+ name: "Rain on surface"
+}
+{
+ id: 292
+ name: "Stream"
+}
+{
+ id: 293
+ name: "Waterfall"
+}
+{
+ id: 294
+ name: "Ocean"
+}
+{
+ id: 295
+ name: "Waves, surf"
+}
+{
+ id: 296
+ name: "Steam"
+}
+{
+ id: 297
+ name: "Gurgling"
+}
+{
+ id: 298
+ name: "Fire"
+}
+{
+ id: 299
+ name: "Crackle"
+}
+{
+ id: 300
+ name: "Vehicle"
+}
+{
+ id: 301
+ name: "Boat, Water vehicle"
+}
+{
+ id: 302
+ name: "Sailboat, sailing ship"
+}
+{
+ id: 303
+ name: "Rowboat, canoe, kayak"
+}
+{
+ id: 304
+ name: "Motorboat, speedboat"
+}
+{
+ id: 305
+ name: "Ship"
+}
+{
+ id: 306
+ name: "Motor vehicle (road)"
+}
+{
+ id: 307
+ name: "Car"
+}
+{
+ id: 308
+ name: "Vehicle horn, car horn, honking"
+}
+{
+ id: 309
+ name: "Toot"
+}
+{
+ id: 310
+ name: "Car alarm"
+}
+{
+ id: 311
+ name: "Power windows, electric windows"
+}
+{
+ id: 312
+ name: "Skidding"
+}
+{
+ id: 313
+ name: "Tire squeal"
+}
+{
+ id: 314
+ name: "Car passing by"
+}
+{
+ id: 315
+ name: "Race car, auto racing"
+}
+{
+ id: 316
+ name: "Truck"
+}
+{
+ id: 317
+ name: "Air brake"
+}
+{
+ id: 318
+ name: "Air horn, truck horn"
+}
+{
+ id: 319
+ name: "Reversing beeps"
+}
+{
+ id: 320
+ name: "Ice cream truck, ice cream van"
+}
+{
+ id: 321
+ name: "Bus"
+}
+{
+ id: 322
+ name: "Emergency vehicle"
+}
+{
+ id: 323
+ name: "Police car (siren)"
+}
+{
+ id: 324
+ name: "Ambulance (siren)"
+}
+{
+ id: 325
+ name: "Fire engine, fire truck (siren)"
+}
+{
+ id: 326
+ name: "Motorcycle"
+}
+{
+ id: 327
+ name: "Traffic noise, roadway noise"
+}
+{
+ id: 328
+ name: "Rail transport"
+}
+{
+ id: 329
+ name: "Train"
+}
+{
+ id: 330
+ name: "Train whistle"
+}
+{
+ id: 331
+ name: "Train horn"
+}
+{
+ id: 332
+ name: "Railroad car, train wagon"
+}
+{
+ id: 333
+ name: "Train wheels squealing"
+}
+{
+ id: 334
+ name: "Subway, metro, underground"
+}
+{
+ id: 335
+ name: "Aircraft"
+}
+{
+ id: 336
+ name: "Aircraft engine"
+}
+{
+ id: 337
+ name: "Jet engine"
+}
+{
+ id: 338
+ name: "Propeller, airscrew"
+}
+{
+ id: 339
+ name: "Helicopter"
+}
+{
+ id: 340
+ name: "Fixed-wing aircraft, airplane"
+}
+{
+ id: 341
+ name: "Bicycle"
+}
+{
+ id: 342
+ name: "Skateboard"
+}
+{
+ id: 343
+ name: "Engine"
+}
+{
+ id: 344
+ name: "Light engine (high frequency)"
+}
+{
+ id: 345
+ name: "Dental drill, dentist\'s drill"
+}
+{
+ id: 346
+ name: "Lawn mower"
+}
+{
+ id: 347
+ name: "Chainsaw"
+}
+{
+ id: 348
+ name: "Medium engine (mid frequency)"
+}
+{
+ id: 349
+ name: "Heavy engine (low frequency)"
+}
+{
+ id: 350
+ name: "Engine knocking"
+}
+{
+ id: 351
+ name: "Engine starting"
+}
+{
+ id: 352
+ name: "Idling"
+}
+{
+ id: 353
+ name: "Accelerating, revving, vroom"
+}
+{
+ id: 354
+ name: "Door"
+}
+{
+ id: 355
+ name: "Doorbell"
+}
+{
+ id: 356
+ name: "Ding-dong"
+}
+{
+ id: 357
+ name: "Sliding door"
+}
+{
+ id: 358
+ name: "Slam"
+}
+{
+ id: 359
+ name: "Knock"
+}
+{
+ id: 360
+ name: "Tap"
+}
+{
+ id: 361
+ name: "Squeak"
+}
+{
+ id: 362
+ name: "Cupboard open or close"
+}
+{
+ id: 363
+ name: "Drawer open or close"
+}
+{
+ id: 364
+ name: "Dishes, pots, and pans"
+}
+{
+ id: 365
+ name: "Cutlery, silverware"
+}
+{
+ id: 366
+ name: "Chopping (food)"
+}
+{
+ id: 367
+ name: "Frying (food)"
+}
+{
+ id: 368
+ name: "Microwave oven"
+}
+{
+ id: 369
+ name: "Telephone"
+}
+{
+ id: 370
+ name: "Water tap, faucet"
+}
+{
+ id: 371
+ name: "Sink (filling or washing)"
+}
+{
+ id: 372
+ name: "Bathtub (filling or washing)"
+}
+{
+ id: 373
+ name: "Hair dryer"
+}
+{
+ id: 374
+ name: "Toilet flush"
+}
+{
+ id: 375
+ name: "Toothbrush"
+}
+{
+ id: 376
+ name: "Electric toothbrush"
+}
+{
+ id: 377
+ name: "Vacuum cleaner"
+}
+{
+ id: 378
+ name: "Zipper (clothing)"
+}
+{
+ id: 379
+ name: "Keys jangling"
+}
+{
+ id: 380
+ name: "Coin (dropping)"
+}
+{
+ id: 381
+ name: "Scissors"
+}
+{
+ id: 382
+ name: "Electric shaver, electric razor"
+}
+{
+ id: 383
+ name: "Shuffling cards"
+}
+{
+ id: 384
+ name: "Typing"
+}
+{
+ id: 385
+ name: "Typewriter"
+}
+{
+ id: 386
+ name: "Computer keyboard"
+}
+{
+ id: 387
+ name: "Writing"
+}
+{
+ id: 388
+ name: "Alarm"
+}
+{
+ id: 389
+ name: "Telephone"
+}
+{
+ id: 390
+ name: "Telephone bell ringing"
+}
+{
+ id: 391
+ name: "Ringtone"
+}
+{
+ id: 392
+ name: "Telephone dialing, DTMF"
+}
+{
+ id: 393
+ name: "Dial tone"
+}
+{
+ id: 394
+ name: "Busy signal"
+}
+{
+ id: 395
+ name: "Alarm clock"
+}
+{
+ id: 396
+ name: "Siren"
+}
+{
+ id: 397
+ name: "Civil defense siren"
+}
+{
+ id: 398
+ name: "Buzzer"
+}
+{
+ id: 399
+ name: "Smoke detector, smoke alarm"
+}
+{
+ id: 400
+ name: "Fire alarm"
+}
+{
+ id: 401
+ name: "Foghorn"
+}
+{
+ id: 402
+ name: "Whistle"
+}
+{
+ id: 403
+ name: "Steam whistle"
+}
+{
+ id: 404
+ name: "Mechanisms"
+}
+{
+ id: 405
+ name: "Ratchet, pawl"
+}
+{
+ id: 406
+ name: "Clock"
+}
+{
+ id: 407
+ name: "Tick"
+}
+{
+ id: 408
+ name: "Tick-tock"
+}
+{
+ id: 409
+ name: "Gears"
+}
+{
+ id: 410
+ name: "Pulleys"
+}
+{
+ id: 411
+ name: "Sewing machine"
+}
+{
+ id: 412
+ name: "Mechanical fan"
+}
+{
+ id: 413
+ name: "Air conditioning"
+}
+{
+ id: 414
+ name: "Cash register"
+}
+{
+ id: 415
+ name: "Printer"
+}
+{
+ id: 416
+ name: "Camera"
+}
+{
+ id: 417
+ name: "Single-lens reflex camera"
+}
+{
+ id: 418
+ name: "Tools"
+}
+{
+ id: 419
+ name: "Hammer"
+}
+{
+ id: 420
+ name: "Jackhammer"
+}
+{
+ id: 421
+ name: "Sawing"
+}
+{
+ id: 422
+ name: "Filing (rasp)"
+}
+{
+ id: 423
+ name: "Sanding"
+}
+{
+ id: 424
+ name: "Power tool"
+}
+{
+ id: 425
+ name: "Drill"
+}
+{
+ id: 426
+ name: "Explosion"
+}
+{
+ id: 427
+ name: "Gunshot, gunfire"
+}
+{
+ id: 428
+ name: "Machine gun"
+}
+{
+ id: 429
+ name: "Fusillade"
+}
+{
+ id: 430
+ name: "Artillery fire"
+}
+{
+ id: 431
+ name: "Cap gun"
+}
+{
+ id: 432
+ name: "Fireworks"
+}
+{
+ id: 433
+ name: "Firecracker"
+}
+{
+ id: 434
+ name: "Burst, pop"
+}
+{
+ id: 435
+ name: "Eruption"
+}
+{
+ id: 436
+ name: "Boom"
+}
+{
+ id: 437
+ name: "Wood"
+}
+{
+ id: 438
+ name: "Chop"
+}
+{
+ id: 439
+ name: "Splinter"
+}
+{
+ id: 440
+ name: "Crack"
+}
+{
+ id: 441
+ name: "Glass"
+}
+{
+ id: 442
+ name: "Chink, clink"
+}
+{
+ id: 443
+ name: "Shatter"
+}
+{
+ id: 444
+ name: "Liquid"
+}
+{
+ id: 445
+ name: "Splash, splatter"
+}
+{
+ id: 446
+ name: "Slosh"
+}
+{
+ id: 447
+ name: "Squish"
+}
+{
+ id: 448
+ name: "Drip"
+}
+{
+ id: 449
+ name: "Pour"
+}
+{
+ id: 450
+ name: "Trickle, dribble"
+}
+{
+ id: 451
+ name: "Gush"
+}
+{
+ id: 452
+ name: "Fill (with liquid)"
+}
+{
+ id: 453
+ name: "Spray"
+}
+{
+ id: 454
+ name: "Pump (liquid)"
+}
+{
+ id: 455
+ name: "Stir"
+}
+{
+ id: 456
+ name: "Boiling"
+}
+{
+ id: 457
+ name: "Sonar"
+}
+{
+ id: 458
+ name: "Arrow"
+}
+{
+ id: 459
+ name: "Whoosh, swoosh, swish"
+}
+{
+ id: 460
+ name: "Thump, thud"
+}
+{
+ id: 461
+ name: "Thunk"
+}
+{
+ id: 462
+ name: "Electronic tuner"
+}
+{
+ id: 463
+ name: "Effects unit"
+}
+{
+ id: 464
+ name: "Chorus effect"
+}
+{
+ id: 465
+ name: "Basketball bounce"
+}
+{
+ id: 466
+ name: "Bang"
+}
+{
+ id: 467
+ name: "Slap, smack"
+}
+{
+ id: 468
+ name: "Whack, thwack"
+}
+{
+ id: 469
+ name: "Smash, crash"
+}
+{
+ id: 470
+ name: "Breaking"
+}
+{
+ id: 471
+ name: "Bouncing"
+}
+{
+ id: 472
+ name: "Whip"
+}
+{
+ id: 473
+ name: "Flap"
+}
+{
+ id: 474
+ name: "Scratch"
+}
+{
+ id: 475
+ name: "Scrape"
+}
+{
+ id: 476
+ name: "Rub"
+}
+{
+ id: 477
+ name: "Roll"
+}
+{
+ id: 478
+ name: "Crushing"
+}
+{
+ id: 479
+ name: "Crumpling, crinkling"
+}
+{
+ id: 480
+ name: "Tearing"
+}
+{
+ id: 481
+ name: "Beep, bleep"
+}
+{
+ id: 482
+ name: "Ping"
+}
+{
+ id: 483
+ name: "Ding"
+}
+{
+ id: 484
+ name: "Clang"
+}
+{
+ id: 485
+ name: "Squeal"
+}
+{
+ id: 486
+ name: "Creak"
+}
+{
+ id: 487
+ name: "Rustle"
+}
+{
+ id: 488
+ name: "Whir"
+}
+{
+ id: 489
+ name: "Clatter"
+}
+{
+ id: 490
+ name: "Sizzle"
+}
+{
+ id: 491
+ name: "Clicking"
+}
+{
+ id: 492
+ name: "Clickety-clack"
+}
+{
+ id: 493
+ name: "Rumble"
+}
+{
+ id: 494
+ name: "Plop"
+}
+{
+ id: 495
+ name: "Jingle, tinkle"
+}
+{
+ id: 496
+ name: "Hum"
+}
+{
+ id: 497
+ name: "Zing"
+}
+{
+ id: 498
+ name: "Boing"
+}
+{
+ id: 499
+ name: "Crunch"
+}
+{
+ id: 500
+ name: "Silence"
+}
+{
+ id: 501
+ name: "Sine wave"
+}
+{
+ id: 502
+ name: "Harmonic"
+}
+{
+ id: 503
+ name: "Chirp tone"
+}
+{
+ id: 504
+ name: "Sound effect"
+}
+{
+ id: 505
+ name: "Pulse"
+}
+{
+ id: 506
+ name: "Inside, small room"
+}
+{
+ id: 507
+ name: "Inside, large room or hall"
+}
+{
+ id: 508
+ name: "Inside, public space"
+}
+{
+ id: 509
+ name: "Outside, urban or manmade"
+}
+{
+ id: 510
+ name: "Outside, rural or natural"
+}
+{
+ id: 511
+ name: "Reverberation"
+}
+{
+ id: 512
+ name: "Echo"
+}
+{
+ id: 513
+ name: "Noise"
+}
+{
+ id: 514
+ name: "Environmental noise"
+}
+{
+ id: 515
+ name: "Static"
+}
+{
+ id: 516
+ name: "Mains hum"
+}
+{
+ id: 517
+ name: "Distortion"
+}
+{
+ id: 518
+ name: "Sidetone"
+}
+{
+ id: 519
+ name: "Cacophony"
+}
+{
+ id: 520
+ name: "White noise"
+}
+{
+ id: 521
+ name: "Pink noise"
+}
+{
+ id: 522
+ name: "Throbbing"
+}
+{
+ id: 523
+ name: "Vibration"
+}
+{
+ id: 524
+ name: "Television"
+}
+{
+ id: 525
+ name: "Radio"
+}
+{
+ id: 526
+ name: "Field recording"
+}
