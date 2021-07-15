@@ -76,14 +76,15 @@ public class SoundRecorder {
 
     private static final String TAG = "SoundRecorder";
     private static final String DEBUG_TAG = "FromSoftware";
-    private static final int RECORDING_RATE = 16000; // can go up to 44K, if needed
+    private static final int RECORDING_RATE = 16000; // (Hz == number of sample per second) can go up to 44K, if needed
     private static final int CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO;
     private static final int CHANNELS_OUT = AudioFormat.CHANNEL_OUT_MONO;
     private static final int FORMAT = AudioFormat.ENCODING_PCM_16BIT;
-    private static int BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
+    // this might vary because it will optimize for difference device (should not make it fixed?)
+    private static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
     public static final String AUDIO_MESSAGE_PATH = "/audio_message";
     private static final double DBLEVEL_THRES = -40.0;
-    int BufferElements2Rec = 16000;
+    private static final int bufferElements2Rec = RECORDING_RATE * 320 / 1000; // 320ms sample for the new model v2
     private static final String SNOOZE_LABEL = "Snooze";
     private static final String SNOOZE_TIME_LABEL = "Snooze Time";
     private static final String[] SNOOZE_CHOICES = {"5 mins", "10 mins", "1 hour", "1 day", "Forever"};
@@ -91,13 +92,14 @@ public class SoundRecorder {
 
     private List<Short> soundBuffer = new ArrayList<>();
     private float [] input1D = new float [6144];
-    private float [][][][] input4D = new float [1][96][64][1];
+    //    private float [][][][] input4D = new float [1][96][64][1];
+    private float [][][] input3D = new float [1][96][64];
     private float[][] output = new float[1][30];
     private final String mOutputFileName;
     private List<String> labels = new ArrayList<String>();
     private Interpreter tfLite;
 
-    private static final int RECORDER_SAMPLERATE = 16000;
+    //    private static final int RECORDER_SAMPLERATE = 16000;
     private static final float PREDICTION_THRES = 0.5F;
     private static final String CHANNEL_ID = "SOUNDWATCH";
     private final Context mContext;
@@ -203,11 +205,11 @@ public class SoundRecorder {
      * @return
      */
     private String predictSoundsFromRawAudio(List<Short> soundBuffer, long recordTime) {
-        if (soundBuffer.size() != 16000) {
+        if (soundBuffer.size() != bufferElements2Rec) {
             soundBuffer = new ArrayList<>();
             return "Invalid audio size";
         }
-        short[] sData = new short[16000];
+        short[] sData = new short[bufferElements2Rec];
         for (int i = 0; i < soundBuffer.size(); i++) {
             sData[i] = soundBuffer.get(i);
         }
@@ -243,7 +245,7 @@ public class SoundRecorder {
                 int count = 0;
                 for (int j = 0; j < 96; j++) {
                     for (int k = 0; k < 64; k++) {
-                        input4D[0][j][k][0] = input1D[count];
+                        input3D[0][j][k] = input1D[count];
                         count++;
                     }
                 }
@@ -253,7 +255,7 @@ public class SoundRecorder {
                     startTime = System.currentTimeMillis();
 
                 //Run inference
-                tfLite.run(input4D, output);
+                tfLite.run(input3D, output);
 
                 if(TEST_MODEL_LATENCY) {
                     long elapsedTime = System.currentTimeMillis() - startTime;
@@ -317,13 +319,13 @@ public class SoundRecorder {
 
     private float[] extractAudioFeatures(List<Short> soundBuffer) {
         float [] input1D = new float [6144];
-        if (soundBuffer.size() != 16000) {
+        if (soundBuffer.size() != bufferElements2Rec) {
             // Sanity check, because sound has to be exactly 16000 elements
             soundBuffer = new ArrayList<>();
             Log.i(TAG, "Empty sound buffer to extract features");
             return null;
         }
-        short[] sData = new short[16000];
+        short[] sData = new short[bufferElements2Rec];
         for (int i = 0; i < soundBuffer.size(); i++) {
             sData[i] = soundBuffer.get(i);
         }
@@ -403,14 +405,14 @@ public class SoundRecorder {
 //                    Log.i(DEBUG_TAG, read + ", " + buffer.length);
                     short[] shorts = convertByteArrayToShortArray(buffer);
                     if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION)
-                        && (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE) || ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE))) {
+                            && (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE) || ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE))) {
                         // For raw audio tranmission, we need to send the buffer all the time
                         // Not waiting for the short buffer to build up
                         processAudioRecognition(null, buffer);
                     }
-                    if (soundRecorder.soundBuffer.size() <= 16000) {
+                    if (soundRecorder.soundBuffer.size() <= bufferElements2Rec) {
                         for (short num : shorts) {
-                            if (soundRecorder.soundBuffer.size() == 16000) {
+                            if (soundRecorder.soundBuffer.size() == bufferElements2Rec) {
                                 final List<Short> tempBuffer = soundRecorder.soundBuffer;
 //                                Log.i(DEBUG_TAG, String.valueOf(tempBuffer));
                                 processAudioRecognition(tempBuffer, buffer);
@@ -458,18 +460,6 @@ public class SoundRecorder {
                     }
                     break;
                 case PHONE_WATCH_ARCHITECTURE:
-                    switch (AUDIO_TRANMISSION_STYLE) {
-                        case AUDIO_FEATURES_TRANSMISSION:
-                            sendSoundFeaturesToPhone(soundBuffer, recordTime);
-                            break;
-                        case RAW_AUDIO_TRANSMISSION:
-                            sendRawAudioToPhone(buffer, recordTime);
-                            break;
-                        default:
-                            Log.i(TAG, "Invalid tranmission style");
-                            break;
-                    }
-                    break;
                 case PHONE_WATCH_SERVER_ARCHITECTURE:
                     /**
                      *
@@ -494,7 +484,7 @@ public class SoundRecorder {
         }
 
         private String predictSoundsFromRawAudio(List<Short> soundBuffer, long recordTime) {
-            if (soundBuffer.size() != 16000) {
+            if (soundBuffer.size() != bufferElements2Rec) {
                 return "Invalid audio size";
             }
             SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
@@ -568,7 +558,7 @@ public class SoundRecorder {
                     Task<Integer> sendMessageTask =
                             Wearable.getMessageClient(soundRecorder.mContext)
                                     .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data)
-                                    ;
+                            ;
                 }
             } else {
                 for (String connectedHostId : soundRecorder.connectedHostIds) {

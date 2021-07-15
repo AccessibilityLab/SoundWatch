@@ -1,30 +1,527 @@
-Dog Bark
-Drill
-Fire/Smoke Alarm
-Phone Ring
 Speech
-Vacuum
+Male Speech/Man Speaking
+Female Speech/Woman Speaking
+Child Speech/Kid Speaking
+Conversation
+Narration/Monologue
+Babbling
+Speech Synthesizer
+Shout
+Bellow
+Whoop
+Yell
+Battle Cry
+Children Shouting
+Screaming
+Whispering
+Laughter
+Baby Laughter
+Giggle
+Snicker
+Belly Laugh
+Chuckle/Chortle
+Crying/Sobbing
 Baby Cry
-Chopping
-Coughing
-Door In-Use
-Water Running
-Knocking
-Microwave
-Shaver
-Toothbrush
-Blender
-Dishwasher
-Doorbell
-Toilet Flush
-Hair Dryer
-Laughing
-Typing
+Whimper
+Wail/Moan
+Sigh
+Singing
+Choir
+Yodeling
+Chant
+Mantra
+Male Singing
+Female Singing
+Child Singing
+Synthetic Singing
+Rapping
+Humming
+Groan
+Grunt
+Whistling
+Breathing
+Wheeze
 Snoring
-Hammering
-Car Honk
-Vehicle
-Saw
+Gasp
+Pant
+Snort
+Cough
+Throat Clearing
+Sneeze
+Sniff
+Run
+Shuffle
+Walk/Footsteps
+Chewing/Mastication
+Biting
+Gargling
+Stomach Rumble
+Burping/Eructation
+Hiccup
+Fart
+Hands
+Finger Snapping
+Clapping
+Heart Sounds/Heartbeat
+Heart Murmur
+Cheering
+Applause
+Chatter
+Crowd
+Hubbub/Speech Noise/Speech Babble
+Children Playing
+Animal
+Domestic Animals/Pets
+Dog
+Dog Bark
+Yip
+Howl
+Bow-Wow
+Growling
+Whimper (Dog)
+Cat
+Purr
 Cat Meow
+Hiss
+Caterwaul
+Livestock/Farm Animals/Working Animals
+Horse
+Clip-Clop
+Neigh/Whinny
+Cattle/Bovinae
+Moo
+Cowbell
+Pig
+Oink
+Goat
+Bleat
+Sheep
+Fowl
+Chicken/Rooster
+Cluck
+Crowing/Cock-A-Doodle-Doo
+Turkey
+Gobble
+Duck
+Quack
+Goose
+Honk
+Wild Animals
+Roaring Cats (Lions/Tigers)
+Roar
+Bird
+Bird Vocalization/Bird Call/Bird Song
+Chirp/Tweet
+Squawk
+Pigeon/Dove
+Coo
+Crow
+Caw
+Owl
+Hoot
+Bird Flight/Flapping Wings
+Canidae/Dogs/Wolves
+Rodents/Rats/Mice
+Mouse
+Patter
+Insect
+Cricket
+Mosquito
+Fly/Housefly
+Buzz
+Bee/Wasp/Etc.
+Frog
+Croak
+Snake
+Rattle
+Whale Vocalization
+Music
+Musical Instrument
+Plucked String Instrument
+Guitar
+Electric Guitar
+Bass Guitar
+Acoustic Guitar
+Steel Guitar/Slide Guitar
+Tapping (Guitar Technique)
+Strum
+Banjo
+Sitar
+Mandolin
+Zither
+Ukulele
+Keyboard (Musical)
+Piano
+Electric Piano
+Organ
+Electronic Organ
+Hammond Organ
+Synthesizer
+Sampler
+Harpsichord
+Percussion
+Drum Kit
+Drum Machine
+Drum
+Snare Drum
+Rimshot
+Drum Roll
+Bass Drum
+Timpani
+Tabla
+Cymbal
+Hi-Hat
+Wood Block
+Tambourine
+Rattle (Instrument)
+Maraca
+Gong
+Tubular Bells
+Mallet Percussion
+Marimba/Xylophone
+Glockenspiel
+Vibraphone
+Steelpan
+Orchestra
+Brass Instrument
+French Horn
+Trumpet
+Trombone
+Bowed String Instrument
+String Section
+Violin/Fiddle
+Pizzicato
+Cello
+Double Bass
+Wind Instrument/Woodwind Instrument
+Flute
+Saxophone
+Clarinet
+Harp
+Bell
+Church Bell
+Jingle Bell
+Bicycle Bell
+Tuning Fork
+Chime
+Wind Chime
+Change Ringing (Campanology)
+Harmonica
+Accordion
+Bagpipes
+Didgeridoo
+Shofar
+Theremin
+Singing Bowl
+Scratching (Performance Technique)
+Pop Music
+Hip Hop Music
+Beatboxing
+Rock Music
+Heavy Metal
+Punk Rock
+Grunge
+Progressive Rock
+Rock And Roll
+Psychedelic Rock
+Rhythm And Blues
+Soul Music
+Reggae
+Country
+Swing Music
+Bluegrass
+Funk
+Folk Music
+Middle Eastern Music
+Jazz
+Disco
+Classical Music
+Opera
+Electronic Music
+House Music
+Techno
+Dubstep
+Drum And Bass
+Electronica
+Electronic Dance Music
+Ambient Music
+Trance Music
+Music Of Latin America
+Salsa Music
+Flamenco
+Blues
+Music For Children
+New-Age Music
+Vocal Music
+A Capella
+Music Of Africa
+Afrobeat
+Christian Music
+Gospel Music
+Music Of Asia
+Carnatic Music
+Music Of Bollywood
+Ska
+Traditional Music
+Independent Music
+Song
+Background Music
+Theme Music
+Jingle (Music)
+Soundtrack Music
+Lullaby
+Video Game Music
+Christmas Music
+Dance Music
+Wedding Music
+Happy Music
+Funny Music
+Sad Music
+Tender Music
+Exciting Music
+Angry Music
+Scary Music
+Wind
+Rustling Leaves
+Wind Noise (Microphone)
+Thunderstorm
+Thunder
+Water
+Rain
+Raindrop
+Rain On Surface
+Stream
+Waterfall
+Ocean
+Waves/Surf
+Steam
+Gurgling
+Fire
+Crackle
+Vehicle
+Boat/Water Vehicle
+Sailboat/Sailing Ship
+Rowboat/Canoe/Kayak
+Motorboat/Speedboat
+Ship
+Motor Vehicle (Road)
+Car
+Car Honk
+Toot
+Car Alarm
+Power Windows/Electric Windows
+Skidding
+Tire Squeal
+Car Passing By
+Race Car/Auto Racing
+Truck
+Air Brake
+Air Horn/Truck Horn
+Reversing Beeps
+Ice Cream Truck/Ice Cream Van
+Bus
+Emergency Vehicle
+Police Car (Siren)
+Ambulance (Siren)
+Fire Engine/Fire Truck (Siren)
+Motorcycle
+Traffic Noise/Roadway Noise
+Rail Transport
+Train
+Train Whistle
+Train Horn
+Railroad Car/Train Wagon
+Train Wheels Squealing
+Subway/Metro/Underground
+Aircraft
+Aircraft Engine
+Jet Engine
+Propeller/Airscrew
+Helicopter
+Fixed-Wing Aircraft/Airplane
+Bicycle
+Skateboard
+Engine
+Light Engine (High Frequency)
+Dental Drill/Dentist's Drill
+Lawn Mower
+Chainsaw
+Medium Engine (Mid Frequency)
+Heavy Engine (Low Frequency)
+Engine Knocking
+Engine Starting
+Idling
+Accelerating/Revving/Vroom
+Door In-Use
+Doorbell
+Ding-Dong
+Sliding Door
+Slam
+Knocking
+Tap
+Squeak
+Cupboard Open Or Close
+Drawer Open Or Close
+Dishes/Pots/And Pans
+Cutlery/Silverware
+Chopping (Food)
+Frying (Food)
+Microwave
+Telephone
+Water Tap/Faucet
+Sink (Filling Or Washing)
+Bathtub (Filling Or Washing)
+Hair Dryer
+Toilet Flush
+Toothbrush
+Electric Toothbrush
+Vacuum Cleaner
+Zipper (Clothing)
+Keys Jangling
+Coin (Dropping)
+Scissors
+Electric Shaver/Electric Razor
+Shuffling Cards
+Typing
+Typewriter
+Computer Keyboard
+Writing
+Alarm
+Telephone
+Telephone Bell Ringing
+Ringtone
+Telephone Dialing/Dtmf
+Dial Tone
+Busy Signal
 Alarm Clock
-Utensils and Cutlery
+Siren
+Civil Defense Siren
+Buzzer
+Smoke Detector/Smoke Alarm
+Fire Alarm
+Foghorn
+Whistle
+Steam Whistle
+Mechanisms
+Ratchet/Pawl
+Clock
+Tick
+Tick-Tock
+Gears
+Pulleys
+Sewing Machine
+Mechanical Fan
+Air Conditioning
+Cash Register
+Printer
+Camera
+Single-Lens Reflex Camera
+Tools
+Hammer
+Jackhammer
+Sawing
+Filing (Rasp)
+Sanding
+Power Tool
+Drill
+Explosion
+Gunshot/Gunfire
+Machine Gun
+Fusillade
+Artillery Fire
+Cap Gun
+Fireworks
+Firecracker
+Burst/Pop
+Eruption
+Boom
+Wood
+Chop
+Splinter
+Crack
+Glass
+Chink/Clink
+Shatter
+Liquid
+Splash/Splatter
+Slosh
+Squish
+Drip
+Pour
+Trickle/Dribble
+Gush
+Fill (With Liquid)
+Spray
+Pump (Liquid)
+Stir
+Boiling
+Sonar
+Arrow
+Whoosh/Swoosh/Swish
+Thump/Thud
+Thunk
+Electronic Tuner
+Effects Unit
+Chorus Effect
+Basketball Bounce
+Bang
+Slap/Smack
+Whack/Thwack
+Smash/Crash
+Breaking
+Bouncing
+Whip
+Flap
+Scratch
+Scrape
+Rub
+Roll
+Crushing
+Crumpling/Crinkling
+Tearing
+Beep/Bleep
+Ping
+Ding
+Clang
+Squeal
+Creak
+Rustle
+Whir
+Clatter
+Sizzle
+Clicking
+Clickety-Clack
+Rumble
+Plop
+Jingle/Tinkle
+Hum
+Zing
+Boing
+Crunch
+Silence
+Sine Wave
+Harmonic
+Chirp Tone
+Sound Effect
+Pulse
+Inside/Small Room
+Inside/Large Room Or Hall
+Inside/Public Space
+Outside/Urban Or Manmade
+Outside/Rural Or Natural
+Reverberation
+Echo
+Noise
+Environmental Noise
+Static
+Mains Hum
+Distortion
+Sidetone
+Cacophony
+White Noise
+Pink Noise
+Throbbing
+Vibration
+Television
+Radio
+Field Recordings
