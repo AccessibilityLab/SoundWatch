@@ -1,39 +1,39 @@
 Speech
-Male Speech/Man Speaking
-Female Speech/Woman Speaking
-Child Speech/Kid Speaking
+Male speech, man speaking
+Female speech, woman speaking
+Child speech, kid speaking
 Conversation
-Narration/Monologue
+Narration, monologue
 Babbling
-Speech Synthesizer
+Speech synthesizer
 Shout
 Bellow
 Whoop
 Yell
-Battle Cry
-Children Shouting
+Battle cry
+Children shouting
 Screaming
 Whispering
 Laughter
-Baby Laughter
+Baby laughter
 Giggle
 Snicker
-Belly Laugh
-Chuckle/Chortle
-Crying/Sobbing
-Baby Cry
+Belly laugh
+Chuckle, chortle
+Crying, sobbing
+Baby cry, infant cry
 Whimper
-Wail/Moan
+Wail, moan
 Sigh
 Singing
 Choir
 Yodeling
 Chant
 Mantra
-Male Singing
-Female Singing
-Child Singing
-Synthetic Singing
+Male singing
+Female singing
+Child singing
+Synthetic singing
 Rapping
 Humming
 Groan
@@ -46,49 +46,49 @@ Gasp
 Pant
 Snort
 Cough
-Throat Clearing
+Throat clearing
 Sneeze
 Sniff
 Run
 Shuffle
-Walk/Footsteps
-Chewing/Mastication
+Walk, footsteps
+Chewing, mastication
 Biting
 Gargling
-Stomach Rumble
-Burping/Eructation
+Stomach rumble
+Burping, eructation
 Hiccup
 Fart
 Hands
-Finger Snapping
+Finger snapping
 Clapping
-Heart Sounds/Heartbeat
-Heart Murmur
+Heart sounds, heartbeat
+Heart murmur
 Cheering
 Applause
 Chatter
 Crowd
-Hubbub/Speech Noise/Speech Babble
-Children Playing
+Hubbub, speech noise, speech babble
+Children playing
 Animal
-Domestic Animals/Pets
+Domestic animals, pets
 Dog
-Dog Bark
+Bark
 Yip
 Howl
-Bow-Wow
+Bow-wow
 Growling
-Whimper (Dog)
+Whimper (dog)
 Cat
 Purr
-Cat Meow
+Meow
 Hiss
 Caterwaul
-Livestock/Farm Animals/Working Animals
+Livestock, farm animals, working animals
 Horse
-Clip-Clop
-Neigh/Whinny
-Cattle/Bovinae
+Clip-clop
+Neigh, whinny
+Cattle, bovinae
 Moo
 Cowbell
 Pig
@@ -97,342 +97,342 @@ Goat
 Bleat
 Sheep
 Fowl
-Chicken/Rooster
+Chicken, rooster
 Cluck
-Crowing/Cock-A-Doodle-Doo
+Crowing, cock-a-doodle-doo
 Turkey
 Gobble
 Duck
 Quack
 Goose
 Honk
-Wild Animals
-Roaring Cats (Lions/Tigers)
+Wild animals
+Roaring cats (lions, tigers)
 Roar
 Bird
-Bird Vocalization/Bird Call/Bird Song
-Chirp/Tweet
+Bird vocalization, bird call, bird song
+Chirp, tweet
 Squawk
-Pigeon/Dove
+Pigeon, dove
 Coo
 Crow
 Caw
 Owl
 Hoot
-Bird Flight/Flapping Wings
-Canidae/Dogs/Wolves
-Rodents/Rats/Mice
+Bird flight, flapping wings
+Canidae, dogs, wolves
+Rodents, rats, mice
 Mouse
 Patter
 Insect
 Cricket
 Mosquito
-Fly/Housefly
+Fly, housefly
 Buzz
-Bee/Wasp/Etc.
+Bee, wasp, etc.
 Frog
 Croak
 Snake
 Rattle
-Whale Vocalization
+Whale vocalization
 Music
-Musical Instrument
-Plucked String Instrument
+Musical instrument
+Plucked string instrument
 Guitar
-Electric Guitar
-Bass Guitar
-Acoustic Guitar
-Steel Guitar/Slide Guitar
-Tapping (Guitar Technique)
+Electric guitar
+Bass guitar
+Acoustic guitar
+Steel guitar, slide guitar
+Tapping (guitar technique)
 Strum
 Banjo
 Sitar
 Mandolin
 Zither
 Ukulele
-Keyboard (Musical)
+Keyboard (musical)
 Piano
-Electric Piano
+Electric piano
 Organ
-Electronic Organ
-Hammond Organ
+Electronic organ
+Hammond organ
 Synthesizer
 Sampler
 Harpsichord
 Percussion
-Drum Kit
-Drum Machine
+Drum kit
+Drum machine
 Drum
-Snare Drum
+Snare drum
 Rimshot
-Drum Roll
-Bass Drum
+Drum roll
+Bass drum
 Timpani
 Tabla
 Cymbal
-Hi-Hat
-Wood Block
+Hi-hat
+Wood block
 Tambourine
-Rattle (Instrument)
+Rattle (instrument)
 Maraca
 Gong
-Tubular Bells
-Mallet Percussion
-Marimba/Xylophone
+Tubular bells
+Mallet percussion
+Marimba, xylophone
 Glockenspiel
 Vibraphone
 Steelpan
 Orchestra
-Brass Instrument
-French Horn
+Brass instrument
+French horn
 Trumpet
 Trombone
-Bowed String Instrument
-String Section
-Violin/Fiddle
+Bowed string instrument
+String section
+Violin, fiddle
 Pizzicato
 Cello
-Double Bass
-Wind Instrument/Woodwind Instrument
+Double bass
+Wind instrument, woodwind instrument
 Flute
 Saxophone
 Clarinet
 Harp
 Bell
-Church Bell
-Jingle Bell
-Bicycle Bell
-Tuning Fork
+Church bell
+Jingle bell
+Bicycle bell
+Tuning fork
 Chime
-Wind Chime
-Change Ringing (Campanology)
+Wind chime
+Change ringing (campanology)
 Harmonica
 Accordion
 Bagpipes
 Didgeridoo
 Shofar
 Theremin
-Singing Bowl
-Scratching (Performance Technique)
-Pop Music
-Hip Hop Music
+Singing bowl
+Scratching (performance technique)
+Pop music
+Hip hop music
 Beatboxing
-Rock Music
-Heavy Metal
-Punk Rock
+Rock music
+Heavy metal
+Punk rock
 Grunge
-Progressive Rock
-Rock And Roll
-Psychedelic Rock
-Rhythm And Blues
-Soul Music
+Progressive rock
+Rock and roll
+Psychedelic rock
+Rhythm and blues
+Soul music
 Reggae
 Country
-Swing Music
+Swing music
 Bluegrass
 Funk
-Folk Music
-Middle Eastern Music
+Folk music
+Middle Eastern music
 Jazz
 Disco
-Classical Music
+Classical music
 Opera
-Electronic Music
-House Music
+Electronic music
+House music
 Techno
 Dubstep
-Drum And Bass
+Drum and bass
 Electronica
-Electronic Dance Music
-Ambient Music
-Trance Music
-Music Of Latin America
-Salsa Music
+Electronic dance music
+Ambient music
+Trance music
+Music of Latin America
+Salsa music
 Flamenco
 Blues
-Music For Children
-New-Age Music
-Vocal Music
-A Capella
-Music Of Africa
+Music for children
+New-age music
+Vocal music
+A capella
+Music of Africa
 Afrobeat
-Christian Music
-Gospel Music
-Music Of Asia
-Carnatic Music
-Music Of Bollywood
+Christian music
+Gospel music
+Music of Asia
+Carnatic music
+Music of Bollywood
 Ska
-Traditional Music
-Independent Music
+Traditional music
+Independent music
 Song
-Background Music
-Theme Music
-Jingle (Music)
-Soundtrack Music
+Background music
+Theme music
+Jingle (music)
+Soundtrack music
 Lullaby
-Video Game Music
-Christmas Music
-Dance Music
-Wedding Music
-Happy Music
-Funny Music
-Sad Music
-Tender Music
-Exciting Music
-Angry Music
-Scary Music
+Video game music
+Christmas music
+Dance music
+Wedding music
+Happy music
+Funny music
+Sad music
+Tender music
+Exciting music
+Angry music
+Scary music
 Wind
-Rustling Leaves
-Wind Noise (Microphone)
+Rustling leaves
+Wind noise (microphone)
 Thunderstorm
 Thunder
 Water
 Rain
 Raindrop
-Rain On Surface
+Rain on surface
 Stream
 Waterfall
 Ocean
-Waves/Surf
+Waves, surf
 Steam
 Gurgling
 Fire
 Crackle
 Vehicle
-Boat/Water Vehicle
-Sailboat/Sailing Ship
-Rowboat/Canoe/Kayak
-Motorboat/Speedboat
+Boat, Water vehicle
+Sailboat, sailing ship
+Rowboat, canoe, kayak
+Motorboat, speedboat
 Ship
-Motor Vehicle (Road)
+Motor vehicle (road)
 Car
-Car Honk
+Vehicle horn, car horn, honking
 Toot
-Car Alarm
-Power Windows/Electric Windows
+Car alarm
+Power windows, electric windows
 Skidding
-Tire Squeal
-Car Passing By
-Race Car/Auto Racing
+Tire squeal
+Car passing by
+Race car, auto racing
 Truck
-Air Brake
-Air Horn/Truck Horn
-Reversing Beeps
-Ice Cream Truck/Ice Cream Van
+Air brake
+Air horn, truck horn
+Reversing beeps
+Ice cream truck, ice cream van
 Bus
-Emergency Vehicle
-Police Car (Siren)
-Ambulance (Siren)
-Fire Engine/Fire Truck (Siren)
+Emergency vehicle
+Police car (siren)
+Ambulance (siren)
+Fire engine, fire truck (siren)
 Motorcycle
-Traffic Noise/Roadway Noise
-Rail Transport
+Traffic noise, roadway noise
+Rail transport
 Train
-Train Whistle
-Train Horn
-Railroad Car/Train Wagon
-Train Wheels Squealing
-Subway/Metro/Underground
+Train whistle
+Train horn
+Railroad car, train wagon
+Train wheels squealing
+Subway, metro, underground
 Aircraft
-Aircraft Engine
-Jet Engine
-Propeller/Airscrew
+Aircraft engine
+Jet engine
+Propeller, airscrew
 Helicopter
-Fixed-Wing Aircraft/Airplane
+Fixed-wing aircraft, airplane
 Bicycle
 Skateboard
 Engine
-Light Engine (High Frequency)
-Dental Drill/Dentist's Drill
-Lawn Mower
+Light engine (high frequency)
+Dental drill, dentist\'s drill
+Lawn mower
 Chainsaw
-Medium Engine (Mid Frequency)
-Heavy Engine (Low Frequency)
-Engine Knocking
-Engine Starting
+Medium engine (mid frequency)
+Heavy engine (low frequency)
+Engine knocking
+Engine starting
 Idling
-Accelerating/Revving/Vroom
-Door In-Use
+Accelerating, revving, vroom
+Door
 Doorbell
-Ding-Dong
-Sliding Door
+Ding-dong
+Sliding door
 Slam
-Knocking
+Knock
 Tap
 Squeak
-Cupboard Open Or Close
-Drawer Open Or Close
-Dishes/Pots/And Pans
-Cutlery/Silverware
-Chopping (Food)
-Frying (Food)
-Microwave
+Cupboard open or close
+Drawer open or close
+Dishes, pots, and pans
+Cutlery, silverware
+Chopping (food)
+Frying (food)
+Microwave oven
 Telephone
-Water Tap/Faucet
-Sink (Filling Or Washing)
-Bathtub (Filling Or Washing)
-Hair Dryer
-Toilet Flush
+Water tap, faucet
+Sink (filling or washing)
+Bathtub (filling or washing)
+Hair dryer
+Toilet flush
 Toothbrush
-Electric Toothbrush
-Vacuum Cleaner
-Zipper (Clothing)
-Keys Jangling
-Coin (Dropping)
+Electric toothbrush
+Vacuum cleaner
+Zipper (clothing)
+Keys jangling
+Coin (dropping)
 Scissors
-Electric Shaver/Electric Razor
-Shuffling Cards
+Electric shaver, electric razor
+Shuffling cards
 Typing
 Typewriter
-Computer Keyboard
+Computer keyboard
 Writing
 Alarm
 Telephone
-Telephone Bell Ringing
+Telephone bell ringing
 Ringtone
-Telephone Dialing/Dtmf
-Dial Tone
-Busy Signal
-Alarm Clock
+Telephone dialing, DTMF
+Dial tone
+Busy signal
+Alarm clock
 Siren
-Civil Defense Siren
+Civil defense siren
 Buzzer
-Smoke Detector/Smoke Alarm
-Fire Alarm
+Smoke detector, smoke alarm
+Fire alarm
 Foghorn
 Whistle
-Steam Whistle
+Steam whistle
 Mechanisms
-Ratchet/Pawl
+Ratchet, pawl
 Clock
 Tick
-Tick-Tock
+Tick-tock
 Gears
 Pulleys
-Sewing Machine
-Mechanical Fan
-Air Conditioning
-Cash Register
+Sewing machine
+Mechanical fan
+Air conditioning
+Cash register
 Printer
 Camera
-Single-Lens Reflex Camera
+Single-lens reflex camera
 Tools
 Hammer
 Jackhammer
 Sawing
-Filing (Rasp)
+Filing (rasp)
 Sanding
-Power Tool
+Power tool
 Drill
 Explosion
-Gunshot/Gunfire
-Machine Gun
+Gunshot, gunfire
+Machine gun
 Fusillade
-Artillery Fire
-Cap Gun
+Artillery fire
+Cap gun
 Fireworks
 Firecracker
-Burst/Pop
+Burst, pop
 Eruption
 Boom
 Wood
@@ -440,34 +440,34 @@ Chop
 Splinter
 Crack
 Glass
-Chink/Clink
+Chink, clink
 Shatter
 Liquid
-Splash/Splatter
+Splash, splatter
 Slosh
 Squish
 Drip
 Pour
-Trickle/Dribble
+Trickle, dribble
 Gush
-Fill (With Liquid)
+Fill (with liquid)
 Spray
-Pump (Liquid)
+Pump (liquid)
 Stir
 Boiling
 Sonar
 Arrow
-Whoosh/Swoosh/Swish
-Thump/Thud
+Whoosh, swoosh, swish
+Thump, thud
 Thunk
-Electronic Tuner
-Effects Unit
-Chorus Effect
-Basketball Bounce
+Electronic tuner
+Effects unit
+Chorus effect
+Basketball bounce
 Bang
-Slap/Smack
-Whack/Thwack
-Smash/Crash
+Slap, smack
+Whack, thwack
+Smash, crash
 Breaking
 Bouncing
 Whip
@@ -477,9 +477,9 @@ Scrape
 Rub
 Roll
 Crushing
-Crumpling/Crinkling
+Crumpling, crinkling
 Tearing
-Beep/Bleep
+Beep, bleep
 Ping
 Ding
 Clang
@@ -490,38 +490,38 @@ Whir
 Clatter
 Sizzle
 Clicking
-Clickety-Clack
+Clickety-clack
 Rumble
 Plop
-Jingle/Tinkle
+Jingle, tinkle
 Hum
 Zing
 Boing
 Crunch
 Silence
-Sine Wave
+Sine wave
 Harmonic
-Chirp Tone
-Sound Effect
+Chirp tone
+Sound effect
 Pulse
-Inside/Small Room
-Inside/Large Room Or Hall
-Inside/Public Space
-Outside/Urban Or Manmade
-Outside/Rural Or Natural
+Inside, small room
+Inside, large room or hall
+Inside, public space
+Outside, urban or manmade
+Outside, rural or natural
 Reverberation
 Echo
 Noise
-Environmental Noise
+Environmental noise
 Static
-Mains Hum
+Mains hum
 Distortion
 Sidetone
 Cacophony
-White Noise
-Pink Noise
+White noise
+Pink noise
 Throbbing
 Vibration
 Television
 Radio
-Field Recordings
+Field recording
