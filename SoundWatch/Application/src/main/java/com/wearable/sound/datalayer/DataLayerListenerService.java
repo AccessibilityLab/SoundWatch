@@ -173,7 +173,7 @@ public class DataLayerListenerService extends WearableListenerService {
             this.numLabels = labels.size();
             this.output = new float[1][numLabels];
         } catch (IOException e) {
-            throw new RuntimeException("Problem reading label file!", e);
+            throw new RuntimeException("Problem reading label file of " + actualLabelFilename, e);
         }
 
         // Load model

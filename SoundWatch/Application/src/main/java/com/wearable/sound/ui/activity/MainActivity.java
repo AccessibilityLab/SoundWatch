@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity
 
     // List of all sounds
     public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, VEHICLE, CAR_HONK,
-            HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, TOOTHBRUSH,DOG_BARK,
+            HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, TOOTHBRUSH, DOG_BARK,
             MICROWAVE, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
             KNOCKING, COUGHING, TYPING);
 
@@ -392,6 +392,7 @@ public class MainActivity extends AppCompatActivity
         public sendSoundEnableMessageToWatchTask(SoundNotification soundNotification) {
             data = soundNotification.label + "," + soundNotification.isEnabled + "," + soundNotification.isSnoozed;
         }
+
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
@@ -406,7 +407,9 @@ public class MainActivity extends AppCompatActivity
 
 //    private List<Short> soundBuffer = new ArrayList<>();
 
-    /** Memory-map the model file in Assets. */
+    /**
+     * Memory-map the model file in Assets.
+     */
     private static ByteBuffer loadModelFile(AssetManager assets, String modelFilename)
             throws IOException {
         AssetFileDescriptor fileDescriptor = assets.openFd(modelFilename);
@@ -451,6 +454,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * SocketIO
+     *
      * @return
      */
 
@@ -471,32 +475,30 @@ public class MainActivity extends AppCompatActivity
         }
         try {
             mSocket = IO.socket(SERVER_URL);
-        } catch (URISyntaxException e) {}
+        } catch (URISyntaxException e) {
+        }
     }
 
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Log.i(TAG, "Received socket event");
-            JSONObject data = (JSONObject) args[0];
-            String db;
-            String audio_label;
-            String accuracy;
-            String recordTime = "";
-            try {
-                audio_label = data.getString("label");
-                accuracy = data.getString("accuracy");
-                db = data.getString("db");
-                if (TEST_E2E_LATENCY) {
-                    recordTime = data.getString("record_time");
-                }
-            } catch (JSONException e) {
-                Log.i(TAG, "JSON Exception failed: " + data.toString());
-                return;
+    private Emitter.Listener onNewMessage = args -> {
+        Log.i(TAG, "Received socket event");
+        JSONObject data = (JSONObject) args[0];
+        String db;
+        String audio_label;
+        String accuracy;
+        String recordTime = "";
+        try {
+            audio_label = data.getString("label");
+            accuracy = data.getString("accuracy");
+            db = data.getString("db");
+            if (TEST_E2E_LATENCY) {
+                recordTime = data.getString("record_time");
             }
-            Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db);
-            new SendAudioLabelToWearTask(audio_label, accuracy, db, recordTime).execute();
+        } catch (JSONException e) {
+            Log.i(TAG, "JSON Exception failed: " + data.toString());
+            return;
         }
+        Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db);
+        new SendAudioLabelToWearTask(audio_label, accuracy, db, recordTime).execute();
     };
 
     private boolean checkPermissions() {
@@ -526,10 +528,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public static boolean isFirst(Context context){
+    public static boolean isFirst(Context context) {
         final SharedPreferences reader = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
         final boolean first = reader.getBoolean("is_first", true);
-        if(first){
+        if (first) {
             final SharedPreferences.Editor editor = reader.edit();
             editor.putBoolean("is_first", false);
             editor.apply();
@@ -721,49 +723,46 @@ public class MainActivity extends AppCompatActivity
     // Item Selected Listener for Bottom Navigation Bar
     private final BottomNavigationView.OnNavigationItemSelectedListener
             mOnNavigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    TextView titleView = findViewById(R.id.title_text);
-                    ScrollView scrollView = findViewById(R.id.scroll_view);
-                    FrameLayout frameLayout = findViewById(R.id.fragment_container);
-                    TextView instructionalView = findViewById(R.id.instruction_text);
-                    Fragment fragment = null;
-                    switch (item.getItemId()) {
-                        case R.id.bottom_navigation_item_home:
-                            titleView.setText(R.string.soundwatch);
-                            fragment = null;
-                            frameLayout.setVisibility(View.GONE);
-                            instructionalView.setVisibility(View.VISIBLE);
-                            scrollView.setVisibility(View.VISIBLE);
-                            break;
-                        case R.id.bottom_navigation_item_about:
-                            titleView.setText(R.string.about);
-                            fragment = new ScrollingFragment();
-                            frameLayout.setVisibility(View.VISIBLE);
-                            instructionalView.setVisibility(View.GONE);
-                            scrollView.setVisibility(View.GONE);
-                            break;
-                        case R.id.bottom_navigation_item_help:
-                            titleView.setText("");
-                            fragment = new HelpFragment();
-                            frameLayout.setVisibility(View.VISIBLE);
-                            instructionalView.setVisibility(View.GONE);
-                            scrollView.setVisibility(View.GONE);
-                            break;
-                        case R.id.bottom_navigation_item_setting:
-                            titleView.setText(R.string.setting);
-                            fragment = new SettingsFragment();
-                            frameLayout.setVisibility(View.VISIBLE);
-                            instructionalView.setVisibility(View.GONE);
-                            scrollView.setVisibility(View.GONE);
-                            break;
-                        default:
-                            break;
-                    }
-                    loadFragment(fragment);
-                    return true;
+            item -> {
+                TextView titleView = findViewById(R.id.title_text);
+                ScrollView scrollView = findViewById(R.id.scroll_view);
+                FrameLayout frameLayout = findViewById(R.id.fragment_container);
+                TextView instructionalView = findViewById(R.id.instruction_text);
+                Fragment fragment = null;
+                switch (item.getItemId()) {
+                    case R.id.bottom_navigation_item_home:
+                        titleView.setText(R.string.soundwatch);
+                        fragment = null;
+                        frameLayout.setVisibility(View.GONE);
+                        instructionalView.setVisibility(View.VISIBLE);
+                        scrollView.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.bottom_navigation_item_about:
+                        titleView.setText(R.string.about);
+                        fragment = new ScrollingFragment();
+                        frameLayout.setVisibility(View.VISIBLE);
+                        instructionalView.setVisibility(View.GONE);
+                        scrollView.setVisibility(View.GONE);
+                        break;
+                    case R.id.bottom_navigation_item_help:
+                        titleView.setText("");
+                        fragment = new HelpFragment();
+                        frameLayout.setVisibility(View.VISIBLE);
+                        instructionalView.setVisibility(View.GONE);
+                        scrollView.setVisibility(View.GONE);
+                        break;
+                    case R.id.bottom_navigation_item_setting:
+                        titleView.setText(R.string.setting);
+                        fragment = new SettingsFragment();
+                        frameLayout.setVisibility(View.VISIBLE);
+                        instructionalView.setVisibility(View.GONE);
+                        scrollView.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
                 }
+                loadFragment(fragment);
+                return true;
             };
 
     private void FirebaseLogging(String id, String name, String content_type) {
@@ -773,9 +772,10 @@ public class MainActivity extends AppCompatActivity
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
+
     private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
         StringBuilder result = new StringBuilder();
-        for (String connectedHostId: connectedHostIds) {
+        for (String connectedHostId : connectedHostIds) {
             result.append(connectedHostId);
         }
         if (connectedHostIds.size() <= 1) {
@@ -1042,7 +1042,9 @@ public class MainActivity extends AppCompatActivity
         mDataItemListAdapter.add(new Event("onCapabilityChanged", capabilityInfo.toString()));
     }
 
-    /** Sends an RPC to start a fullscreen Activity on the wearable. */
+    /**
+     * Sends an RPC to start a fullscreen Activity on the wearable.
+     */
     public void onStartWearableActivityClick(View view) {
         LOGD(TAG, "Generating RPC");
         // Trigger an AsyncTask that will query for a list of connected nodes and send a
@@ -1050,7 +1052,8 @@ public class MainActivity extends AppCompatActivity
         new StartWearableActivityTask().execute();
     }
 
-    public void onLocationAwarenessClick(View view) { }
+    public void onLocationAwarenessClick(View view) {
+    }
 
     @WorkerThread
     private void sendMessageWithData(String node, String title, byte[] data) {
@@ -1174,14 +1177,18 @@ public class MainActivity extends AppCompatActivity
         return results;
     }
 
-    /** As simple wrapper around Log.d */
+    /**
+     * As simple wrapper around Log.d
+     */
     private static void LOGD(final String tag, String message) {
         if (Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message);
         }
     }
 
-    /** A View Adapter for presenting the Event objects in a list */
+    /**
+     * A View Adapter for presenting the Event objects in a list
+     */
     private static class DataItemAdapter extends ArrayAdapter<Event> {
 
         private final Context mContext;
@@ -1254,6 +1261,7 @@ public class MainActivity extends AppCompatActivity
             this.recordTime = recordTime;
             this.db = db;
         }
+
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
@@ -1266,7 +1274,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /** Generates a DataItem based on an incrementing count. */
+    /**
+     * Generates a DataItem based on an incrementing count.
+     */
     private class DataItemGenerator implements Runnable {
 
         private int count = 0;
@@ -1307,6 +1317,7 @@ public class MainActivity extends AppCompatActivity
 //        transaction.addToBackStack(null);
 //        transaction.commit();
 //    }
+
     /**
      * loading fragment into FrameLayout
      *
@@ -1323,18 +1334,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     /*
-    * Set different mode based on user's preferences.
-    * Currently there are two modes:
-    *   1. High Accuracy Mode/ Less sounds recognized: 11 sounds available
-    *   2. Low Accuracy Mode/ More sounds recognized: 30 sounds available
-    *
-    * @param mode 1 for high accuracy, 2 for low accuracy
-    * */
+     * Set different mode based on user's preferences.
+     * Currently there are two modes:
+     *   1. High Accuracy Mode/ Less sounds recognized: 11 sounds available
+     *   2. Low Accuracy Mode/ More sounds recognized: 30 sounds available
+     *
+     * @param mode 1 for high accuracy, 2 for low accuracy
+     * */
     private void setAccuracyMode(int mode) {
         CheckBox checkBoxToDisable;
         if (mode == HIGH_ACCURACY_MODE) {
-            for (Integer sound: lowAccuracyList) {
-                checkBoxToDisable = (CheckBox)findViewById(sound);
+            for (Integer sound : lowAccuracyList) {
+                checkBoxToDisable = (CheckBox) findViewById(sound);
                 checkBoxToDisable.setVisibility(View.GONE);
             }
             // some config for padding
