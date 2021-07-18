@@ -359,15 +359,16 @@ public class DataLayerListenerService extends WearableListenerService {
                                 for (short num : shorts) {
                                     // load up enough bufferElements2Rec samples, then predict
                                     if (soundBuffer.size() == bufferElements2Rec) {
-                                        if (soundSecondCounter == 1) {
-                                            // Skip ~330ms seconds to accommodate latency
-                                            predictSoundsFromRawAudio();
-                                            soundSecondCounter = 0;
-                                        } else {
-                                            soundSecondCounter++;
-                                            soundBuffer = new ArrayList<>();
-                                        }
-
+//                                        if (soundSecondCounter == 1) {
+//                                            // Skip ~330ms seconds to accommodate latency
+//                                            predictSoundsFromRawAudio();
+//                                            soundSecondCounter = 0;
+//                                        } else {
+//                                            soundSecondCounter++;
+//                                            soundBuffer = new ArrayList<>();
+//                                        }
+                                        // (new model) not skipping
+                                        predictSoundsFromRawAudio();
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -381,14 +382,16 @@ public class DataLayerListenerService extends WearableListenerService {
                             if (soundBuffer.size() < bufferElements2Rec) {
                                 for (short num : shorts) {
                                     if (soundBuffer.size() == bufferElements2Rec) {
-                                        if (soundSecondCounter == 1) {
-                                            // Skip 1 seconds to accommodate latency
-                                            predictSoundsFromRawAudio();
-                                            soundSecondCounter = 0;
-                                        } else {
-                                            soundSecondCounter++;
-                                            soundBuffer = new ArrayList<>();
-                                        }
+//                                        if (soundSecondCounter == 1) {
+//                                            // Skip 1 seconds to accommodate latency
+//                                            predictSoundsFromRawAudio();
+//                                            soundSecondCounter = 0;
+//                                        } else {
+//                                            soundSecondCounter++;
+//                                            soundBuffer = new ArrayList<>();
+//                                        }
+                                        // (new model) not skipping
+                                        predictSoundsFromRawAudio();
                                     }
                                     soundBuffer.add(num);
                                 }
