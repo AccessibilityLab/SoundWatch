@@ -612,32 +612,6 @@ public class DataLayerListenerService extends WearableListenerService {
         return 10 * Math.log10(rms);
     }
 
-//    private double db(short[] data) {
-//        double rms = 0.0;
-//        int len = 0;
-//        for (short datum : data) {
-//            if (datum != 0) {
-//                len++;
-//            }
-//            rms += Math.abs(datum);
-//        }
-//        rms = rms / len;
-//        return 20 * Math.log10(rms);
-//    }
-
-//    public static double db(List<Short> soundBuffer) {
-//        double rms = 0.0;
-//        int dataLength = 0;
-//        for (int i = 0; i < soundBuffer.size(); i++) {
-//            if (soundBuffer.get(i) != 0) {
-//                dataLength++;
-//            }
-//            rms += soundBuffer.get(i) * soundBuffer.get(i);
-//        }
-//        rms = rms / dataLength;
-//        return 10 * Math.log10(rms);
-//    }
-
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
