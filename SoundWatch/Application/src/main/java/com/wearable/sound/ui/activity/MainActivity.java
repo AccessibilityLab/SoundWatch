@@ -198,18 +198,6 @@ public class MainActivity extends AppCompatActivity
     private ScheduledExecutorService mGeneratorExecutor;
     private ScheduledFuture<?> mDataItemGeneratorFuture;
 
-    //If recording from phone...
-    //private static final int RECORDER_SAMPLERATE = 16000;
-    //private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    //private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-
-//    private static final float PREDICTION_THRES = 0.5F;
-//    private static final double DBLEVEL_THRES = 45.0;
-//    private Interpreter tfLite;
-//    private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
-//    private static final String MODEL_FILENAME = "file:///android_asset/sw_v2_320ms.tflite";
-//    private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
-
     // List of all sounds
     public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, VEHICLE, CAR_HONK,
             HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, TOOTHBRUSH, DOG_BARK,
@@ -431,10 +419,6 @@ public class MainActivity extends AppCompatActivity
 //    protected Python py;
 //    PyObject pythonModule;
 
-    //    private float [] input1D = new float [6144];
-////    private float [][][][] input4D = new float [1][96][64][1];
-//    private float [][][] input3D = new float [1][96][64];
-//    private float[][] output = new float[1][30];
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastSnoozeSound = "com.wearable.sound.broadcast.snoozeSound";
     public static final String mBroadcastUnsnoozeSound = "com.wearable.sound.broadcast.unsnoozeSound";
@@ -551,36 +535,6 @@ public class MainActivity extends AppCompatActivity
             mSocket.connect();
             //            Toast.makeText(this, "socket connected", Toast.LENGTH_SHORT).show();
         }
-
-//        //Initialize python module
-//        if (! Python.isStarted()) {
-//            Python.start(new AndroidPlatform(this));
-//
-//        }
-//        py = Python.getInstance();
-//        pythonModule = py.getModule("main");
-
-//        // Load labels
-//        String actualLabelFilename = LABEL_FILENAME.split("file:///android_asset/", -1)[1];
-//        BufferedReader br = null;
-//        try {
-//            br = new BufferedReader(new InputStreamReader(getAssets().open(actualLabelFilename)));
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                labels.add(line);
-//            }
-//            br.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Problem reading label file!", e);
-//        }
-
-//        // Load model
-//        String actualModelFilename = MODEL_FILENAME.split("file:///android_asset/", -1)[1];
-//        try {
-//            tfLite = new Interpreter(loadModelFile(getAssets(), actualModelFilename));
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
 
         mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
@@ -798,97 +752,6 @@ public class MainActivity extends AppCompatActivity
             FirebaseLogging(sound, "F" + Instant.now().getEpochSecond(), "sound_type");
         }
     }
-
-//    private double db(short[] data) {
-//        double rms = 0.0;
-//        int dataLength = 0;
-//        for (short datum : data) {
-//            if (datum != 0) {
-//                dataLength++;
-//            }
-//            rms += datum * datum;
-//        }
-//        rms = rms / dataLength;
-//        return 10 * Math.log10(rms);
-//    }
-
-//    private short[] convertByteArrayToShortArray(byte[] bytes) {
-//        short[] result = new short[bytes.length / 2];
-//        ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(result);
-//        return result;
-//    }
-
-//    private byte[] convertShortArrayToByteArray(short[] shorts) {
-//        byte[] result = new byte[shorts.length * 2];
-//        ByteBuffer.wrap(result).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(shorts);
-//        return result;
-//    }
-
-//    private String predictSounds() {
-//        if (soundBuffer.size() != 16000) {
-//            return "Invalid audio size";
-//        }
-//        short[] sData = new short[BufferElements2Rec];
-//        for (int i = 0; i < soundBuffer.size(); i++) {
-//            sData[i] = soundBuffer.get(i);
-//        }
-//        soundBuffer = new ArrayList<>();
-//        try {
-//            Log.i(TAG, "DB of data: " + db(sData));
-//            if (db(sData) >= DBLEVEL_THRES && sData.length > 0) {
-//
-//                //Get MFCC features
-//                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));   //System.out.println("Sending to python: " + Arrays.toString(sData));
-//
-//                //Parse features into a float array
-//                String inputString = mfccFeatures.toString();
-//                if (inputString.isEmpty()) {
-//                    return "Empty MFCC feature";
-//                }
-//                inputString = inputString.replace("jarray('F')([", "").replace("])", "");
-//                String[] inputStringArr = inputString.split(", ");
-//                for (int i = 0; i < 6144; i++) {
-//                    if (inputStringArr[i].isEmpty()) {
-//                        return "Empty MFCC feature";
-//                    }
-//                    input1D[i] = Float.parseFloat(inputStringArr[i]);
-//                }
-//
-//                // Resize to dimensions of model input
-//                int count = 0;
-//                for (int j = 0; j < 96; j++) {
-//                    for (int k = 0; k < 64; k++) {
-//                        input3D[0][j][k] = input1D[count];
-//                        count++;
-//                    }
-//                }
-//
-//                //Run inference
-//                tfLite.run(input3D, output);
-//
-//                //Find max and argmax
-//                float max = output[0][0];
-//                int argmax = 0;
-//                for (int i = 0; i < 30; i++) {
-//                    if (max < output[0][i]) {
-//                        max = output[0][i];
-//                        argmax = i;
-//                    }
-//                }
-//
-//                if (max > PREDICTION_THRES) {
-//                    //Get label and confidence
-//                    final String prediction = labels.get(argmax);
-//                    final String confidence = String.format("%,.2f", max);
-//                    new SendAudioLabelToWearTask(prediction, confidence, Double.toString(db(sData)), null).execute();
-//                    return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
-//                }
-//            }
-//        } catch (PyException e) {
-//            return "Something went wrong parsing to MFCC feature";
-//        }
-//        return "Unrecognized sound. " + LocalTime.now();
-//    }
 
     @Override
     public void onResume() {

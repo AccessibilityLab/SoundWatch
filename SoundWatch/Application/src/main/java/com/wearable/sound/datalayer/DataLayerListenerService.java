@@ -359,15 +359,16 @@ public class DataLayerListenerService extends WearableListenerService {
                                 for (short num : shorts) {
                                     // load up enough bufferElements2Rec samples, then predict
                                     if (soundBuffer.size() == bufferElements2Rec) {
-                                        if (soundSecondCounter == 1) {
-                                            // Skip ~330ms seconds to accommodate latency
-                                            predictSoundsFromRawAudio();
-                                            soundSecondCounter = 0;
-                                        } else {
-                                            soundSecondCounter++;
-                                            soundBuffer = new ArrayList<>();
-                                        }
-
+//                                        if (soundSecondCounter == 1) {
+//                                            // Skip ~330ms seconds to accommodate latency
+//                                            predictSoundsFromRawAudio();
+//                                            soundSecondCounter = 0;
+//                                        } else {
+//                                            soundSecondCounter++;
+//                                            soundBuffer = new ArrayList<>();
+//                                        }
+                                        // (new model) not skipping
+                                        predictSoundsFromRawAudio();
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -381,14 +382,16 @@ public class DataLayerListenerService extends WearableListenerService {
                             if (soundBuffer.size() < bufferElements2Rec) {
                                 for (short num : shorts) {
                                     if (soundBuffer.size() == bufferElements2Rec) {
-                                        if (soundSecondCounter == 1) {
-                                            // Skip 1 seconds to accommodate latency
-                                            predictSoundsFromRawAudio();
-                                            soundSecondCounter = 0;
-                                        } else {
-                                            soundSecondCounter++;
-                                            soundBuffer = new ArrayList<>();
-                                        }
+//                                        if (soundSecondCounter == 1) {
+//                                            // Skip 1 seconds to accommodate latency
+//                                            predictSoundsFromRawAudio();
+//                                            soundSecondCounter = 0;
+//                                        } else {
+//                                            soundSecondCounter++;
+//                                            soundBuffer = new ArrayList<>();
+//                                        }
+                                        // (new model) not skipping
+                                        predictSoundsFromRawAudio();
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -476,47 +479,52 @@ public class DataLayerListenerService extends WearableListenerService {
     /**
      * Audio Processing
      */
-    private float[] extractAudioFeatures(List<Short> soundBuffer) {
-//        float[] input1D = new float [6144];
-        if (soundBuffer.size() != bufferElements2Rec) {
+    private float[] extractAudioFeatures(short[] sData) {
+        float[] result = new float [input1D.length];
+        if (sData.length != bufferElements2Rec) {
             // Sanity check, because sound has to be exactly bufferElements2Rec elements
-            soundBuffer = new ArrayList<>();
             return null;
         }
-        short[] sData = new short[bufferElements2Rec];
-        for (int i = 0; i < soundBuffer.size(); i++) {
-            sData[i] = soundBuffer.get(i);
-        }
         try {
-            if (db(sData) >= DBLEVEL_THRES && sData.length > 0) {
-                // Lazily load python module to faster boot up processing
+            if (db(sData) >= DBLEVEL_THRES) {
+                Log.d(TAG, "Within threshold.");
+                //Log.i(TAG, "Time elapsed before Running chaquopy" + (System.currentTimeMillis() - recordTime));
+
+                long startTimePython = System.currentTimeMillis();
                 if (py == null || pythonModule == null) {
-                    synchronized (this) {
-                        if (!Python.isStarted()) {
-                            Python.start(new AndroidPlatform(this));
-                        }
+                    if (!Python.isStarted()) {
+                        Python.start(new AndroidPlatform(this));
                     }
 
                     py = Python.getInstance();
                     pythonModule = py.getModule("main");
+                    Log.i(TAG, "Time elapsed after init Python modules: " + (System.currentTimeMillis() - startTimePython));
                 }
-                //Get MFCC features
-                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));   //System.out.println("Sending to python: " + Arrays.toString(sData));
 
-                //Parse features into a float array
+                // Get MFCC features
+//                System.out.println("Sending to python:\n" + Arrays.toString(sData));
+                System.out.println("=======sending to python array length of " + sData.length);
+                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));
+
+                Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
+//                System.out.println("=======mfccFeatures is " + mfccFeatures.toString());
+
+                // Parse features into a float array
                 String inputString = mfccFeatures.toString();
-                if (inputString.isEmpty()) {
-                    return null;
-                }
                 inputString = inputString.replace("jarray('F')([", "").replace("])", "");
                 String[] inputStringArr = inputString.split(", ");
-                for (int i = 0; i < input1D.length; i++) {
+                if (inputStringArr.length == 0) {
+                    return null;
+                }
+                System.out.println("=======inputStringArr length is " + inputStringArr.length);
+
+                for (int i = 0; i < result.length; i++) {
                     if (inputStringArr[i].isEmpty()) {
                         return null;
                     }
-                    input1D[i] = Float.parseFloat(inputStringArr[i]);
+                    result[i] = Float.parseFloat(inputStringArr[i]);
                 }
-                return input1D;
+                return result;
             }
             return null;
         } catch (PyException e) {
@@ -603,32 +611,6 @@ public class DataLayerListenerService extends WearableListenerService {
         rms = rms / dataLength;
         return 10 * Math.log10(rms);
     }
-
-//    private double db(short[] data) {
-//        double rms = 0.0;
-//        int len = 0;
-//        for (short datum : data) {
-//            if (datum != 0) {
-//                len++;
-//            }
-//            rms += Math.abs(datum);
-//        }
-//        rms = rms / len;
-//        return 20 * Math.log10(rms);
-//    }
-
-//    public static double db(List<Short> soundBuffer) {
-//        double rms = 0.0;
-//        int dataLength = 0;
-//        for (int i = 0; i < soundBuffer.size(); i++) {
-//            if (soundBuffer.get(i) != 0) {
-//                dataLength++;
-//            }
-//            rms += soundBuffer.get(i) * soundBuffer.get(i);
-//        }
-//        rms = rms / dataLength;
-//        return 10 * Math.log10(rms);
-//    }
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -779,44 +761,11 @@ public class DataLayerListenerService extends WearableListenerService {
             double decibel = db(sData);
             Log.d(TAG, "2. DB of data: " + decibel + "| DB_thresh: " + DBLEVEL_THRES);
             if (decibel >= DBLEVEL_THRES) {
-                Log.d(TAG, "Within threshold.");
-                //Log.i(TAG, "Time elapsed before Running chaquopy" + (System.currentTimeMillis() - recordTime));
-
-                long startTimePython = System.currentTimeMillis();
-                if (py == null || pythonModule == null) {
-                    if (!Python.isStarted()) {
-                        Python.start(new AndroidPlatform(this));
-                    }
-
-                    py = Python.getInstance();
-                    pythonModule = py.getModule("main");
-                    Log.i(TAG, "Time elapsed after init Python modules: " + (System.currentTimeMillis() - startTimePython));
+                // extract audio features from raw bytes
+                input1D = extractAudioFeatures(sData);
+                if (input1D == null) {
+                    return "Empty MFCC features, or something went wrong";
                 }
-
-                // Get MFCC features
-//                System.out.println("Sending to python:\n" + Arrays.toString(sData));
-                System.out.println("=======sending to python array length of " + sData.length);
-                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));
-
-                Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
-//                System.out.println("=======mfccFeatures is " + mfccFeatures.toString());
-
-                // Parse features into a float array
-                String inputString = mfccFeatures.toString();
-                inputString = inputString.replace("jarray('F')([", "").replace("])", "");
-                String[] inputStringArr = inputString.split(", ");
-                if (inputStringArr.length == 0) {
-                    return "Empty MFCC feature";
-                }
-                System.out.println("=======inputStringArr length is " + inputStringArr.length);
-
-                for (int i = 0; i < input1D.length; i++) {
-                    if (inputStringArr[i].isEmpty()) {
-                        return "Empty MFCC feature";
-                    }
-                    input1D[i] = Float.parseFloat(inputStringArr[i]);
-                }
-
 //                System.out.println("input1D is " + Arrays.toString(input1D));
 
                 // Resize to dimensions of model input
@@ -844,7 +793,7 @@ public class DataLayerListenerService extends WearableListenerService {
                         predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
                     }
                     // Sort the predictions by value in decreasing order
-                    Collections.sort(predictions, Collections.reverseOrder());
+                    predictions.sort(Collections.reverseOrder());
 
                     // Convert this map into a shape of sound=value_sound=value
                     StringBuilder result = new StringBuilder();
@@ -860,7 +809,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 }
 
 
-                if(TEST_MODEL_LATENCY) {
+                if (TEST_MODEL_LATENCY) {
                     long elapsedTime = System.currentTimeMillis() - startTime;
                     Log.i(TAG, "Elasped time" + elapsedTime);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
@@ -877,7 +826,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     }
                 }
 
-                //Find max and argmax
+                // Find max and argmax
                 float max = output[0][0];
                 int argmax = 0;
                 for (int i = 0; i < numLabels; i++) {
