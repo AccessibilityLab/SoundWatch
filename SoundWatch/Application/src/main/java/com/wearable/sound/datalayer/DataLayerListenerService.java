@@ -792,6 +792,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     for (int i = 0; i < numLabels; i++) {
                         predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
                     }
+                    printAboveThresholdPredictions(predictions);
                     // Sort the predictions by value in decreasing order
                     predictions.sort(Collections.reverseOrder());
 
@@ -988,6 +989,25 @@ public class DataLayerListenerService extends WearableListenerService {
         buffer.put(bytes);
         buffer.flip();//need flip
         return buffer.getLong();
+    }
+
+    /**
+     * For testing, given a list of predictions, printing out all labels whose accuracy > threshold
+     *  in a single line
+     * @param predictions: list of predictions returned by the tflite model
+     */
+    private void printAboveThresholdPredictions(List<SoundPrediction> predictions) {
+        StringBuilder singleLine = new StringBuilder();
+        int count = 0;
+        for (SoundPrediction prediction : predictions) {
+            if (prediction.getAccuracy() >= PREDICTION_THRES) {
+                count++;
+                singleLine.append(prediction.getLabel()).append("_").append(prediction.getAccuracy()).append(";");
+            }
+        }
+        if (count > 0) {
+            System.out.println("TESTING LABELS ACCURACY: " + singleLine.toString());
+        }
     }
 
 }
