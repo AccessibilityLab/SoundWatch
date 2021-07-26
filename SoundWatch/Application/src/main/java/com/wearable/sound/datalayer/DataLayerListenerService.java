@@ -59,6 +59,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
@@ -792,13 +793,18 @@ public class DataLayerListenerService extends WearableListenerService {
                     for (int i = 0; i < numLabels; i++) {
                         predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
                     }
-                    printAboveThresholdPredictions(predictions);
                     // Sort the predictions by value in decreasing order
                     predictions.sort(Collections.reverseOrder());
 
+                    // optimize: filter out predictions with accuracy > threshold to reduce the bandwidth
+                    List<SoundPrediction> filteredPredictions = predictions.stream().filter(c -> c.getAccuracy() > PREDICTION_THRES).collect(Collectors.toList());
+
+                    // FIXME: comment this out for production
+                    printAboveThresholdPredictions(filteredPredictions);
+
                     // Convert this map into a shape of sound=value_sound=value
                     StringBuilder result = new StringBuilder();
-                    for (SoundPrediction soundPrediction: predictions) {
+                    for (SoundPrediction soundPrediction: filteredPredictions) {
                         result.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy()).append(",");
                     }
                     // Strip the last ","
@@ -1009,5 +1015,4 @@ public class DataLayerListenerService extends WearableListenerService {
             System.out.println("TESTING LABELS ACCURACY: " + singleLine.toString());
         }
     }
-
 }
