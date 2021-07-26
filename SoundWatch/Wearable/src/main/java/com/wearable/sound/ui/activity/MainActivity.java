@@ -99,7 +99,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
     private long absolutelastTime = 0;
-    public static final double PREDICTION_THRESHOLD = 0.4;
+    private static final float PREDICTION_THRES = 0.4F;
     private static Toast mToast;
     public static boolean IS_FOREGROUND_DISABLED;
     private static boolean IS_FIRST_TIME_CONNECT;
@@ -215,7 +215,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 continue;
             }
 
-            if (soundPrediction.getAccuracy() < PREDICTION_THRESHOLD) {
+            if (soundPrediction.getAccuracy() < PREDICTION_THRES) {
                 continue;
             }
             return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getAccuracy()), time, db, null);

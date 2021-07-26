@@ -56,8 +56,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -109,7 +112,8 @@ public class DataLayerListenerService extends WearableListenerService {
     // note: vggish model require a buffer of minimum 5360 bytes to return a non-null result;
     //  that's equivalent to ~330ms of data with recording rate of 16kHz;
     //  for model v2, the buffer size is intended to be ~320ms
-    private static final int bufferElements2Rec = 5360;
+    // FIXME: try 16k buffer (~1sec) and average 3 predictions
+    private static final int bufferElements2Rec = RECORDING_RATE;
     private final List<String> labels = new ArrayList<>();
     private int numLabels;
     //    private double dbTotal = 0;
@@ -770,29 +774,63 @@ public class DataLayerListenerService extends WearableListenerService {
 //                System.out.println("input1D is " + Arrays.toString(input1D));
 
                 // Resize to dimensions of model input
+//                int count = 0;
+//                for (int j = 0; j < NUM_FRAMES; j++) {
+//                    for (int k = 0; k < NUM_BANDS; k++) {
+//                        input3D[0][j][k] = input1D[count];
+//                        count++;
+//                    }
+//                }
+//
+                long startTime = 0;
+                if (TEST_MODEL_LATENCY)
+                    startTime = System.currentTimeMillis();
+                Log.i(TAG, "Elapsed time from watch to model on phone: " + (System.currentTimeMillis() - recordTime));
+//
+//                // Run inference
+//                tfLite.run(input3D, output);
+//
+//                System.out.println("=====output is " + Arrays.toString(output));
+
+                // TODO: experiment with averaging the predictions
+                float[][][] reshapedInput = new float[3][NUM_FRAMES][NUM_BANDS];
                 int count = 0;
-                for (int j = 0; j < NUM_FRAMES; j++) {
-                    for (int k = 0; k < NUM_BANDS; k++) {
-                        input3D[0][j][k] = input1D[count];
-                        count++;
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < NUM_FRAMES; j++) {
+                        for (int k = 0; k < NUM_BANDS; k++) {
+                            input3D[i][j][k] = input1D[count];
+                            count++;
+                        }
+                    }
+                }
+                Map<String, List<Float>> predictionsBag = new HashMap<>();
+                for (int i = 0; i < 3; i++) {
+                    tfLite.run(reshapedInput[i], output);
+
+                    for (int j = 0; j < numLabels; j++) {
+                        String label = labels.get(j);
+                        if (!predictionsBag.containsKey(label)) {
+                            predictionsBag.put(label, new ArrayList<>());
+                        }
+
+                        Objects.requireNonNull(predictionsBag.get(label)).add(output[0][j]);
                     }
                 }
 
-                long startTime = 0;
-                if(TEST_MODEL_LATENCY)
-                    startTime = System.currentTimeMillis();
-                Log.i(TAG, "Elapsed time from watch to model on phone: " + (System.currentTimeMillis() - recordTime));
-
-                // Run inference
-                tfLite.run(input3D, output);
-
-                System.out.println("=====output is " + Arrays.toString(output));
-
                 if (PREDICT_MULTIPLE_SOUNDS) {
                     List<SoundPrediction> predictions = new ArrayList<>();
-                    for (int i = 0; i < numLabels; i++) {
-                        predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
+//                    for (int i = 0; i < numLabels; i++) {
+//                        predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
+//                    }
+                    for (String label : predictionsBag.keySet()) {
+                        float sumAcc = 0;
+                        for (float acc : Objects.requireNonNull(predictionsBag.get(label))) {
+                            sumAcc += acc;
+                        }
+
+                        predictions.add(new SoundPrediction(label, sumAcc / 3));
                     }
+
                     // Sort the predictions by value in decreasing order
                     predictions.sort(Collections.reverseOrder());
 
