@@ -94,6 +94,8 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
     private static final float PREDICTION_THRES = 0.4F;
+    // attempt to reduce "speech" noise predictions
+    private static final float SPEECH_PREDICTION_THRES = 0.75F;
     private static double DBLEVEL_THRES = 40;
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     private static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
@@ -771,86 +773,89 @@ public class DataLayerListenerService extends WearableListenerService {
                 if (input1D == null) {
                     return "Empty MFCC features, or something went wrong";
                 }
-//                System.out.println("input1D is " + Arrays.toString(input1D));
+                System.out.println("input1D is " + Arrays.toString(input1D));
 
                 // Resize to dimensions of model input
-//                int count = 0;
-//                for (int j = 0; j < NUM_FRAMES; j++) {
-//                    for (int k = 0; k < NUM_BANDS; k++) {
-//                        input3D[0][j][k] = input1D[count];
-//                        count++;
-//                    }
-//                }
-//
+                int count = 0;
+                for (int j = 0; j < NUM_FRAMES; j++) {
+                    for (int k = 0; k < NUM_BANDS; k++) {
+                        input3D[0][j][k] = input1D[count];
+                        count++;
+                    }
+                }
+
                 long startTime = 0;
                 if (TEST_MODEL_LATENCY)
                     startTime = System.currentTimeMillis();
                 Log.i(TAG, "Elapsed time from watch to model on phone: " + (System.currentTimeMillis() - recordTime));
+
+                // Run inference
+                tfLite.run(input3D, output);
+
+                System.out.println("=====output is " + Arrays.toString(output));
+
+//                // TODO: experiment with averaging the predictions
+//                float[][][] reshapedInput = new float[3][NUM_FRAMES][NUM_BANDS];
+//                int count = 0;
+//                for (int i = 0; i < 3; i++) {
+//                    for (int j = 0; j < NUM_FRAMES; j++) {
+//                        for (int k = 0; k < NUM_BANDS; k++) {
+//                            reshapedInput[i][j][k] = input1D[count];
+//                            count++;
+//                        }
+//                    }
+//                }
+//                Map<String, List<Float>> predictionsBag = new HashMap<>();
+//                for (int i = 0; i < 3; i++) {
+//                    tfLite.run(reshapedInput[i], output);
 //
-//                // Run inference
-//                tfLite.run(input3D, output);
+//                    for (int j = 0; j < numLabels; j++) {
+//                        String label = labels.get(j);
+//                        if (!predictionsBag.containsKey(label)) {
+//                            predictionsBag.put(label, new ArrayList<>());
+//                        }
 //
-//                System.out.println("=====output is " + Arrays.toString(output));
-
-                // TODO: experiment with averaging the predictions
-                float[][][] reshapedInput = new float[3][NUM_FRAMES][NUM_BANDS];
-                int count = 0;
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < NUM_FRAMES; j++) {
-                        for (int k = 0; k < NUM_BANDS; k++) {
-                            input3D[i][j][k] = input1D[count];
-                            count++;
-                        }
-                    }
-                }
-                Map<String, List<Float>> predictionsBag = new HashMap<>();
-                for (int i = 0; i < 3; i++) {
-                    tfLite.run(reshapedInput[i], output);
-
-                    for (int j = 0; j < numLabels; j++) {
-                        String label = labels.get(j);
-                        if (!predictionsBag.containsKey(label)) {
-                            predictionsBag.put(label, new ArrayList<>());
-                        }
-
-                        Objects.requireNonNull(predictionsBag.get(label)).add(output[0][j]);
-                    }
-                }
+//                        Objects.requireNonNull(predictionsBag.get(label)).add(output[0][j]);
+//                    }
+//                }
 
                 if (PREDICT_MULTIPLE_SOUNDS) {
                     List<SoundPrediction> predictions = new ArrayList<>();
-//                    for (int i = 0; i < numLabels; i++) {
-//                        predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
-//                    }
-                    for (String label : predictionsBag.keySet()) {
-                        float sumAcc = 0;
-                        for (float acc : Objects.requireNonNull(predictionsBag.get(label))) {
-                            sumAcc += acc;
-                        }
-
-                        predictions.add(new SoundPrediction(label, sumAcc / 3));
+                    for (int i = 0; i < numLabels; i++) {
+                        predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
                     }
+//                    for (String label : predictionsBag.keySet()) {
+//                        float sumAcc = 0;
+//                        for (float acc : Objects.requireNonNull(predictionsBag.get(label))) {
+//                            sumAcc += acc;
+//                        }
+//
+//                        predictions.add(new SoundPrediction(label, sumAcc / 3));
+//                    }
 
                     // Sort the predictions by value in decreasing order
                     predictions.sort(Collections.reverseOrder());
 
                     // optimize: filter out predictions with accuracy > threshold to reduce the bandwidth
-                    List<SoundPrediction> filteredPredictions = predictions.stream().filter(c -> c.getAccuracy() > PREDICTION_THRES).collect(Collectors.toList());
-
-                    // FIXME: comment this out for production
-                    printAboveThresholdPredictions(filteredPredictions);
+                    List<SoundPrediction> filteredPredictions = predictions
+                            .stream()
+                            .filter(c -> c.getLabel().equals("Speech") ? c.getAccuracy() > SPEECH_PREDICTION_THRES : c.getAccuracy() > PREDICTION_THRES)
+                            .collect(Collectors.toList());
 
                     // Convert this map into a shape of sound=value_sound=value
-                    StringBuilder result = new StringBuilder();
-                    for (SoundPrediction soundPrediction: filteredPredictions) {
-                        result.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy()).append(",");
-                    }
-                    // Strip the last ","
-                    result = new StringBuilder(result.substring(0, result.length() - 1));
+                    if (filteredPredictions.size() > 0) {
+                        StringBuilder result = new StringBuilder();
+                        for (SoundPrediction soundPrediction : filteredPredictions) {
+                            result.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy()).append(",");
+                        }
+                        // Strip the last ","
+                        result = new StringBuilder(result.substring(0, result.length() - 1));
 
-                    // TODO: Something with DB
-                    new SendAllAudioPredictionsToWearTask(result.toString(), db(sData), recordTime).execute();
-                    return result.toString();
+                        // TODO: Something with DB
+                        System.out.println("TEST LABEL ACCURACY: " + result.toString());
+                        new SendAllAudioPredictionsToWearTask(result.toString(), db(sData), recordTime).execute();
+                        return result.toString();
+                    }
                 }
 
 

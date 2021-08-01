@@ -22,8 +22,8 @@ public class Constants {
     public static final String CAT_MEOW= "Cat Meow";
     public static final String VEHICLE= "Vehicle";
     // for now, mapping new label "Fire Alarm" to replace this
-//    public static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm";
-    public static final String FIRE_SMOKE_ALARM = "Fire Alarm";
+    public static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm";
+//    public static final String FIRE_SMOKE_ALARM = "Fire Alarm";
     public static final String WATER_RUNNING = "Water Running";
     public static final String BABY_CRY = "Baby Cry";
     public static final String DOOR_IN_USE = "Door In-Use";
