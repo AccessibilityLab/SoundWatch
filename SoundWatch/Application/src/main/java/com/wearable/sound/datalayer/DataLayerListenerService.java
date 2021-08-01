@@ -56,9 +56,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
@@ -90,6 +94,8 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
     private static final float PREDICTION_THRES = 0.4F;
+    // attempt to reduce "speech" noise predictions
+    private static final float SPEECH_PREDICTION_THRES = 0.75F;
     private static double DBLEVEL_THRES = 40;
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     private static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
@@ -108,7 +114,8 @@ public class DataLayerListenerService extends WearableListenerService {
     // note: vggish model require a buffer of minimum 5360 bytes to return a non-null result;
     //  that's equivalent to ~330ms of data with recording rate of 16kHz;
     //  for model v2, the buffer size is intended to be ~320ms
-    private static final int bufferElements2Rec = 5360;
+    // FIXME: try 16k buffer (~1sec) and average 3 predictions
+    private static final int bufferElements2Rec = RECORDING_RATE;
     private final List<String> labels = new ArrayList<>();
     private int numLabels;
     //    private double dbTotal = 0;
@@ -766,7 +773,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 if (input1D == null) {
                     return "Empty MFCC features, or something went wrong";
                 }
-//                System.out.println("input1D is " + Arrays.toString(input1D));
+                System.out.println("input1D is " + Arrays.toString(input1D));
 
                 // Resize to dimensions of model input
                 int count = 0;
@@ -778,7 +785,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 }
 
                 long startTime = 0;
-                if(TEST_MODEL_LATENCY)
+                if (TEST_MODEL_LATENCY)
                     startTime = System.currentTimeMillis();
                 Log.i(TAG, "Elapsed time from watch to model on phone: " + (System.currentTimeMillis() - recordTime));
 
@@ -787,25 +794,68 @@ public class DataLayerListenerService extends WearableListenerService {
 
                 System.out.println("=====output is " + Arrays.toString(output));
 
+//                // TODO: experiment with averaging the predictions
+//                float[][][] reshapedInput = new float[3][NUM_FRAMES][NUM_BANDS];
+//                int count = 0;
+//                for (int i = 0; i < 3; i++) {
+//                    for (int j = 0; j < NUM_FRAMES; j++) {
+//                        for (int k = 0; k < NUM_BANDS; k++) {
+//                            reshapedInput[i][j][k] = input1D[count];
+//                            count++;
+//                        }
+//                    }
+//                }
+//                Map<String, List<Float>> predictionsBag = new HashMap<>();
+//                for (int i = 0; i < 3; i++) {
+//                    tfLite.run(reshapedInput[i], output);
+//
+//                    for (int j = 0; j < numLabels; j++) {
+//                        String label = labels.get(j);
+//                        if (!predictionsBag.containsKey(label)) {
+//                            predictionsBag.put(label, new ArrayList<>());
+//                        }
+//
+//                        Objects.requireNonNull(predictionsBag.get(label)).add(output[0][j]);
+//                    }
+//                }
+
                 if (PREDICT_MULTIPLE_SOUNDS) {
                     List<SoundPrediction> predictions = new ArrayList<>();
                     for (int i = 0; i < numLabels; i++) {
                         predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
                     }
+//                    for (String label : predictionsBag.keySet()) {
+//                        float sumAcc = 0;
+//                        for (float acc : Objects.requireNonNull(predictionsBag.get(label))) {
+//                            sumAcc += acc;
+//                        }
+//
+//                        predictions.add(new SoundPrediction(label, sumAcc / 3));
+//                    }
+
                     // Sort the predictions by value in decreasing order
                     predictions.sort(Collections.reverseOrder());
 
-                    // Convert this map into a shape of sound=value_sound=value
-                    StringBuilder result = new StringBuilder();
-                    for (SoundPrediction soundPrediction: predictions) {
-                        result.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy()).append(",");
-                    }
-                    // Strip the last ","
-                    result = new StringBuilder(result.substring(0, result.length() - 1));
+                    // optimize: filter out predictions with accuracy > threshold to reduce the bandwidth
+                    List<SoundPrediction> filteredPredictions = predictions
+                            .stream()
+                            .filter(c -> c.getLabel().equals("Speech") ? c.getAccuracy() > SPEECH_PREDICTION_THRES : c.getAccuracy() > PREDICTION_THRES)
+                            .collect(Collectors.toList());
 
-                    // TODO: Something with DB
-                    new SendAllAudioPredictionsToWearTask(result.toString(), db(sData), recordTime).execute();
-                    return result.toString();
+                    // Convert this map into a shape of sound=value_sound=value
+                    if (filteredPredictions.size() > 0) {
+                        StringBuilder result = new StringBuilder();
+                        for (SoundPrediction soundPrediction : filteredPredictions) {
+                            result.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy()).append(",");
+                        }
+                        // Strip the last ","
+                        result = new StringBuilder(result.substring(0, result.length() - 1));
+
+                        // TODO: Something with DB
+                        System.out.println("TEST LABEL ACCURACY: " + result.toString());
+                        new SendAllAudioPredictionsToWearTask(result.toString(), db(sData), recordTime).execute();
+                        return result.toString();
+                    }
                 }
 
 
@@ -990,4 +1040,22 @@ public class DataLayerListenerService extends WearableListenerService {
         return buffer.getLong();
     }
 
+    /**
+     * For testing, given a list of predictions, printing out all labels whose accuracy > threshold
+     *  in a single line
+     * @param predictions: list of predictions returned by the tflite model
+     */
+    private void printAboveThresholdPredictions(List<SoundPrediction> predictions) {
+        StringBuilder singleLine = new StringBuilder();
+        int count = 0;
+        for (SoundPrediction prediction : predictions) {
+            if (prediction.getAccuracy() >= PREDICTION_THRES) {
+                count++;
+                singleLine.append(prediction.getLabel()).append("_").append(prediction.getAccuracy()).append(";");
+            }
+        }
+        if (count > 0) {
+            System.out.println("TESTING LABELS ACCURACY: " + singleLine.toString());
+        }
+    }
 }

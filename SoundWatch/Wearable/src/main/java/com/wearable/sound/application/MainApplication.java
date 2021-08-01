@@ -7,8 +7,7 @@ import java.util.List;
 
 public class MainApplication extends Application {
     public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(
-//            "Fire/Smoke Alarm",
-            "Fire Alarm",
+            "Fire/Smoke Alarm",
             "Speech",
             "Door In-Use",
             "Water Running",

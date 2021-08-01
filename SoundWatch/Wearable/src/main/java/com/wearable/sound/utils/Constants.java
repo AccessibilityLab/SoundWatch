@@ -1,5 +1,8 @@
 package com.wearable.sound.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     /**
      * Data layer paths which is the data sent from watch

@@ -99,7 +99,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static Set<String> connectedHostIds = new HashSet<>();
     private long absolutelastTime = 0;
-    public static final double PREDICTION_THRESHOLD = 0.4;
+    private static final float PREDICTION_THRES = 0.4F;
     private static Toast mToast;
     public static boolean IS_FOREGROUND_DISABLED;
     private static boolean IS_FIRST_TIME_CONNECT;
@@ -197,7 +197,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             String[] parts = soundKvPair.split("_");
             String label = parts[0];
             String accuracy = parts[1];
-            result.add(new SoundPrediction(label, Float.parseFloat(accuracy)));
+            result.add(new SoundPrediction(remapSoundLabel(label), Float.parseFloat(accuracy)));
         }
         return result;
     }
@@ -215,12 +215,38 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 continue;
             }
 
-            if (soundPrediction.getAccuracy() < PREDICTION_THRESHOLD) {
+            if (soundPrediction.getAccuracy() < PREDICTION_THRES) {
                 continue;
             }
             return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getAccuracy()), time, db, null);
         }
         return new AudioLabel("Unrecognized Sound", Float.toString(1.0f), time, db, null);
+    }
+
+    /**
+     * Remapping the original label string to the one compatible with SW (v2)
+     * For example: Fire Alarm --> Fire/Smoke Alarm or Smoke Alarm --> Fire/Smoke Alarm
+     * @param label : the label for a prediction
+     * @return
+     */
+    private String remapSoundLabel(String label) {
+        switch (label) {
+            case "Fire Alarm":
+            case "Smoke Detector/Smoke Alarm":
+                return "Fire/Smoke Alarm";
+            case "Water":
+            case "Pour":
+                return "Water Running";
+            case "Dog":
+                return "Dog Bark";
+            case "Cat":
+                return "Cat Meow";
+            case "Motor Vehicle (Road)":
+                return "Vehicle";
+        }
+
+        // else, keep it the same
+        return label;
     }
 
 
