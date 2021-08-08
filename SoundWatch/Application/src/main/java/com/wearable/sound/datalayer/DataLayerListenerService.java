@@ -115,7 +115,7 @@ public class DataLayerListenerService extends WearableListenerService {
     //  that's equivalent to ~330ms of data with recording rate of 16kHz;
     //  for model v2, the buffer size is intended to be ~320ms
     // FIXME: try 16k buffer (~1sec) and average 3 predictions
-    private static final int bufferElements2Rec = RECORDING_RATE;
+    private static final int bufferElements2Rec = 5360;
     private final List<String> labels = new ArrayList<>();
     private int numLabels;
     //    private double dbTotal = 0;
@@ -836,6 +836,8 @@ public class DataLayerListenerService extends WearableListenerService {
                     // Sort the predictions by value in decreasing order
                     predictions.sort(Collections.reverseOrder());
 
+                    printAboveThresholdPredictions(predictions);
+
                     // optimize: filter out predictions with accuracy > threshold to reduce the bandwidth
                     List<SoundPrediction> filteredPredictions = predictions
                             .stream()
@@ -852,7 +854,6 @@ public class DataLayerListenerService extends WearableListenerService {
                         result = new StringBuilder(result.substring(0, result.length() - 1));
 
                         // TODO: Something with DB
-                        System.out.println("TEST LABEL ACCURACY: " + result.toString());
                         new SendAllAudioPredictionsToWearTask(result.toString(), db(sData), recordTime).execute();
                         return result.toString();
                     }
@@ -1049,7 +1050,7 @@ public class DataLayerListenerService extends WearableListenerService {
         StringBuilder singleLine = new StringBuilder();
         int count = 0;
         for (SoundPrediction prediction : predictions) {
-            if (prediction.getAccuracy() >= PREDICTION_THRES) {
+            if (prediction.getAccuracy() >= 0.2) {
                 count++;
                 singleLine.append(prediction.getLabel()).append("_").append(prediction.getAccuracy()).append(";");
             }
