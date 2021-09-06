@@ -6,18 +6,32 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application {
+//    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(
+//            "Fire/Smoke Alarm",
+//            "Speech",
+//            "Door In-Use",
+//            "Water Running",
+//            "Knocking",
+//            "Microwave",
+//            "Dog Bark",
+//            "Cat Meow",
+//            "Car Honk",
+//            "Vehicle",
+//            "Baby Cry"));
+
     public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(
-            "Fire/Smoke Alarm",
-            "Speech",
-            "Door In-Use",
-            "Water Running",
-            "Knocking",
-            "Microwave",
-            "Dog Bark",
-            "Cat Meow",
-            "Car Honk",
-            "Vehicle",
-            "Baby Cry"));
+       "Appliances",
+        "Baby Cry",
+        "Car Honk",
+        "Cat Meow",
+        "Dog Bark",
+        "Door In-Use",
+        "Fire/Smoke Alarm",
+        "Knocking",
+        "Siren",
+        "Water Running"));
+
+
 
     //    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
 //        "Dog Bark",

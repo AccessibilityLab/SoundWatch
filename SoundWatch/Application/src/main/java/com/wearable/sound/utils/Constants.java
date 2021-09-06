@@ -28,7 +28,7 @@ public class Constants {
     public static final String BABY_CRY = "Baby Cry";
     public static final String DOOR_IN_USE = "Door In-Use";
     public static final String CAR_HONK= "Car Honk";
-    public static final String MICROWAVE= "Microwave";
+    public static final String APPLIANCES= "Appliances";
 
     public static final String SHAVER= "Electric Shaver/Electric Razor";
     public static final String TOOTHBRUSH= "Toothbrush";

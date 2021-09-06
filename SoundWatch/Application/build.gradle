@@ -12,7 +12,7 @@ buildscript {
 
 apply plugin: 'com.android.application'
 // For Google Firebase
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.chaquo.python'
 android {
     compileSdkVersion 29
@@ -26,16 +26,20 @@ android {
         python {
             // If Chaquopy fails to find Python on your build machine, enable the following
             // line and edit it to point to Python 3.4 or later.
-            buildPython "/opt/homebrew/Cellar/python@3.9/3.9.6/bin/python3.9"
+//            buildPython "/opt/homebrew/Cellar/python@3.9/3.9.6/bin/python3.9"
 //              buildPython "C:/Python36/python3.exe"
 //            buildPython "C:\\Users\\ak_ka\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
 //            buildPython "C:\\Python38\\python.exe"
+            buildPython "C:\\Users\\guard\\Python Scripts\\Scripts\\.venv\\Scripts\\python.exe"
             pip {
                 install "numpy==1.17.4"
+                install "librosa"
+                install "tflite_runtime"
             }
         }
         ndk {
-            abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
+//            abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
+            abiFilters 'armeabi-v7a'
         }
     }
     buildTypes {
@@ -49,7 +53,7 @@ android {
     aaptOptions {
         noCompress "tflite"
     }
-    
+
 }
 
 repositories {
@@ -58,7 +62,6 @@ repositories {
 }
 
 dependencies {
-
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
@@ -89,8 +92,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // Import tflite dependencies
-    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
-    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
+//    implementation 'org.tensorflow:tensorflow-lite:1.12.0'
+//    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
     implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly'
 
     // SocketIO

@@ -34,6 +34,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.Node;
@@ -45,6 +46,7 @@ import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
 import com.wearable.sound.models.AudioLabel;
 import com.wearable.sound.models.SoundPrediction;
+import com.wearable.sound.service.FeedbackSoundService;
 import com.wearable.sound.service.ForegroundService;
 import com.wearable.sound.service.SnoozeSoundService;
 import com.wearable.sound.utils.AlarmReceiver;
@@ -116,6 +118,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
     public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
     public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningstatus";
+    public static final String mBroadcastAudioFeedback = "com.wearable.sound.broadcast.audiofeedback";
     private IntentFilter mIntentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -140,6 +143,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         String confidence = parts[1];
                         String time = parts[2];
                         String db = parts[3];
+
                         createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, null));
                     }
                 }
@@ -184,6 +188,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                     updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
                 }
 
+            } else if (intent.getAction().equals(mBroadcastAudioFeedback)) {
+                String data  = intent.getStringExtra(AUDIO_LABEL);
+//                addAudioToEnabledSounds(data);
             }
         }
     };
@@ -981,15 +988,23 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         
         // Unique notification for each kind of sound
         final int NOTIFICATION_ID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
-
+        Log.d(TAG, "Label: " + audioLabel.label + " NotiID: " + NOTIFICATION_ID);
         // Disable same sound for 5 seconds
         if (soundLastTime.containsKey(audioLabel.label) && !MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
                 if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
-                    Log.i(TAG, "Same sound appear in less than 5 seconds");
+                    Log.i(TAG, "Same sound appear in less than 5 seconds: " + audioLabel.label +" last time: " + soundLastTime.get(audioLabel.label));
                     return; // stop sending noti if less than 10 second
+                } else {
+                    soundLastTime.remove(audioLabel.label);
                 }
         }
-        soundLastTime.put(audioLabel.label, System.currentTimeMillis());
+
+        if (!soundLastTime.containsKey(audioLabel.label)) {
+            soundLastTime.put(audioLabel.label, System.currentTimeMillis());
+        }
+        for (String label: ((MainApplication) getApplicationContext()).enabledSounds) {
+            Log.d(TAG,"label: " + label);
+        }
 
         //If it's blocked or app in foreground (to not irritate user), return
         if ((((MainApplication) this.getApplication()).getBlockedSounds()).contains(NOTIFICATION_ID)
@@ -1027,12 +1042,26 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Intent snoozeIntent = new Intent(this, SnoozeSoundService.class);
         snoozeIntent.putExtra(SOUND_ID, NOTIFICATION_ID);
         snoozeIntent.putExtra(SOUND_LABEL, audioLabel.label);
         snoozeIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
-        //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
         PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        Intent correctFeedbackIntent = new Intent(this, FeedbackSoundService.class);
+        correctFeedbackIntent.putExtra(SOUND_ID, NOTIFICATION_ID);
+        correctFeedbackIntent.putExtra(SOUND_LABEL, audioLabel.label);
+        correctFeedbackIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
+        correctFeedbackIntent.putExtra(FEEDBACK, "true");
+        PendingIntent correctFeedbackPendingIntent = PendingIntent.getService(this, 0, correctFeedbackIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent incorrectFeedbackIntent = new Intent(this, FeedbackSoundService.class);
+        incorrectFeedbackIntent.putExtra(SOUND_ID, NOTIFICATION_ID);
+        incorrectFeedbackIntent.putExtra(SOUND_LABEL, audioLabel.label);
+        incorrectFeedbackIntent.putExtra(FEEDBACK, "false");
+        incorrectFeedbackIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
+        PendingIntent incorrectFeedbackPendingIntent = PendingIntent.getService(this, 1, incorrectFeedbackIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
@@ -1049,14 +1078,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         .setSummaryText(""))
                 .setAutoCancel(true) //Remove notification from the list after the user has tapped it
                 .setContentIntent(pendingIntent)
-                .addAction(R.drawable.ic_full_cancel,
-                        "Snooze 10 mins", snoozeSoundPendingIntent);
+                //.addAction(R.drawable.ic_full_cancel,
+                //        "Snooze 10 mins", snoozeSoundPendingIntent)
+                .addAction(R.drawable.ic_cc_checkmark, "Correct", correctFeedbackPendingIntent)
+                .addAction(R.drawable.ic_full_cancel, "Incorrect", incorrectFeedbackPendingIntent);
 
         //NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
-
         if(TEST_E2E_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
             Log.i(TAG, "Elapsed time: " + elapsedTime);
@@ -1074,5 +1104,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             }
         }
 
+    }
+    private void addAudioToEnabledSounds(String audioLabel) {
+        Log.d(TAG,"Added " + audioLabel + " back to enabledSounds");
+        ((MainApplication) this.getApplication()).enabledSounds.add(audioLabel);
     }
 }

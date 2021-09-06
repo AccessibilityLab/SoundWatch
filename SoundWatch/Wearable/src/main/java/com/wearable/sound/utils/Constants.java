@@ -15,6 +15,8 @@ public class Constants {
     public static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
     public static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
     public static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
+    public static final String SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH = "/SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH";
+
     public static final String COUNT_PATH = "/count";
 
     /**
@@ -23,11 +25,13 @@ public class Constants {
 
     public static final String SNOOZE_TIME = "SNOOZE_TIME";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
+    public static final String SOUND_FEEDBACK_FROM_WATCH_PATH = "/SOUND_FEEDBACK_FROM_WATCH_PATH";
     public static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
     public static final String CONNECTED_HOST_IDS = "CONNECTED_HOST_IDS";
     public static final String SNOOZE_SOUND = "SNOOZE_SOUND";
     public static final String SOUND_ID = "SOUND_ID";
     public static final String SOUND_LABEL = "SOUND_LABEL";
+    public static final String FEEDBACK = "FEEDBACK";
     /**
      *
      */
@@ -39,7 +43,7 @@ public class Constants {
 
     public static final String MODEL_1 = "file:///android_asset/sw_model_1.tflite";
     public static final String MODEL_2 = "file:///android_asset/sw_model_2.tflite";
-    public static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
+    public static final String LABEL_FILENAME = "file:///android_asset/labels_10.txt";
 
     public static final String MODEL_FILENAME = MODEL_2;
     public static final boolean TEST_MODEL_LATENCY = false;

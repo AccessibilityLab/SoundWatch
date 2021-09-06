@@ -82,9 +82,11 @@ public class SoundRecorder {
     private static final int FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     // this might vary because it will optimize for difference device (should not make it fixed?)
     private static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
+//    private static final int BUFFER_SIZE = 2048;
     public static final String AUDIO_MESSAGE_PATH = "/audio_message";
     private static final double DBLEVEL_THRES = -40.0;
-    private static final int bufferElements2Rec = RECORDING_RATE * 320 / 1000; // 320ms sample for the new model v2
+//    private static final int bufferElements2Rec = RECORDING_RATE * 320 / 1000; // 320ms sample for the new model v2
+    private static final int bufferElements2Rec = RECORDING_RATE;
     private static final String SNOOZE_LABEL = "Snooze";
     private static final String SNOOZE_TIME_LABEL = "Snooze Time";
     private static final String[] SNOOZE_CHOICES = {"5 mins", "10 mins", "1 hour", "1 day", "Forever"};
@@ -391,7 +393,7 @@ public class SoundRecorder {
         protected Void doInBackground(Void... params) {
             final SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
             mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                    RECORDING_RATE, CHANNEL_IN, FORMAT, BUFFER_SIZE * 3);
+                    RECORDING_RATE, CHANNEL_IN, FORMAT, BUFFER_SIZE);
             BufferedOutputStream bufferedOutputStream = null;
             try {
                 bufferedOutputStream = new BufferedOutputStream(
@@ -548,6 +550,7 @@ public class SoundRecorder {
          * @param recordTime
          */
         private void sendRawAudioToPhone(byte[] buffer, long recordTime) {
+            Log.d(TAG,"buffer size: " + buffer.length);
             SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
             if (TEST_E2E_LATENCY) {
                 byte[] currentTimeData = longToBytes(recordTime);

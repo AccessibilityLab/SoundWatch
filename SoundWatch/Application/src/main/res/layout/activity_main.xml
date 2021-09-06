@@ -253,7 +253,7 @@
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
-                android:id="@+id/microwave"
+                android:id="@+id/appliances"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
@@ -261,7 +261,7 @@
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
-                android:text="@string/microwave"
+                android:text="@string/appliances"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 

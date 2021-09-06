@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
      * Phone Watch Architecture configuration ONLY!!!
      * [ EXPERIMENTAL ]
      */
-    public static final boolean PREDICT_MULTIPLE_SOUNDS = true;
+    public static final boolean PREDICT_MULTIPLE_SOUNDS = false;
 
     /**
      * Architecture configurations
@@ -201,17 +201,17 @@ public class MainActivity extends AppCompatActivity
     // List of all sounds
     public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, VEHICLE, CAR_HONK,
             HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, TOOTHBRUSH, DOG_BARK,
-            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
+            APPLIANCES, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
             KNOCKING, COUGHING, TYPING);
 
     // List of only high accuracy sounds
     public List<String> highAccSounds = Arrays.asList(CAT_MEOW, VEHICLE, CAR_HONK, DOG_BARK,
-            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM, SPEECH,
+            APPLIANCES, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM,
             KNOCKING);
 
     // List of IDs of only high accuracy sounds (11 sounds)
-    private static final List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm, R.id.speech,
-            R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.microwave, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
+    private static final List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm,
+            R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.appliances, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
             R.id.vehicle, R.id.baby_crying));
 
     // List of IDs of only low accuracy sounds (19 sounds)
@@ -241,12 +241,12 @@ public class MainActivity extends AppCompatActivity
         CHECKBOX_MAP.put(DOG_BARK, R.id.dog_bark);
         CHECKBOX_MAP.put(VEHICLE, R.id.vehicle);
         CHECKBOX_MAP.put(CAR_HONK, R.id.car_honk);
-        CHECKBOX_MAP.put(MICROWAVE, R.id.microwave);
+        CHECKBOX_MAP.put(APPLIANCES, R.id.appliances);
         CHECKBOX_MAP.put(WATER_RUNNING, R.id.water_running);
         CHECKBOX_MAP.put(DOOR_IN_USE, R.id.door_in_use);
         CHECKBOX_MAP.put(BABY_CRY, R.id.baby_crying);
         CHECKBOX_MAP.put(FIRE_SMOKE_ALARM, R.id.fire_smoke_alarm);
-        CHECKBOX_MAP.put(SPEECH, R.id.speech);
+//        CHECKBOX_MAP.put(SPEECH, R.id.speech);
         CHECKBOX_MAP.put(KNOCKING, R.id.knocking);
     }
 
@@ -272,8 +272,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.fire_smoke_alarm:
                 currentSound = SOUNDS_MAP.get(FIRE_SMOKE_ALARM);
                 break;
-            case R.id.microwave:
-                currentSound = SOUNDS_MAP.get(MICROWAVE);
+            case R.id.appliances:
+                currentSound = SOUNDS_MAP.get(APPLIANCES);
                 break;
             case R.id.water_running:
                 currentSound = SOUNDS_MAP.get(WATER_RUNNING);
@@ -827,8 +827,8 @@ public class MainActivity extends AppCompatActivity
                 return (CheckBox) findViewById(R.id.car_honk);
             case FIRE_SMOKE_ALARM:
                 return (CheckBox) findViewById(R.id.fire_smoke_alarm);
-            case MICROWAVE:
-                return (CheckBox) findViewById(R.id.microwave);
+            case APPLIANCES:
+                return (CheckBox) findViewById(R.id.appliances);
             case WATER_RUNNING:
                 return (CheckBox) findViewById(R.id.water_running);
             case DOOR_IN_USE:

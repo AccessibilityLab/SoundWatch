@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.Tensor;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -61,13 +62,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import androidx.annotation.WorkerThread;
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
-
 
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -91,6 +94,8 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
     private static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
+    private static final String SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH = "/SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH";
+
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
     private static final float PREDICTION_THRES = 0.4F;
@@ -103,11 +108,12 @@ public class DataLayerListenerService extends WearableListenerService {
     public static final String COUNT_PATH = "/count";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_UNSNOOZE_FROM_WATCH_PATH = "/SOUND_UNSNOOZE_FROM_WATCH_PATH";
+    public static final String SOUND_FEEDBACK_FROM_WATCH_PATH =  "/SOUND_FEEDBACK_FROM_WATCH_PATH";
 
     private Interpreter tfLite;
     //    private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String MODEL_FILENAME = "file:///android_asset/sw_model_v2.tflite";
-    private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
+    private static final String LABEL_FILENAME = "file:///android_asset/labels_10.txt";
 
     // must match with Wearable.SoundRecorder
     private static final int RECORDING_RATE = 16000; // (Hz == number of sample per second
@@ -115,8 +121,9 @@ public class DataLayerListenerService extends WearableListenerService {
     //  that's equivalent to ~330ms of data with recording rate of 16kHz;
     //  for model v2, the buffer size is intended to be ~320ms
     // FIXME: try 16k buffer (~1sec) and average 3 predictions
-    private static final int bufferElements2Rec = 5360;
+    private static final int bufferElements2Rec = 16000;
     private final List<String> labels = new ArrayList<>();
+    private final Map<String, Integer> labels2Int = new HashMap<>();
     private int numLabels;
     //    private double dbTotal = 0;
     private int counter = 0;
@@ -137,7 +144,11 @@ public class DataLayerListenerService extends WearableListenerService {
 
     private List<Short> soundBuffer = new ArrayList<>();
     private int soundSecondCounter = 0;
-
+    private boolean isFirstTime = true;
+    private boolean receivedFeedback = false;
+    private Map<String, JSONObject> map = new ConcurrentHashMap<>();
+    private Map<Integer, List<Double>> topPredictions = new ConcurrentHashMap<>();
+    private int count = 0;
     /**
      * SocketIO part
      */
@@ -171,14 +182,20 @@ public class DataLayerListenerService extends WearableListenerService {
         String actualLabelFilename = LABEL_FILENAME.split("file:///android_asset/", -1)[1];
         BufferedReader br;
         try {
+            int i = 0;
             br = new BufferedReader(new InputStreamReader(getAssets().open(actualLabelFilename)));
             String line;
             while ((line = br.readLine()) != null) {
                 labels.add(line);
+                labels2Int.put(line, i);
+                i++;
             }
             br.close();
             this.numLabels = labels.size();
             this.output = new float[1][numLabels];
+            for (String key: labels2Int.keySet()) {
+                Log.d(TAG, "key: " + key + "value: " + labels2Int.get(key));
+            }
         } catch (IOException e) {
             throw new RuntimeException("Problem reading label file of " + actualLabelFilename, e);
         }
@@ -248,7 +265,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.i(TAG, "Message received from Watch");
+        Log.i(TAG, "Message received from Watch: " + messageEvent.getPath());
 
         if (messageEvent.getPath().equals(SOUND_SNOOZE_FROM_WATCH_PATH)) {
             String soundLabel = (new String(messageEvent.getData())).split(",")[0];
@@ -303,12 +320,39 @@ public class DataLayerListenerService extends WearableListenerService {
             sendBroadcast(broadcastIntent);
             return;
         }
+        String feedback = "none";
+        if (messageEvent.getPath().equals(SOUND_FEEDBACK_FROM_WATCH_PATH)) {
+            String[] parts = (new String(messageEvent.getData())).split("_");
+            feedback = parts[0];
+            String audioLabel = parts[1];
+            Log.i(TAG, "Feedback for sound " + audioLabel + " to be verified. Map currently has " + map.keySet().size() +" elements.");
+            if (map.containsKey(audioLabel)) {
+                Log.i(TAG, "Phone received feedback [" + feedback + "] from watch for sound " + labels2Int.get(audioLabel));
+                if (py == null || pythonModule == null) {
+                    if (!Python.isStarted()) {
+                        Python.start(new AndroidPlatform(this));
+                    }
 
+                    py = Python.getInstance();
+                }
+
+                pythonModule = py.getModule("thompsonsampling");
+                pythonModule.callAttr("feedback_sound", labels2Int.get(audioLabel), feedback);
+                map.remove(audioLabel);
+                soundBuffer.clear();
+            } else {
+                Log.i(TAG, "map doesn't have " + audioLabel);
+            }
+            return;
+        }
+        if (map.keySet().size() == 0) {
+            processAudioRecognition(messageEvent.getData(), feedback);
+        }
         /** Parsing data array from watch **/
-        processAudioRecognition(messageEvent.getData());
+
     }
 
-    public void processAudioRecognition(byte[] data) {
+    public void processAudioRecognition(byte[] data, String feedback) {
 //        Log.i(TAG, "processAudioRcognition()");
         float[] features;
         short[] shorts;
@@ -375,7 +419,7 @@ public class DataLayerListenerService extends WearableListenerService {
 //                                            soundBuffer = new ArrayList<>();
 //                                        }
                                         // (new model) not skipping
-                                        predictSoundsFromRawAudio();
+                                        predictSoundsFromRawAudio(feedback);
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -383,9 +427,11 @@ public class DataLayerListenerService extends WearableListenerService {
                         } else {
                             //Log.i(TAG, "Buffer size: " + soundBuffer.size());
                             shorts = convertByteArrayToShortArray(data);
+                            Log.d(TAG, "shorts audio: "+ Arrays.toString(shorts) + " data length: " + data.length);
                             if (soundBuffer.size() == bufferElements2Rec) {
-                                predictSoundsFromRawAudio();
+                                predictSoundsFromRawAudio(feedback);
                             }
+
                             if (soundBuffer.size() < bufferElements2Rec) {
                                 for (short num : shorts) {
                                     if (soundBuffer.size() == bufferElements2Rec) {
@@ -398,7 +444,7 @@ public class DataLayerListenerService extends WearableListenerService {
 //                                            soundBuffer = new ArrayList<>();
 //                                        }
                                         // (new model) not skipping
-                                        predictSoundsFromRawAudio();
+                                        predictSoundsFromRawAudio(feedback);
                                     }
                                     soundBuffer.add(num);
                                 }
@@ -486,8 +532,8 @@ public class DataLayerListenerService extends WearableListenerService {
     /**
      * Audio Processing
      */
-    private float[] extractAudioFeatures(short[] sData) {
-        float[] result = new float [input1D.length];
+    private float[][][] extractAudioFeatures(short[] sData) {
+        float[][][] result = new float [1][NUM_FRAMES][NUM_BANDS];
         if (sData.length != bufferElements2Rec) {
             // Sanity check, because sound has to be exactly bufferElements2Rec elements
             return null;
@@ -504,38 +550,41 @@ public class DataLayerListenerService extends WearableListenerService {
                     }
 
                     py = Python.getInstance();
-                    pythonModule = py.getModule("main");
+                    pythonModule = py.getModule("spectrogram");
                     Log.i(TAG, "Time elapsed after init Python modules: " + (System.currentTimeMillis() - startTimePython));
                 }
 
                 // Get MFCC features
 //                System.out.println("Sending to python:\n" + Arrays.toString(sData));
+                pythonModule = py.getModule("spectrogram");
                 System.out.println("=======sending to python array length of " + sData.length);
-                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));
+                PyObject mfccFeatures = pythonModule.callAttr("extract_features", Arrays.toString(sData));
 
                 Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
 //                System.out.println("=======mfccFeatures is " + mfccFeatures.toString());
 
                 // Parse features into a float array
-                String inputString = mfccFeatures.toString();
-                inputString = inputString.replace("jarray('F')([", "").replace("])", "");
-                String[] inputStringArr = inputString.split(", ");
-                if (inputStringArr.length == 0) {
+                String featuresString = mfccFeatures.toString();
+                featuresString = featuresString.replace("jarray('F')([", "").replace("])", "");
+                String[] featuresStringArr = featuresString.split(", ");
+                if (featuresStringArr.length == 0) {
                     return null;
                 }
-                System.out.println("=======inputStringArr length is " + inputStringArr.length);
-
-                for (int i = 0; i < result.length; i++) {
-                    if (inputStringArr[i].isEmpty()) {
-                        return null;
+                System.out.println("=======inputStringArr length is " + featuresStringArr.length);
+                int count = 0;
+                for (int i = 0; i < NUM_FRAMES; i++) {
+                    for (int j = 0; j < NUM_BANDS; j++) {
+                        result[0][i][j] = Float.parseFloat(featuresStringArr[count]);
+                        count++;
                     }
-                    result[i] = Float.parseFloat(inputStringArr[i]);
                 }
+                Log.d(TAG,"");
                 return result;
             }
             return null;
         } catch (PyException e) {
             Log.i(TAG, "Something went wrong parsing to MFCC feature");
+            e.printStackTrace();
             return null;
         }
     }
@@ -720,12 +769,14 @@ public class DataLayerListenerService extends WearableListenerService {
             new SendAllAudioPredictionsToWearTask(result, db, recordTime).execute();
             return result;
         }
+
         for (int i = 0; i < numLabels; i++) {
             if (max < output[0][i]) {
                 max = output[0][i];
                 argmax = i;
             }
         }
+        Log.d(TAG, "OUTPUT SHAPE: " + output[0].length);
 
         if (max > PREDICTION_THRES) {
             //Get label and confidence
@@ -748,41 +799,73 @@ public class DataLayerListenerService extends WearableListenerService {
     }
 
 
-    private String predictSoundsFromRawAudio() {
+    private String predictSoundsFromRawAudio(String feedback) {
 //        counter++;
+
         Log.d(TAG, "Counter: " + counter);
         if (soundBuffer.size() != bufferElements2Rec) {
             soundBuffer = new ArrayList<>();
             return "Invalid audio size";
         }
-
         // copy buffer to a new short array
         short[] sData = new short[bufferElements2Rec];
         for (int i = 0; i < soundBuffer.size(); i++) {
             sData[i] = soundBuffer.get(i);
         }
+        Log.d(TAG, "Raw audio: " + Arrays.toString(sData));
         soundBuffer = new ArrayList<>();
-        System.out.println("sData length is " + sData.length);
 
         try {
             double decibel = db(sData);
             Log.d(TAG, "2. DB of data: " + decibel + "| DB_thresh: " + DBLEVEL_THRES);
             if (decibel >= DBLEVEL_THRES) {
-                // extract audio features from raw bytes
-                input1D = extractAudioFeatures(sData);
-                if (input1D == null) {
-                    return "Empty MFCC features, or something went wrong";
-                }
-                System.out.println("input1D is " + Arrays.toString(input1D));
+                try {
+                    if (map.keySet().size() > 0) {
+                        Log.d(TAG, "isFirstTime: " + isFirstTime + " feedback: " + feedback);
+                        Set<String> set= map.keySet();
+                        for (String prediction: set) {
+                            JSONObject data = map.get(prediction);
+                            new SendAudioLabelToWearTask(prediction, "-1", data.getDouble("db") , recordTime).execute();
+                        }
 
-                // Resize to dimensions of model input
-                int count = 0;
-                for (int j = 0; j < NUM_FRAMES; j++) {
-                    for (int k = 0; k < NUM_BANDS; k++) {
-                        input3D[0][j][k] = input1D[count];
-                        count++;
+                        return "";
                     }
+                    isFirstTime = false;
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("shortData.txt", Context.MODE_APPEND));
+                    outputStreamWriter.write("CURRENT INPUT: \n");
+                    for (int i= 0; i<sData.length;i++){
+                        outputStreamWriter.write(sData[i]+" ");
+                    }
+                    outputStreamWriter.write("\n");
+
+
+                    outputStreamWriter.close();
+                }   catch (IOException e) {
+                Log.e("Exception", "File write failed: " + e.toString());
                 }
+                // extract audio features from raw bytes
+                input3D = extractAudioFeatures(sData);
+
+//                try {
+//                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("input.txt", Context.MODE_APPEND));
+//                    outputStreamWriter.write("CURRENT INPUT: \n");
+//                    for (int i= 0; i<input3D.length;i++){
+//                        for (int j= 0; j<input3D[i].length ;j++){
+//                            for (int k=0; k<input3D[i][j].length;k++){
+//                                outputStreamWriter.write(input3D[i][j][k]+" ");
+//                            }
+//                            outputStreamWriter.write("\n");
+//                            // System.out.println(); remove this println
+//                        }
+//                    }
+//
+//                    outputStreamWriter.close();
+//                }
+//                catch (IOException e) {
+//                    Log.e("Exception", "File write failed: " + e.toString());
+//                }
+
+
 
                 long startTime = 0;
                 if (TEST_MODEL_LATENCY)
@@ -790,34 +873,15 @@ public class DataLayerListenerService extends WearableListenerService {
                 Log.i(TAG, "Elapsed time from watch to model on phone: " + (System.currentTimeMillis() - recordTime));
 
                 // Run inference
-                tfLite.run(input3D, output);
+                int predictionIdx = inference(input3D);
+                topPredictions.putIfAbsent(predictionIdx, new ArrayList<>());
+                if (count < 3){
+                    topPredictions.get(predictionIdx).add(decibel);
+                    count++;
+                }
 
-                System.out.println("=====output is " + Arrays.toString(output));
 
-//                // TODO: experiment with averaging the predictions
-//                float[][][] reshapedInput = new float[3][NUM_FRAMES][NUM_BANDS];
-//                int count = 0;
-//                for (int i = 0; i < 3; i++) {
-//                    for (int j = 0; j < NUM_FRAMES; j++) {
-//                        for (int k = 0; k < NUM_BANDS; k++) {
-//                            reshapedInput[i][j][k] = input1D[count];
-//                            count++;
-//                        }
-//                    }
-//                }
-//                Map<String, List<Float>> predictionsBag = new HashMap<>();
-//                for (int i = 0; i < 3; i++) {
-//                    tfLite.run(reshapedInput[i], output);
-//
-//                    for (int j = 0; j < numLabels; j++) {
-//                        String label = labels.get(j);
-//                        if (!predictionsBag.containsKey(label)) {
-//                            predictionsBag.put(label, new ArrayList<>());
-//                        }
-//
-//                        Objects.requireNonNull(predictionsBag.get(label)).add(output[0][j]);
-//                    }
-//                }
+                Log.d(TAG, "Prediction idx: " + predictionIdx);
 
                 if (PREDICT_MULTIPLE_SOUNDS) {
                     List<SoundPrediction> predictions = new ArrayList<>();
@@ -877,33 +941,99 @@ public class DataLayerListenerService extends WearableListenerService {
                     }
                 }
 
-                // Find max and argmax
-                float max = output[0][0];
-                int argmax = 0;
-                for (int i = 0; i < numLabels; i++) {
-                    if (max < output[0][i]) {
-                        max = output[0][i];
-                        argmax = i;
+////                 Find max and argmax
+//                float max = output[0][0];
+//                int argmax = 0;
+//                for (int i = 0; i < numLabels; i++) {
+//                    if (max < output[0][i]) {
+//                        max = output[0][i];
+//                        argmax = i;
+//                    }
+//                }
+//                Log.d(TAG,"Argmax " + argmax);
+//
+//                if (max > PREDICTION_THRES) {
+//                    //Get label and confidence
+//                    //Get label and confidence
+//                    final String prediction = labels.get(argmax);
+//                    final String confidence = String.valueOf(max);
+//                    // TODO: Something with DB
+//                    new SendAudioLabelToWearTask(prediction, confidence, Math.abs(db(sData)), recordTime).execute();
+//                    return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
+//                } else {
+//                    if (TEST_E2E_LATENCY) {
+//                        Log.i(TAG, "Audio < prethreshold");
+//                        new SendAudioLabelToWearTask(UNIDENTIFIED_SOUND, "1.0", 0.0, recordTime).execute();
+//                        return UNIDENTIFIED_SOUND + ": " + 1.0 + "%                           " + LocalTime.now();
+//                    }
+//                }
+                Log.d(TAG,"topPredictions count: " + count);
+                if (count == 3) {
+                    Log.d(TAG,"topPredictions full");
+                    int max = -1;
+                    int maxIdx = -1;
+                    for (Integer prediction : topPredictions.keySet()) {
+                        if (topPredictions.get(prediction).size() > max) {
+                            max = topPredictions.get(prediction).size();
+                            maxIdx = prediction;
+                        }
                     }
+                    if (max / 2 == 1) {
+                        Log.d(TAG,"topPredictions, chosen: " + maxIdx);
+                        final String prediction = labels.get(maxIdx);
+                        final String confidence = String.valueOf(maxIdx);
+                        // TODO: Something with DB
+
+                        double avgDb = 0.0;
+                        for (Double db: topPredictions.get(maxIdx)) {
+                            avgDb += db;
+                        }
+                        avgDb /= topPredictions.get(maxIdx).size();
+
+                        JSONObject data = new JSONObject();
+                        data.put("prediction", predictionIdx);
+                        data.put("db", avgDb);
+                        map.put(prediction, data);
+                        if (map.keySet().size() == 1) {
+                            new SendAudioLabelToWearTask(prediction, confidence, avgDb , recordTime).execute();
+
+                        }
+                        topPredictions.clear();
+                        count = 0;
+                        return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%";
+                    }
+                    topPredictions.clear();
+                    count = 0;
                 }
 
-                if (max > PREDICTION_THRES) {
-                    //Get label and confidence
-                    final String prediction = labels.get(argmax);
-                    final String confidence = String.format("%,.2f", max);
-                    // TODO: Something with DB
-                    new SendAudioLabelToWearTask(prediction, confidence, Math.abs(db(sData)), recordTime).execute();
-                    return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
-                } else {
-                    if (TEST_E2E_LATENCY) {
-                        Log.i(TAG, "Audio < prethreshold");
-                        new SendAudioLabelToWearTask(UNIDENTIFIED_SOUND, "1.0", 0.0, recordTime).execute();
-                        return UNIDENTIFIED_SOUND + ": " + 1.0 + "%                           " + LocalTime.now();
-                    }
-                }
+                return UNIDENTIFIED_SOUND + ": " + 1.0 + "%                           " + LocalTime.now();
+//                if (predictionIdx != -1) {
+//                    //Get label and confidence
+//                    final String prediction = labels.get(predictionIdx);
+//                    final String confidence = String.valueOf(predictionIdx);
+//                    // TODO: Something with DB
+//
+//                    double db = Math.abs(db(sData));
+//                    JSONObject data = new JSONObject();
+//                    data.put("prediction", predictionIdx);
+//                    data.put("db", db);
+//                    map.put(prediction, data);
+//                    if (map.containsKey(prediction) && map.keySet().size() == 1) {
+//                        new SendAudioLabelToWearTask(prediction, confidence, db , recordTime).execute();
+//
+//                    }
+//                    return prediction + ": " + (Double.parseDouble(confidence) * 100) + "%                           " + LocalTime.now();
+//                } else {
+//                    if (TEST_E2E_LATENCY) {
+//                        Log.i(TAG, "Audio < prethreshold");
+//                        new SendAudioLabelToWearTask(UNIDENTIFIED_SOUND, "1.0", 0.0, recordTime).execute();
+//                        return UNIDENTIFIED_SOUND + ": " + 1.0 + "%                           " + LocalTime.now();
+//                    }
+//                }
             }
-        } catch (PyException e) {
+        } catch (Exception e) {
             Log.i(TAG, "Something went wrong parsing to MFCC feature");
+            e.printStackTrace();
             return "Something went wrong parsing to MFCC feature";
         }
 
@@ -913,6 +1043,28 @@ public class DataLayerListenerService extends WearableListenerService {
         }
         Log.i(TAG, "Unrecognized Sound");
         return "Unrecognized sound" + "                           " + LocalTime.now();
+    }
+
+    private int inference(float[][][] input3D) {
+        try{
+            if (py == null || pythonModule == null) {
+                if (!Python.isStarted()) {
+                    Python.start(new AndroidPlatform(this));
+                }
+                py = Python.getInstance();
+                //pythonModule = py.getModule("thompsonsampling");
+            }
+            Log.d(TAG,"Before Pymodule");
+
+            PyObject module = py.getModule("thompsonsampling");
+            Log.d(TAG,"Pymodule ");
+            PyObject prediction_max_arm = module.callAttr("load_input", (Object) input3D);
+            return prediction_max_arm.toInt();
+        } catch (PyException e) {
+            e.printStackTrace();
+            Log.i(TAG, "Something went wrong with calling thompsonsampling");
+        }
+        return -1;
     }
 
     public class SendAudioLabelToWearTask extends AsyncTask<Void, Void, Void> {
@@ -944,6 +1096,25 @@ public class DataLayerListenerService extends WearableListenerService {
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
+            }
+            return null;
+        }
+    }
+
+    public class SendAudioFeedbackToWearTask extends AsyncTask<Void, Void, Void> {
+        private String audioLabel;
+
+        public SendAudioFeedbackToWearTask(String audioLabel) {
+            this.audioLabel = audioLabel;
+        }
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            Collection<String> nodes = getNodes();
+
+            Log.i(TAG, "Number of connected devices:" + nodes.size());
+            for (String node : nodes) {
+                sendMessageWithData(node, SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH, audioLabel.getBytes());
             }
             return null;
         }
