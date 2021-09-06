@@ -1,5 +1,8 @@
 package com.wearable.sound.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     /**
      * Data layer paths which is the data sent from watch
@@ -34,10 +37,11 @@ public class Constants {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     public static final String VOICE_FILE_NAME = "audiorecord.pcm";
 
-    public static final String MODEL_1 = "file:///android_asset/example_model.tflite";
+    public static final String MODEL_1 = "file:///android_asset/sw_model_1.tflite";
+    public static final String MODEL_2 = "file:///android_asset/sw_model_2.tflite";
     public static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
 
-    public static final String MODEL_FILENAME = MODEL_1;
+    public static final String MODEL_FILENAME = MODEL_2;
     public static final boolean TEST_MODEL_LATENCY = false;
     public static final boolean TEST_E2E_LATENCY = false;
 
@@ -69,8 +73,8 @@ public class Constants {
 
 
     /*
-    *  Foreground Service configurations
-    * */
+     *  Foreground Service configurations
+     * */
     public interface ACTION {
         String MAIN_ACTION = "com.wearable.sound.utils.action.main";
         public static String PREV_ACTION = "com.wearable.sound.utils.action.prev";

@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application {
-    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList("Fire/Smoke Alarm",
+    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(
+            "Fire/Smoke Alarm",
             "Speech",
             "Door In-Use",
             "Water Running",
@@ -18,7 +19,7 @@ public class MainApplication extends Application {
             "Vehicle",
             "Baby Cry"));
 
-//    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
+    //    public ArrayList<String> enabledSounds = new ArrayList<>(Arrays.asList(new String[] {
 //        "Dog Bark",
 //        "Drill",
 //        "Fire/Smoke Alarm",
