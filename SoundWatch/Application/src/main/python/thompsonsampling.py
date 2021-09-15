@@ -18,9 +18,6 @@ interpreter.allocate_tensors()
 dict = {}
 
 
-
-
-
 def ts_predict(features, num_classes, V, S, Vhalf, Vinv):
     '''
     Return a prediction without update the parameters
@@ -44,7 +41,6 @@ def ts_predict(features, num_classes, V, S, Vhalf, Vinv):
         post_mean = Vinv[i].dot(S[i])
         # draw sample from posterior for class i, this is the \tilde{\phi}_a vector
         theta_hat = post_mean + Vhalf[i].dot(rand.randn(d))
-        print("reward at i:",i,":", theta_hat.dot(x))
         # determine if class i the best observed so far
         if theta_hat.dot(x) > reward:
             reward = theta_hat.dot(x)
@@ -65,7 +61,7 @@ def feedback_sound(predicted_max_arm, feedback):
     print("User gave feedback", feedback, "for sound" , predicted_max_arm)
     if feedback != "none" and predicted_max_arm in dict:
         with open(TS_UPDATE_PATH,'wb') as f:
-            pickle.dump(ts_update(dict[predicted_max_arm], feedback, NUM_CLASSES, V, S, Vhalf, Vinv, predicted_max_arm), f)
+            pickle.dump(ts_update(dict[predicted_max_arm], feedback, V, S, Vhalf, Vinv, predicted_max_arm), f)
         dict.pop(predicted_max_arm)
 
 def ts_update(features, feedback, V, S, Vhalf, Vinv, predicted_max_arm):
@@ -83,9 +79,9 @@ def ts_update(features, feedback, V, S, Vhalf, Vinv, predicted_max_arm):
 
     '''
     if feedback == "true":
-        reward = 5
+        reward = 10
     else:
-        reward = -10
+        reward = -50
     print("Entered ts_update with feedback", reward)
     x = features[0,:]
 

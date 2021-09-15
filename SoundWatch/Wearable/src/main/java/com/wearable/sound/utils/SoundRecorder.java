@@ -44,7 +44,9 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -86,7 +88,7 @@ public class SoundRecorder {
     public static final String AUDIO_MESSAGE_PATH = "/audio_message";
     private static final double DBLEVEL_THRES = -40.0;
 //    private static final int bufferElements2Rec = RECORDING_RATE * 320 / 1000; // 320ms sample for the new model v2
-    private static final int bufferElements2Rec = RECORDING_RATE;
+    private static final int bufferElements2Rec = 10479;
     private static final String SNOOZE_LABEL = "Snooze";
     private static final String SNOOZE_TIME_LABEL = "Snooze Time";
     private static final String[] SNOOZE_CHOICES = {"5 mins", "10 mins", "1 hour", "1 day", "Forever"};

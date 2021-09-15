@@ -121,7 +121,7 @@ public class DataLayerListenerService extends WearableListenerService {
     //  that's equivalent to ~330ms of data with recording rate of 16kHz;
     //  for model v2, the buffer size is intended to be ~320ms
     // FIXME: try 16k buffer (~1sec) and average 3 predictions
-    private static final int bufferElements2Rec = 16000;
+    private static final int bufferElements2Rec = 10479;
     private final List<String> labels = new ArrayList<>();
     private final Map<String, Integer> labels2Int = new HashMap<>();
     private int numLabels;
@@ -338,16 +338,16 @@ public class DataLayerListenerService extends WearableListenerService {
 
                 pythonModule = py.getModule("thompsonsampling");
                 pythonModule.callAttr("feedback_sound", labels2Int.get(audioLabel), feedback);
-                map.remove(audioLabel);
+                map.clear();
                 soundBuffer.clear();
             } else {
                 Log.i(TAG, "map doesn't have " + audioLabel);
             }
             return;
         }
-        if (map.keySet().size() == 0) {
+//        if (map.keySet().size() == 0) {
             processAudioRecognition(messageEvent.getData(), feedback);
-        }
+//        }
         /** Parsing data array from watch **/
 
     }
@@ -556,9 +556,13 @@ public class DataLayerListenerService extends WearableListenerService {
 
                 // Get MFCC features
 //                System.out.println("Sending to python:\n" + Arrays.toString(sData));
-                pythonModule = py.getModule("spectrogram");
+//                pythonModule = py.getModule("spectrogram");
+//                System.out.println("=======sending to python array length of " + sData.length);
+//                PyObject mfccFeatures = pythonModule.callAttr("extract_features", Arrays.toString(sData));
+
+                pythonModule = py.getModule("main");
                 System.out.println("=======sending to python array length of " + sData.length);
-                PyObject mfccFeatures = pythonModule.callAttr("extract_features", Arrays.toString(sData));
+                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));
 
                 Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
 //                System.out.println("=======mfccFeatures is " + mfccFeatures.toString());
@@ -1030,6 +1034,9 @@ public class DataLayerListenerService extends WearableListenerService {
 //                        return UNIDENTIFIED_SOUND + ": " + 1.0 + "%                           " + LocalTime.now();
 //                    }
 //                }
+            } else {
+                topPredictions.clear();
+                count = 0;
             }
         } catch (Exception e) {
             Log.i(TAG, "Something went wrong parsing to MFCC feature");

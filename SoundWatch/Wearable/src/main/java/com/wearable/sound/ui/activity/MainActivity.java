@@ -999,9 +999,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 }
         }
 
-        if (!soundLastTime.containsKey(audioLabel.label)) {
-            soundLastTime.put(audioLabel.label, System.currentTimeMillis());
-        }
+//        if (!soundLastTime.containsKey(audioLabel.label)) {
+//        }
         for (String label: ((MainApplication) getApplicationContext()).enabledSounds) {
             Log.d(TAG,"label: " + label);
         }
@@ -1063,6 +1062,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         incorrectFeedbackIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
         PendingIntent incorrectFeedbackPendingIntent = PendingIntent.getService(this, 1, incorrectFeedbackIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Intent skipFeedbackIntent = new Intent(this, FeedbackSoundService.class);
+        skipFeedbackIntent.putExtra(SOUND_ID, NOTIFICATION_ID);
+        skipFeedbackIntent.putExtra(SOUND_LABEL, audioLabel.label);
+        skipFeedbackIntent.putExtra(FEEDBACK, "none");
+        skipFeedbackIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
+        PendingIntent skipFeedbackPendingIntent = PendingIntent.getService(this, 2, skipFeedbackIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
 //                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
@@ -1081,12 +1087,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 //.addAction(R.drawable.ic_full_cancel,
                 //        "Snooze 10 mins", snoozeSoundPendingIntent)
                 .addAction(R.drawable.ic_cc_checkmark, "Correct", correctFeedbackPendingIntent)
-                .addAction(R.drawable.ic_full_cancel, "Incorrect", incorrectFeedbackPendingIntent);
+                .addAction(R.drawable.ic_full_cancel, "Incorrect", incorrectFeedbackPendingIntent)
+                .addAction(R.drawable.ic_full_cancel, "Skip", skipFeedbackPendingIntent);
 
         //NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notificationCompatBuilder.build());
+        soundLastTime.put(audioLabel.label, System.currentTimeMillis());
+
         if(TEST_E2E_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
             Log.i(TAG, "Elapsed time: " + elapsedTime);
