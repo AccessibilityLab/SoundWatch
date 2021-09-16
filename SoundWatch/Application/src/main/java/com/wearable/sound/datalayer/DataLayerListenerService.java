@@ -101,7 +101,7 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final float PREDICTION_THRES = 0.4F;
     // attempt to reduce "speech" noise predictions
     private static final float SPEECH_PREDICTION_THRES = 0.75F;
-    private static double DBLEVEL_THRES = 40;
+    private static double DBLEVEL_THRES = 50;
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     private static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
 
@@ -121,7 +121,7 @@ public class DataLayerListenerService extends WearableListenerService {
     //  that's equivalent to ~330ms of data with recording rate of 16kHz;
     //  for model v2, the buffer size is intended to be ~320ms
     // FIXME: try 16k buffer (~1sec) and average 3 predictions
-    private static final int bufferElements2Rec = 10479;
+    private static final int bufferElements2Rec = 5360;
     private final List<String> labels = new ArrayList<>();
     private final Map<String, Integer> labels2Int = new HashMap<>();
     private int numLabels;
@@ -885,7 +885,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 }
 
 
-                Log.d(TAG, "Prediction idx: " + predictionIdx);
+                Log.d(TAG, "Prediction: " + labels.get(predictionIdx));
 
                 if (PREDICT_MULTIPLE_SOUNDS) {
                     List<SoundPrediction> predictions = new ArrayList<>();
