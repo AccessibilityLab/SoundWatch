@@ -115,6 +115,10 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="setting">Settings</string>
     <!-- Foreground Service Preferences -->
+    <string name="calibration_title"> Calibration Mode</string>
+    <string name="calibration_off"> Calibration Mode is OFF</string>
+    <string name="calibration_on"> Calibration Mode is ON</string>
+
     <string name="foreground_title">Sleep Mode</string>
     <string name="foreground_summary_on"> Sleep Mode is ON.
     </string>

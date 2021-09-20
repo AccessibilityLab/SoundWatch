@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String START_ACTIVITY_PATH = "/start-activity";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
+    private static final String SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH = "/SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH";
     private static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
     private static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
     private static final String COUNT_PATH = "/count";
@@ -223,10 +224,13 @@ public class MainActivity extends AppCompatActivity
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
+    public static final String CALIBRATION_LABEL = "CALIBRATION_LABEL";
     public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
 
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<>();
     public static Map<String, Integer> CHECKBOX_MAP = new HashMap<>();
+
+    public static boolean IS_CALIBRATING;
 
     public SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
 
@@ -423,6 +427,7 @@ public class MainActivity extends AppCompatActivity
     public static final String mBroadcastSnoozeSound = "com.wearable.sound.broadcast.snoozeSound";
     public static final String mBroadcastUnsnoozeSound = "com.wearable.sound.broadcast.unsnoozeSound";
     public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
+    public static final String mBroadcastCalibrationMode = "com.wearable.sound.broadcast.calibrationmode";
     public static final String mBroadcastDisableForegroundService = "com.wearable.sound.broadcast.disableforegroundservice";
 
     private IntentFilter mIntentFilter;
@@ -587,8 +592,10 @@ public class MainActivity extends AppCompatActivity
 //        int defaultValue = getResources().getInteger(R.integer.saved_high_score_default_key);
 //        int highScore = sharedPref.getInt(getString(R.string.saved_high_score_key), defaultValue);
 
-
         // Create a SharedPreference for root_preferences to update and use value from the setting tab
+
+        Wearable.getMessageClient(MainActivity.this)
+                .sendMessage(CALIBRATION_LABEL, SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH, "calibration_disabled".getBytes());
 
         boolean isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
         Log.d(TAG, "isSleepModeOn1" + isSleepModeOn);
@@ -601,13 +608,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Turn this on to reset Preference every time the app open (1/2)
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.clear().apply();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear().apply();
 
 
         // // Turn this to true to reset Preference every time the app open (2/2)
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
-        isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, true);
 
 //         Start the service once by default
         Log.i(TAG, "Starting foreground service first time");
@@ -624,6 +630,7 @@ public class MainActivity extends AppCompatActivity
         mIntentFilter.addAction(mBroadcastSnoozeSound);
         mIntentFilter.addAction(mBroadcastUnsnoozeSound);
         mIntentFilter.addAction(mBroadcastForegroundService);
+        mIntentFilter.addAction(mBroadcastCalibrationMode);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -658,6 +665,16 @@ public class MainActivity extends AppCompatActivity
                             Wearable.getMessageClient(MainActivity.this)
                                     .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_disabled".getBytes());
 //                          Toast.makeText(MainActivity.this, "Foreground service stopped.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (key.equals("calibration_mode")) {
+                        IS_CALIBRATING = sharedPreferences.getBoolean("calibration_mode", false);
+                        Log.d(TAG, "Is Calibrating" + IS_CALIBRATING);
+                        if (!IS_CALIBRATING) {
+                            Wearable.getMessageClient(MainActivity.this)
+                                    .sendMessage(CALIBRATION_LABEL, SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH, "calibration_disabled".getBytes());
+                        } else {
+                            Wearable.getMessageClient(MainActivity.this)
+                                    .sendMessage(CALIBRATION_LABEL, SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH, "calibration_enabled".getBytes());
                         }
                     }
                     // enable this for Listening MODE: 1 out of 3
@@ -805,6 +822,10 @@ public class MainActivity extends AppCompatActivity
                 } else if (intent.getStringExtra(FOREGROUND_LABEL).equals("watch_stop_record")) {
                     Toast.makeText(MainActivity.this, "Smartwatch stops listening", Toast.LENGTH_SHORT).show();
                 }
+            } else if (intent.getAction().equals(mBroadcastCalibrationMode)) {
+                String calibrationMode = IS_CALIBRATING? "calibration_enabled" : "calibration_disabled";
+                Wearable.getMessageClient(MainActivity.this)
+                        .sendMessage(CALIBRATION_LABEL, SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH, calibrationMode.getBytes());
             }
         }
     };

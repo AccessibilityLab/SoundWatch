@@ -398,10 +398,6 @@ public class SoundRecorder {
                     RECORDING_RATE, CHANNEL_IN, FORMAT, BUFFER_SIZE);
             BufferedOutputStream bufferedOutputStream = null;
             try {
-                bufferedOutputStream = new BufferedOutputStream(
-                        soundRecorder.mContext.openFileOutput(
-                                soundRecorder.mOutputFileName,
-                                Context.MODE_PRIVATE));
                 final byte[] buffer = new byte[BUFFER_SIZE];
                 mAudioRecord.startRecording();
                 while (!isCancelled()) {
@@ -425,18 +421,10 @@ public class SoundRecorder {
                             soundRecorder.soundBuffer.add(num);
                         }
                     }
-                    bufferedOutputStream.write(buffer, 0, read);
                 }
-            } catch (IOException | NullPointerException | IndexOutOfBoundsException e) {
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
                 Log.e(TAG, "Failed to record data: " + e);
             } finally {
-                if (bufferedOutputStream != null) {
-                    try {
-                        bufferedOutputStream.close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                }
                 mAudioRecord.release();
                 mAudioRecord = null;
             }

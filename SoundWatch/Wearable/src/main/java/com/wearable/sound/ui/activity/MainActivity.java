@@ -51,6 +51,7 @@ import com.wearable.sound.service.FeedbackSoundService;
 import com.wearable.sound.service.ForegroundService;
 import com.wearable.sound.service.SnoozeSoundService;
 import com.wearable.sound.utils.AlarmReceiver;
+import com.wearable.sound.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,7 +106,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final float PREDICTION_THRES = 0.4F;
     private static Toast mToast;
     public static boolean IS_FOREGROUND_DISABLED;
+    public static boolean IS_CALIBRATING;
     private static boolean IS_FIRST_TIME_CONNECT;
+    private boolean calibrationSwitched;
     //private Map<String, Long> soundLastTime = new HashMap<>();
 
     //Notification snooze configurations
@@ -117,6 +120,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
      */
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
+    public static final String mBroadcastCalibrationMode = "com.wearable.sound.broadcast.calibrationmode";
     public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
     public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningstatus";
     public static final String mBroadcastAudioFeedback = "com.wearable.sound.broadcast.audiofeedback";
@@ -163,6 +167,27 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 List<SoundPrediction> predictions = parsePredictions(soundPredictions);
                 AudioLabel audioLabel = filterTopSoundLabel(predictions, time, db);
                 createAudioLabelNotification(audioLabel);
+            } else if (intent.getAction().equals(mBroadcastCalibrationMode)) {
+                String data = intent.getStringExtra(CALIBRATION_LABEL);
+                Log.i(TAG, "Received Calibration Mode status from phone: " + data);
+
+                assert data != null;
+                if (data.contains("calibration_enabled")) {
+                    IS_CALIBRATING = true;
+                } else if (data.contains("calibration_disabled")) {
+                    IS_CALIBRATING = false;
+                }
+                Log.d(TAG, "IS_CALIBRATING -" + IS_CALIBRATING);
+                if (calibrationSwitched != IS_CALIBRATING) {
+                    NotificationManagerCompat.from(context).cancelAll();
+                    soundLastTime.clear();
+                    calibrationSwitched = IS_CALIBRATING;
+                }
+//                if (IS_CALIBRATING) {
+//                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                    Notification notification = foregroundnoti
+//                    notificationManager.getNotificationChannel().
+//                }
             } else if (intent.getAction().equals(mBroadcastForegroundService)) {
                 String data = intent.getStringExtra(FOREGROUND_LABEL);
                 Log.i(TAG, "Received Foreground Service status from phone: " + data);
@@ -174,6 +199,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 } else if (data.contains("foreground_disabled")) {
                     IS_FOREGROUND_DISABLED = true;
                     IS_RECORDING = true;
+                    NotificationManagerCompat.from(context).cancelAll();
                 }
                 Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
                 updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
@@ -193,12 +219,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                     updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
                 }
 
-            } else if (intent.getAction().equals(mBroadcastAudioFeedback)) {
-                String data = intent.getStringExtra(AUDIO_LABEL);
-//                addAudioToEnabledSounds(data);
             }
         }
     };
+
 
     public List<SoundPrediction> parsePredictions(String soundPredictions) {
         List<SoundPrediction> result = new ArrayList<>();
@@ -444,6 +468,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         mIntentFilter.addAction(mBroadcastAllSoundPredictions);
+        mIntentFilter.addAction(mBroadcastCalibrationMode);
         mIntentFilter.addAction(mBroadcastForegroundService);
         mIntentFilter.addAction(mBroadcastListeningStatus);
         registerReceiver(mReceiver, mIntentFilter);
@@ -565,6 +590,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         Log.i(TAG, "onRecordClick: " + view);
         // Change the image to STOP icon
         Log.d(TAG, IS_RECORDING + "-" + IS_FOREGROUND_DISABLED);
+        NotificationManagerCompat.from(this).cancelAll();
+        for (String connectedHostId : connectedHostIds) {
+            Wearable.getMessageClient(this.getApplicationContext())
+                    .sendMessage(connectedHostId, SOUND_CALIBRATION_MODE_FROM_WATCH_PATH, "calibration_mode".getBytes());
+        }
         updateMicView(IS_RECORDING, IS_FOREGROUND_DISABLED);
     }
 
@@ -1001,9 +1031,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             Log.i(TAG, "Converted to " + audioLabel.label);
         } */
 
+
         // Unique notification for each kind of sound
         final int NOTIFICATION_ID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
         Log.d(TAG, "Label: " + audioLabel.label + " NotiID: " + NOTIFICATION_ID);
+
+        // When calibrating, we don't have to block this sound since
+        // its notification needs to be displayed
+        if (IS_CALIBRATING) soundLastTime.remove(audioLabel.label);
+
         // Disable same sound for 5 seconds
         if (soundLastTime.containsKey(audioLabel.label) && !MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
             if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
@@ -1098,12 +1134,17 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 //                        .setBigContentTitle("Nearby Sound")
                         .setSummaryText(""))
                 .setAutoCancel(true) //Remove notification from the list after the user has tapped it
-                .setContentIntent(pendingIntent)
-                //.addAction(R.drawable.ic_full_cancel,
-                //        "Snooze 10 mins", snoozeSoundPendingIntent)
-                .addAction(R.drawable.ic_cc_checkmark, "Correct", correctFeedbackPendingIntent)
-                .addAction(R.drawable.ic_full_cancel, "Incorrect", incorrectFeedbackPendingIntent)
-                .addAction(R.drawable.ic_full_cancel, "Skip", skipFeedbackPendingIntent);
+                .setContentIntent(pendingIntent);
+
+        if (IS_CALIBRATING) {
+            notificationCompatBuilder.setOngoing(true)
+                    .addAction(R.drawable.ic_cc_checkmark, "Correct", correctFeedbackPendingIntent)
+                    .addAction(R.drawable.ic_full_cancel, "Incorrect", incorrectFeedbackPendingIntent)
+                    .addAction(R.drawable.ic_full_cancel, "Skip", skipFeedbackPendingIntent);
+        } else {
+            notificationCompatBuilder.addAction(R.drawable.ic_full_cancel,
+                    "Snooze 10 mins", snoozeSoundPendingIntent);
+        }
 
         //NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
         Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
@@ -1127,10 +1168,5 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             }
         }
 
-    }
-
-    private void addAudioToEnabledSounds(String audioLabel) {
-        Log.d(TAG, "Added " + audioLabel + " back to enabledSounds");
-        ((MainApplication) this.getApplication()).enabledSounds.add(audioLabel);
     }
 }

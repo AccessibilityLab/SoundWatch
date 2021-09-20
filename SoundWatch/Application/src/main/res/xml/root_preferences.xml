@@ -3,7 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory app:title="@string/first_preference">
 
-
+        <SwitchPreferenceCompat
+            app:key="calibration_mode"
+            app:defaultValue="false"
+            app:summaryOff="@string/calibration_off"
+            app:summaryOn="@string/calibration_on"
+            app:title="@string/calibration_title" />
         <SwitchPreferenceCompat
             app:key="foreground_service"
             app:defaultValue="false"

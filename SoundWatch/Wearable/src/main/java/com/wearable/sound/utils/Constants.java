@@ -13,6 +13,7 @@ public class Constants {
     public static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     public static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     public static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
+    public static final String SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH = "/SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH";
     public static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
     public static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
     public static final String SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH = "/SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH";
@@ -25,6 +26,7 @@ public class Constants {
 
     public static final String SNOOZE_TIME = "SNOOZE_TIME";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
+    public static final String SOUND_CALIBRATION_MODE_FROM_WATCH_PATH = "/SOUND_CALIBRATION_MODE_FROM_WATCH_PATH";
     public static final String SOUND_FEEDBACK_FROM_WATCH_PATH = "/SOUND_FEEDBACK_FROM_WATCH_PATH";
     public static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
     public static final String CONNECTED_HOST_IDS = "CONNECTED_HOST_IDS";
@@ -36,6 +38,7 @@ public class Constants {
      *
      */
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
+    public static final String CALIBRATION_LABEL = "CALIBRATION_LABEL";
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
     public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
     public static final String CHANNEL_ID = "ForegroundServiceChannel";

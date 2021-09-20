@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.android.gms.wearable.Wearable;
 import com.wearable.sound.ui.activity.MainActivity;
 import com.wearable.sound.R;
 import com.wearable.sound.utils.Constants;
@@ -25,7 +26,7 @@ import static com.wearable.sound.utils.Constants.*;
 
 public class ForegroundService extends Service {
     private static final String TAG = "ForegroundService";
-
+    public static Notification foregroundNotification;
     private SoundRecorder mSoundRecorder;
     private CountDownTimer mCountDownTimer;
     private static Set<String> connectedHostIds = new HashSet<>();
@@ -48,14 +49,19 @@ public class ForegroundService extends Service {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Listening...")
                 .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
-                .setContentIntent(pendingIntent)
-                .build();
-        startForeground(2, notification);
+                .setContentIntent(pendingIntent);
+        foregroundNotification = notification.build();
+        startForeground(2, foregroundNotification);
         mSoundRecorder.startRecording(connectedHostIds);
         Log.d(TAG, "Start Recording...");
+        // Ask for the state of IS_CALIBRATING
+        for (String connectedHostId : connectedHostIds) {
+            Wearable.getMessageClient(this.getApplicationContext())
+                    .sendMessage(connectedHostId, SOUND_CALIBRATION_MODE_FROM_WATCH_PATH, "calibration_mode".getBytes());
+        }
         return START_NOT_STICKY;
     }
     @Override
