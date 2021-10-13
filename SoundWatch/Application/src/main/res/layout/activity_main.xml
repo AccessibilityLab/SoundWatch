@@ -99,8 +99,9 @@
                 android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
+
             <CheckBox
-                android:id="@+id/car_honk"
+                android:id="@+id/siren"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
@@ -108,7 +109,7 @@
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
-                android:text="@string/car_honk"
+                android:text="@string/siren"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
@@ -456,6 +457,20 @@
                 android:layout_marginTop="@dimen/margin_medium"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_12ssp"/>
+
+            <CheckBox
+                android:id="@+id/car_honk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/car_honk"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
 
             <CheckBox
                 android:id="@+id/vehicle"

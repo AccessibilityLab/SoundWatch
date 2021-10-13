@@ -21,6 +21,8 @@ public class Constants {
     public static final String DOG_BARK = "Dog Bark";
     public static final String CAT_MEOW= "Cat Meow";
     public static final String VEHICLE= "Vehicle";
+    public static final String SIREN= "Siren";
+
     // for now, mapping new label "Fire Alarm" to replace this
     public static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm";
 //    public static final String FIRE_SMOKE_ALARM = "Fire Alarm";
@@ -34,7 +36,7 @@ public class Constants {
     public static final String TOOTHBRUSH= "Toothbrush";
     //    public static final String BLENDER = "Blender";
 //    public static final String DISHWASHER = "Dishwasher";
-    public static final String DOORBELL = "Doorbell";
+    public static final String DOORBELL = "Door Bell";
     public static final String TOILET_FLUSH = "Toilet Flush";
     public static final String HAIR_DRYER= "Hair Dryer";
     public static final String LAUGHING= "Laughter";

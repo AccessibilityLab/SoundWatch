@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -41,7 +40,6 @@ import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
-import com.google.android.gms.tasks.Task;
 import com.kuassivi.component.RipplePulseRelativeLayout;
 import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
@@ -51,7 +49,6 @@ import com.wearable.sound.service.FeedbackSoundService;
 import com.wearable.sound.service.ForegroundService;
 import com.wearable.sound.service.SnoozeSoundService;
 import com.wearable.sound.utils.AlarmReceiver;
-import com.wearable.sound.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,10 +103,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     private static final float PREDICTION_THRES = 0.4F;
     private static Toast mToast;
     public static boolean IS_FOREGROUND_DISABLED;
+
+    // Calibration
     public static boolean IS_CALIBRATING;
-    private static boolean IS_FIRST_TIME_CONNECT;
     private boolean calibrationSwitched;
-    //private Map<String, Long> soundLastTime = new HashMap<>();
+
+    // Notification
+    private NotificationManager notificationManager;
 
     //Notification snooze configurations
     private Map<String, Long> soundLastTime = new HashMap<>();
@@ -123,13 +123,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     public static final String mBroadcastCalibrationMode = "com.wearable.sound.broadcast.calibrationmode";
     public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
     public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningstatus";
-    public static final String mBroadcastAudioFeedback = "com.wearable.sound.broadcast.audiofeedback";
+    public static final String mBroadcastPendingFeedback = "com.wearable.sound.broadcast.pendingfeedback";
     private IntentFilter mIntentFilter;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received intent: " + intent.getAction());
             if (intent.getAction().equals(mBroadcastSoundPrediction)) {
+                StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+                if (IS_CALIBRATING && notifications.length == 2) return;    // Exit if watch has exactly 1 notification waiting for feedback (and a "Listening" notification)
                 String data = intent.getStringExtra(AUDIO_LABEL);
                 String[] parts = data.split(",");
                 Log.i(DEBUG_TAG, Arrays.toString(parts));
@@ -152,10 +154,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, null));
                     }
                 }
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
-                Log.d(TAG, "NUM ACTIVE NOTIS: " + notifications.length);
 
+
+            } else if (intent.getAction().equals(mBroadcastPendingFeedback)){
+                sendNumNotisToPhone();
             } else if (intent.getAction().equals(mBroadcastAllSoundPredictions)) {
                 String data = intent.getStringExtra(AUDIO_LABEL);
                 Log.i(TAG, "Received audio data from phone: " + data);
@@ -222,6 +224,18 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             }
         }
     };
+
+    // Send current number of notifications to phone.
+    // If phone receives "1" (meaning there's the only "Listening" notification exising),
+    // phone will resend current pending feedback.
+    private void sendNumNotisToPhone() {
+        StatusBarNotification[] curNotifications = notificationManager.getActiveNotifications();
+        Log.d(TAG, "NUM ACTIVE NOTIS: " + curNotifications.length);
+        for (String connectedHostId : connectedHostIds) {
+            Wearable.getMessageClient(this.getApplicationContext())
+                    .sendMessage(connectedHostId, SOUND_NUM_NOTIS_FROM_WATCH_PATH, String.valueOf(curNotifications.length).getBytes());
+        }
+    }
 
 
     public List<SoundPrediction> parsePredictions(String soundPredictions) {
@@ -471,6 +485,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         mIntentFilter.addAction(mBroadcastCalibrationMode);
         mIntentFilter.addAction(mBroadcastForegroundService);
         mIntentFilter.addAction(mBroadcastListeningStatus);
+        mIntentFilter.addAction(mBroadcastPendingFeedback);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -494,7 +509,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         Log.d(TAG, "onStart()");
         super.onStart();
-
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //resetconnectedHostIds
         connectedHostIds.clear();
         final String CAPABILITY_1 = "capability_1";

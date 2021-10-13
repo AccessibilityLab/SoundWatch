@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity
     private static final String START_ACTIVITY_PATH = "/start-activity";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
     private static final String SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH = "/SEND_CALIBRATION_MODE_STATUS_FROM_PHONE_PATH";
+    private static final String SEND_PENDING_FEEDBACK_STATUS_FROM_PHONE_PATH = "/SEND_PENDING_FEEDBACK_STATUS_FROM_PHONE_PATH";
     private static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
     private static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
     private static final String COUNT_PATH = "/count";
@@ -206,25 +207,26 @@ public class MainActivity extends AppCompatActivity
             KNOCKING, COUGHING, TYPING);
 
     // List of only high accuracy sounds
-    public List<String> highAccSounds = Arrays.asList(CAT_MEOW, VEHICLE, CAR_HONK, DOG_BARK,
-            APPLIANCES, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM,
+    public List<String> highAccSounds = Arrays.asList(CAT_MEOW, SIREN, CAR_HONK, DOG_BARK,
+            APPLIANCES, WATER_RUNNING, DOORBELL, BABY_CRY, FIRE_SMOKE_ALARM,
             KNOCKING);
 
-    // List of IDs of only high accuracy sounds (11 sounds)
+    // List of IDs of only high accuracy sounds (10 sounds)
     private static final List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm,
-            R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.appliances, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
-            R.id.vehicle, R.id.baby_crying));
+            R.id.door_bell, R.id.water_running, R.id.knocking, R.id.appliances, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
+            R.id.siren, R.id.baby_crying));
 
     // List of IDs of only low accuracy sounds (19 sounds)
     private static final List<Integer> lowAccuracyList = new ArrayList<>(Arrays.asList(R.id.utensils_and_cutlery, R.id.alarm_clock,
-            R.id.saw, R.id.hammering, R.id.snoring, R.id.laughing, R.id.hair_dryer, R.id.toilet_flush, R.id.door_bell,
+            R.id.saw, R.id.hammering, R.id.snoring, R.id.laughing, R.id.hair_dryer, R.id.toilet_flush,
             R.id.dishwasher, R.id.blender, R.id.tooth_brush, R.id.shaver, R.id.chopping, R.id.vacuum, R.id.drill, R.id.phone_ring,
-            R.id.coughing, R.id.typing));
+            R.id.coughing, R.id.typing, R.id.vehicle, R.id.speech, R.id.door_in_use));
 
     private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
     public static final String CALIBRATION_LABEL = "CALIBRATION_LABEL";
+    public static final String PENDING_FEEDBACK_LABEL = "PENDING_FEEDBACK_LABEL";
     public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
 
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<>();
@@ -235,7 +237,7 @@ public class MainActivity extends AppCompatActivity
     public SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
 
     {
-        for (String sound : sounds) {
+        for (String sound : highAccSounds) {
             SOUNDS_MAP.put(sound, new SoundNotification(sound, true, false));
         }
     }
@@ -243,11 +245,11 @@ public class MainActivity extends AppCompatActivity
     {
         CHECKBOX_MAP.put(CAT_MEOW, R.id.cat_meow);
         CHECKBOX_MAP.put(DOG_BARK, R.id.dog_bark);
-        CHECKBOX_MAP.put(VEHICLE, R.id.vehicle);
+        CHECKBOX_MAP.put(SIREN, R.id.siren);
         CHECKBOX_MAP.put(CAR_HONK, R.id.car_honk);
         CHECKBOX_MAP.put(APPLIANCES, R.id.appliances);
         CHECKBOX_MAP.put(WATER_RUNNING, R.id.water_running);
-        CHECKBOX_MAP.put(DOOR_IN_USE, R.id.door_in_use);
+        CHECKBOX_MAP.put(DOORBELL, R.id.door_bell);
         CHECKBOX_MAP.put(BABY_CRY, R.id.baby_crying);
         CHECKBOX_MAP.put(FIRE_SMOKE_ALARM, R.id.fire_smoke_alarm);
 //        CHECKBOX_MAP.put(SPEECH, R.id.speech);
@@ -269,6 +271,9 @@ public class MainActivity extends AppCompatActivity
 //                break;
             case R.id.vehicle:
                 currentSound = SOUNDS_MAP.get(VEHICLE);
+                break;
+            case R.id.siren:
+                currentSound = SOUNDS_MAP.get(SIREN);
                 break;
             case R.id.car_honk:
                 currentSound = SOUNDS_MAP.get(CAR_HONK);

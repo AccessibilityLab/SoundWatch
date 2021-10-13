@@ -143,12 +143,12 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.setAction(MainActivity.mBroadcastListeningStatus);
             broadcastIntent.putExtra(WATCH_STATUS_LABEL, data);
             sendBroadcast(broadcastIntent);
-        } else if (messageEvent.getPath().equals(SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH)) {
+        } else if (messageEvent.getPath().equals(SEND_PENDING_FEEDBACK_STATUS_FROM_PHONE_PATH)) {
             String data = new String(messageEvent.getData());
             Log.i(TAG, "Audio feedback received: " + data);
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(MainActivity.mBroadcastAudioFeedback);
+            broadcastIntent.setAction(MainActivity.mBroadcastPendingFeedback);
             broadcastIntent.putExtra(AUDIO_LABEL, data);
             sendBroadcast(broadcastIntent);
         }

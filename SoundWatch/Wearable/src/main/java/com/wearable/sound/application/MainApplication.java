@@ -25,7 +25,7 @@ public class MainApplication extends Application {
         "Car Honk",
         "Cat Meow",
         "Dog Bark",
-        "Door In-Use",
+        "Door Bell",
         "Fire/Smoke Alarm",
         "Knocking",
         "Siren",

@@ -82,6 +82,7 @@ import com.wearable.sound.utils.Constants;
 import static com.wearable.sound.ui.activity.MainActivity.AUDIO_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.FOREGROUND_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.IS_CALIBRATING;
+import static com.wearable.sound.ui.activity.MainActivity.PENDING_FEEDBACK_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.PREDICT_MULTIPLE_SOUNDS;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
@@ -97,7 +98,7 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
     private static final String AUDIO_PREDICTION_PATH = "/audio-prediction";
     private static final String SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH = "/SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH";
-    private static final String SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH = "/SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH";
+    private static final String SEND_PENDING_FEEDBACK_STATUS_FROM_PHONE_PATH = "/SEND_PENDING_FEEDBACK_STATUS_FROM_PHONE_PATH";
 
     private static final String CHANNEL_ID = "SOUNDWATCH";
 
@@ -112,6 +113,8 @@ public class DataLayerListenerService extends WearableListenerService {
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_UNSNOOZE_FROM_WATCH_PATH = "/SOUND_UNSNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_CALIBRATION_MODE_FROM_WATCH_PATH = "/SOUND_CALIBRATION_MODE_FROM_WATCH_PATH";
+    public static final String SOUND_NUM_NOTIS_FROM_WATCH_PATH = "/SOUND_NUM_NOTIS_FROM_WATCH_PATH";
+
     public static final String SOUND_FEEDBACK_FROM_WATCH_PATH = "/SOUND_FEEDBACK_FROM_WATCH_PATH";
 
     private Interpreter tfLite;
@@ -328,6 +331,14 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.setAction(MainActivity.mBroadcastForegroundService);
             broadcastIntent.putExtra(FOREGROUND_LABEL, connectedStatus);
             sendBroadcast(broadcastIntent);
+            return;
+        }
+
+        if (messageEvent.getPath().equals(SOUND_NUM_NOTIS_FROM_WATCH_PATH)) {
+            int numNotis = Integer.parseInt(new String(messageEvent.getData()));
+            Log.i(TAG, "Phone received number of notifications from watch: " + numNotis);
+
+            if (numNotis == 1) pendingPredictionFeedback.clear();
             return;
         }
 
@@ -846,17 +857,17 @@ public class DataLayerListenerService extends WearableListenerService {
             if (decibel >= DBLEVEL_THRES) {
                 input3D = extractAudioFeatures(sData); // extract audio features from raw bytes
                 int predictionIdx = inference(input3D); // Run inference
-                Log.d(TAG, "Prediction: " + labels.get(predictionIdx));
+                Log.d(TAG, "Prediction: " + labels.get(predictionIdx) +"- index " + predictionIdx + " from dataset.");
 //                reinitializeOnCalibrationSwitch();
                 if (IS_CALIBRATING) {
                     if (pendingPredictionFeedback.keySet().size() > 0) {
                         Log.d(TAG, "There's a pending prediction to be given feedback");
-//                        Set<String> set = pendingPredictionFeedback.keySet();
-//                        for (String prediction : set) {
-//                            JSONObject data = pendingPredictionFeedback.get(prediction);
-//                            if (System.currentTimeMillis() > data.getLong("time") + 3 * 1000)
-//                                new SendAudioLabelToWearTask(prediction, "-1", data.getDouble("db"), recordTime).execute();
-//                        }
+
+                        // When there's a pending notification waiting for feedback, keep sending this msg
+                        // so that the watch sends back "number of cur notifications".
+                        // If phone receives "1", clear pendingPredictionFeedback and send a prediction.
+                        Wearable.getMessageClient(this)
+                                .sendMessage(PENDING_FEEDBACK_LABEL, SEND_PENDING_FEEDBACK_STATUS_FROM_PHONE_PATH, "awaiting_feedback".getBytes());
                         return;
                     }
                     final String prediction = labels.get(predictionIdx);
@@ -868,7 +879,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     data.put("db", decibel);
                     data.put("time", System.currentTimeMillis());
 
-                    pendingPredictionFeedback.put(prediction, data);
+                    if (pendingPredictionFeedback.size() < 1) pendingPredictionFeedback.put(prediction, data);
                     new SendAudioLabelToWearTask(prediction, confidence, decibel, recordTime).execute();
                     return;
                 }
@@ -1054,25 +1065,6 @@ public class DataLayerListenerService extends WearableListenerService {
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
-            }
-            return null;
-        }
-    }
-
-    public class SendAudioFeedbackToWearTask extends AsyncTask<Void, Void, Void> {
-        private String audioLabel;
-
-        public SendAudioFeedbackToWearTask(String audioLabel) {
-            this.audioLabel = audioLabel;
-        }
-
-        @Override
-        protected Void doInBackground(Void... args) {
-            Collection<String> nodes = getNodes();
-
-            Log.i(TAG, "Number of connected devices:" + nodes.size());
-            for (String node : nodes) {
-                sendMessageWithData(node, SEND_AUDIO_FEEDBACK_FROM_PHONE_PATH, audioLabel.getBytes());
             }
             return null;
         }
