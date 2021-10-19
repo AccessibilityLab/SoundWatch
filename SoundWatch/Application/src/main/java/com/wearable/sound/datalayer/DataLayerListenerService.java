@@ -82,8 +82,11 @@ import static com.wearable.sound.ui.activity.MainActivity.PREDICT_MULTIPLE_SOUND
 import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_MODEL_LATENCY;
 
+// TODO: make this to work when removing the InstallTimePack
 
-/** Listens to DataItems and Messages from the local node. */
+/**
+ * Listens to DataItems and Messages from the local node.
+ */
 public class DataLayerListenerService extends WearableListenerService {
     private static final String TAG = "Phone/DataLayerService";
     private static final String UNIDENTIFIED_SOUND = "Unidentified Sound";
@@ -95,15 +98,17 @@ public class DataLayerListenerService extends WearableListenerService {
 
     private static final float PREDICTION_THRES = 0.4F;
     // attempt to reduce "speech" noise predictions
+    // FIXME: no more speech label, remove this
     private static final float SPEECH_PREDICTION_THRES = 0.75F;
     private static double DBLEVEL_THRES = 40;
+
     private static final String SEND_CURRENT_BLOCKED_SOUND_PATH = "/SEND_CURRENT_BLOCKED_SOUND_PATH";
     private static final String WATCH_CONNECT_STATUS = "/WATCH_CONNECT_STATUS";
-
     public static final String COUNT_PATH = "/count";
     public static final String SOUND_SNOOZE_FROM_WATCH_PATH = "/SOUND_SNOOZE_FROM_WATCH_PATH";
     public static final String SOUND_UNSNOOZE_FROM_WATCH_PATH = "/SOUND_UNSNOOZE_FROM_WATCH_PATH";
 
+    // Tflite model and label file
     private Interpreter tfLite;
     //    private static final String MODEL_FILENAME = "file:///android_asset/example_model.tflite";
     private static final String MODEL_FILENAME = "file:///android_asset/sw_model_v2.tflite";
@@ -126,14 +131,14 @@ public class DataLayerListenerService extends WearableListenerService {
     protected Python py;
     PyObject pythonModule;
 
+    // FIXME: to reshape the features later? make it local instead?
     private static final int NUM_FRAMES = 32;  // Frames in input mel-spectrogram patch.
     private static final int NUM_BANDS = 64;// Frequency bands in input mel-spectrogram patch.
-    private float [] input1D = new float [NUM_FRAMES * NUM_BANDS];
+    private float[] input1D = new float[NUM_FRAMES * NUM_BANDS];
     //    private float [][][][] input4D = new float [1][96][64][1];
-    private float [][][] input3D = new float [1][NUM_FRAMES][NUM_BANDS];
+    private float[][][] input3D = new float[1][NUM_FRAMES][NUM_BANDS];
     private float[][] output;
     private long recordTime;
-
 
     private List<Short> soundBuffer = new ArrayList<>();
     private int soundSecondCounter = 0;
@@ -144,13 +149,17 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String SERVER_URL = "http://sheltered-dawn-06267.herokuapp.com/";
 
     private Socket mSocket;
+
     {
         try {
             mSocket = IO.socket("http://chat.socket.io");
-        } catch (URISyntaxException e) {}
+        } catch (URISyntaxException e) {
+        }
     }
 
-    /** Memory-map the model file in Assets. */
+    /**
+     * Memory-map the model file in Assets.
+     */
     private static MappedByteBuffer loadModelFile(AssetManager assets, String modelFilename)
             throws IOException {
         AssetFileDescriptor fileDescriptor = assets.openFd(modelFilename);
@@ -487,7 +496,7 @@ public class DataLayerListenerService extends WearableListenerService {
      * Audio Processing
      */
     private float[] extractAudioFeatures(short[] sData) {
-        float[] result = new float [input1D.length];
+        float[] result = new float[input1D.length];
         if (sData.length != bufferElements2Rec) {
             // Sanity check, because sound has to be exactly bufferElements2Rec elements
             return null;
@@ -549,7 +558,7 @@ public class DataLayerListenerService extends WearableListenerService {
             if (TEST_E2E_LATENCY) {
                 jsonObject.put("record_time", Long.toString(recordTime));
             }
-            Log.i(TAG, "Data sent to server features from phone: "  + features.length + ", " + db);
+            Log.i(TAG, "Data sent to server features from phone: " + features.length + ", " + db);
             MainActivity.mSocket.emit("audio_feature_data", jsonObject);
         } catch (JSONException e) {
             Log.i(TAG, "Failed sending sound features to server");
@@ -591,7 +600,7 @@ public class DataLayerListenerService extends WearableListenerService {
             }
             return fArr;
         } catch (IOException e) {
-            Log.i(TAG,"ERROR parsing bytes array to float array");
+            Log.i(TAG, "ERROR parsing bytes array to float array");
         }
         return null;
     }
@@ -660,10 +669,10 @@ public class DataLayerListenerService extends WearableListenerService {
 
 
     /**
-     *  Predicting sounds Functions on device
-     *  ---- From Raw Audio
-     *  ---- From features
-     * **/
+     * Predicting sounds Functions on device
+     * ---- From Raw Audio
+     * ---- From features
+     **/
 
     private String predictSoundsFromAudioFeatures(float[] input1D, double db, Long recordTime) {
         Log.i(TAG, "Predicting sounds from audio features");
@@ -677,13 +686,13 @@ public class DataLayerListenerService extends WearableListenerService {
             }
         }
         long startTime = 0;
-        if(TEST_MODEL_LATENCY)
+        if (TEST_MODEL_LATENCY)
             startTime = System.currentTimeMillis();
 
         // Run inference
         tfLite.run(input3D, output);
 
-        if(TEST_MODEL_LATENCY) {
+        if (TEST_MODEL_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - startTime;
             Log.i(TAG, "Elasped time" + elapsedTime);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
@@ -692,10 +701,9 @@ public class DataLayerListenerService extends WearableListenerService {
             try {
                 Log.i(TAG, "Writing time to a file");
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("watch_model.txt", Context.MODE_APPEND));
-                outputStreamWriter.write(timeStamp + "," +  Long.toString(elapsedTime) + "\n");
+                outputStreamWriter.write(timeStamp + "," + Long.toString(elapsedTime) + "\n");
                 outputStreamWriter.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
             }
         }
@@ -712,7 +720,7 @@ public class DataLayerListenerService extends WearableListenerService {
             Collections.sort(predictions, Collections.reverseOrder());
             // Convert this map into a shape of sound=value_sound=value
             String result = "";
-            for (SoundPrediction soundPrediction: predictions) {
+            for (SoundPrediction soundPrediction : predictions) {
                 result += soundPrediction.getLabel() + "_" + soundPrediction.getAccuracy() + ",";
             }
             // Strip the last ","
@@ -869,10 +877,9 @@ public class DataLayerListenerService extends WearableListenerService {
                     try {
                         Log.i(TAG, "Writing time to a file");
                         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("watch_model.txt", Context.MODE_APPEND));
-                        outputStreamWriter.write(timeStamp + "," +  Long.toString(elapsedTime) + "\n");
+                        outputStreamWriter.write(timeStamp + "," + Long.toString(elapsedTime) + "\n");
                         outputStreamWriter.close();
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         Log.e("Exception", "File write failed: " + e.toString());
                     }
                 }
@@ -931,6 +938,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 this.recordTime = recordTime;
             }
         }
+
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
@@ -950,9 +958,9 @@ public class DataLayerListenerService extends WearableListenerService {
     }
 
     public class SendAllAudioPredictionsToWearTask extends AsyncTask<Void, Void, Void> {
-        private String result;
-        private String db;
-        private Long recordTime;
+        private final String result;
+        private final String db;
+        private final Long recordTime;
 
         public SendAllAudioPredictionsToWearTask(String result, double db, Long recordTime) {
             this.db = Double.toString(db);
@@ -1043,7 +1051,8 @@ public class DataLayerListenerService extends WearableListenerService {
 
     /**
      * For testing, given a list of predictions, printing out all labels whose accuracy > threshold
-     *  in a single line
+     * in a single line
+     *
      * @param predictions: list of predictions returned by the tflite model
      */
     private void printAboveThresholdPredictions(List<SoundPrediction> predictions) {
