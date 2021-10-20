@@ -203,7 +203,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     }
 
     private AudioLabel filterTopSoundLabel(List<SoundPrediction> soundPredictions, String time, String db) {
-        ArrayList<String> enabledSounds = ((MainApplication) getApplicationContext()).enabledSounds;
+        List<String> enabledSounds = ((MainApplication) getApplicationContext()).enabledSounds;
 
         // Traverse list in decreasing order, so the first one found should be the one in notification
         for (SoundPrediction soundPrediction: soundPredictions) {

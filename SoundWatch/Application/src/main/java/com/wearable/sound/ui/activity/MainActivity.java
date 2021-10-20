@@ -17,24 +17,17 @@
 package com.wearable.sound.ui.activity;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.media.AudioRecord;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -48,37 +41,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.preference.EditTextPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreferenceCompat;
 
 
-import com.chaquo.python.PyException;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
-import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -89,24 +68,14 @@ import com.wearable.sound.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.tensorflow.lite.Interpreter;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.channels.FileChannel;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -127,8 +96,8 @@ import static com.wearable.sound.utils.Constants.*;
  * the paired wearable.
  */
 public class MainActivity extends AppCompatActivity
-            implements
-            CapabilityClient.OnCapabilityChangedListener {
+        implements
+        CapabilityClient.OnCapabilityChangedListener {
 
     private static final String TAG = "MainActivity";
     /**
@@ -138,10 +107,10 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAnalytics mFirebaseAnalytics;
     // [END declare_analytics]
 
-    /**
-     * Different Mode configuration
-     */
-    public static final int HIGH_ACCURACY_MODE = 1;
+//    /**
+//     * Different Mode configuration
+//     */
+//    public static final int HIGH_ACCURACY_MODE = 1;
 
     public static final boolean TEST_MODEL_LATENCY = false;
     public static final boolean TEST_E2E_LATENCY = false;
@@ -151,7 +120,7 @@ public class MainActivity extends AppCompatActivity
      */
     public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
     public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
+    public static final String AUDIO_TRANSMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
 
     /**
      * Phone Watch Architecture configuration ONLY!!!
@@ -168,7 +137,6 @@ public class MainActivity extends AppCompatActivity
     public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
     public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
 
-
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private static final String START_ACTIVITY_PATH = "/start-activity";
@@ -181,8 +149,10 @@ public class MainActivity extends AppCompatActivity
     private static final String COUNT_KEY = "count";
     private static final String MY_PREF = "my_preferences";
 
-    private boolean mCameraSupported = false;
-//    int BufferElements2Rec = 16000;
+    private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
+    public static final String AUDIO_LABEL = "AUDIO_LABEL";
+    public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
+    public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
 
     private ConstraintLayout tutorialLayout;
     private ListView mDataItemList;
@@ -193,38 +163,14 @@ public class MainActivity extends AppCompatActivity
     private View mStartActivityBtn;
     private DataItemAdapter mDataItemListAdapter;
 
-
     // Send DataItem
     private ScheduledExecutorService mGeneratorExecutor;
     private ScheduledFuture<?> mDataItemGeneratorFuture;
 
-    // List of all sounds
-    public List<String> sounds = Arrays.asList(UTENSILS_AND_CUTLERY, ALARM_CLOCK, CAT_MEOW, VEHICLE, CAR_HONK,
-            HAMMERING, SNORING, LAUGHING, HAIR_DRYER, TOILET_FLUSH, DOORBELL, TOOTHBRUSH, DOG_BARK,
-            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, SHAVER, BABY_CRY, CHOPPING, VACUUM, DRILL, FIRE_SMOKE_ALARM, SPEECH,
-            KNOCKING, COUGHING, TYPING);
 
-    // List of only high accuracy sounds
-    public List<String> highAccSounds = Arrays.asList(CAT_MEOW, VEHICLE, CAR_HONK, DOG_BARK,
-            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM, SPEECH,
-            KNOCKING);
-
-    // List of IDs of only high accuracy sounds (11 sounds)
-    private static final List<Integer> highAccuracyList = new ArrayList<>(Arrays.asList(R.id.fire_smoke_alarm, R.id.speech,
-            R.id.door_in_use, R.id.water_running, R.id.knocking, R.id.microwave, R.id.dog_bark, R.id.cat_meow, R.id.car_honk,
-            R.id.vehicle, R.id.baby_crying));
-
-    // List of IDs of only low accuracy sounds (19 sounds)
-    private static final List<Integer> lowAccuracyList = new ArrayList<>(Arrays.asList(R.id.utensils_and_cutlery, R.id.alarm_clock,
-            R.id.saw, R.id.hammering, R.id.snoring, R.id.laughing, R.id.hair_dryer, R.id.toilet_flush, R.id.door_bell,
-            R.id.dishwasher, R.id.blender, R.id.tooth_brush, R.id.shaver, R.id.chopping, R.id.vacuum, R.id.drill, R.id.phone_ring,
-            R.id.coughing, R.id.typing));
-
-    private static final String SOUND_ENABLE_FROM_PHONE_PATH = "/SOUND_ENABLE_FROM_PHONE_PATH";
-    public static final String AUDIO_LABEL = "AUDIO_LABEL";
-    public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
-    public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
-
+    // List of all sounds with available notifications (no more high vs low accuracy)
+    public List<String> sounds = Arrays.asList(CAT_MEOW, VEHICLE, CAR_HONK, DOG_BARK,
+            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM, KNOCKING);
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<>();
     public static Map<String, Integer> CHECKBOX_MAP = new HashMap<>();
 
@@ -234,9 +180,7 @@ public class MainActivity extends AppCompatActivity
         for (String sound : sounds) {
             SOUNDS_MAP.put(sound, new SoundNotification(sound, true, false));
         }
-    }
 
-    {
         CHECKBOX_MAP.put(CAT_MEOW, R.id.cat_meow);
         CHECKBOX_MAP.put(DOG_BARK, R.id.dog_bark);
         CHECKBOX_MAP.put(VEHICLE, R.id.vehicle);
@@ -246,111 +190,27 @@ public class MainActivity extends AppCompatActivity
         CHECKBOX_MAP.put(DOOR_IN_USE, R.id.door_in_use);
         CHECKBOX_MAP.put(BABY_CRY, R.id.baby_crying);
         CHECKBOX_MAP.put(FIRE_SMOKE_ALARM, R.id.fire_smoke_alarm);
-        CHECKBOX_MAP.put(SPEECH, R.id.speech);
         CHECKBOX_MAP.put(KNOCKING, R.id.knocking);
     }
 
+    /**
+     * Update when the check box gets clicked
+     *
+     * @param view
+     */
     public void onCheckBoxClick(View view) {
         int id = view.getId();
         SoundNotification currentSound = null;
-        switch (id) {
-            case R.id.speech:
-                currentSound = SOUNDS_MAP.get(SPEECH);
-                break;
-            case R.id.knocking:
-                currentSound = SOUNDS_MAP.get(KNOCKING);
-                break;
-//            case R.id.phone_ring:
-//                currentSound = SOUNDS_MAP.get(PHONE_RING);
-//                break;
-            case R.id.vehicle:
-                currentSound = SOUNDS_MAP.get(VEHICLE);
-                break;
-            case R.id.car_honk:
-                currentSound = SOUNDS_MAP.get(CAR_HONK);
-                break;
-            case R.id.fire_smoke_alarm:
-                currentSound = SOUNDS_MAP.get(FIRE_SMOKE_ALARM);
-                break;
-            case R.id.microwave:
-                currentSound = SOUNDS_MAP.get(MICROWAVE);
-                break;
-            case R.id.water_running:
-                currentSound = SOUNDS_MAP.get(WATER_RUNNING);
-                break;
-            case R.id.door_in_use:
-                currentSound = SOUNDS_MAP.get(DOOR_IN_USE);
-                break;
-//            case R.id.dishwasher:
-//                currentSound = SOUNDS_MAP.get(DISHWASHER);
-//                break;
-            case R.id.door_bell:
-                currentSound = SOUNDS_MAP.get(DOORBELL);
-                break;
-            case R.id.shaver:
-                currentSound = SOUNDS_MAP.get(SHAVER);
-                break;
-            case R.id.tooth_brush:
-                currentSound = SOUNDS_MAP.get(TOOTHBRUSH);
-                break;
-            case R.id.toilet_flush:
-                currentSound = SOUNDS_MAP.get(VACUUM);
-                break;
-            case R.id.baby_crying:
-                currentSound = SOUNDS_MAP.get(BABY_CRY);
-                break;
-            case R.id.chopping:
-                currentSound = SOUNDS_MAP.get(CHOPPING);
-                break;
-//            case R.id.blender:
-//                currentSound = SOUNDS_MAP.get(BLENDER);
-//                break;
-            case R.id.hair_dryer:
-                currentSound = SOUNDS_MAP.get(HAIR_DRYER);
-                break;
-            case R.id.snoring:
-                currentSound = SOUNDS_MAP.get(SNORING);
-                break;
-            case R.id.hammering:
-                currentSound = SOUNDS_MAP.get(HAMMERING);
-                break;
-//            case R.id.saw:
-//                currentSound = SOUNDS_MAP.get(SAW);
-//                break;
-            case R.id.cat_meow:
-                currentSound = SOUNDS_MAP.get(CAT_MEOW);
-                break;
-            case R.id.alarm_clock:
-                currentSound = SOUNDS_MAP.get(ALARM_CLOCK);
-                break;
-            case R.id.utensils_and_cutlery:
-                currentSound = SOUNDS_MAP.get(UTENSILS_AND_CUTLERY);
-                break;
-            case R.id.dog_bark:
-                currentSound = SOUNDS_MAP.get(DOG_BARK);
-                break;
-            case R.id.drill:
-                currentSound = SOUNDS_MAP.get(DRILL);
-                break;
-            case R.id.vacuum:
-                currentSound = SOUNDS_MAP.get(VACUUM);
-                break;
-            case R.id.laughing:
-                currentSound = SOUNDS_MAP.get(LAUGHING);
-                break;
-            case R.id.coughing:
-                currentSound = SOUNDS_MAP.get(COUGHING);
-                break;
-            case R.id.typing:
-                currentSound = SOUNDS_MAP.get(TYPING);
-                break;
-            default:
-                break;
+        for (String sound : CHECKBOX_MAP.keySet()) {
+            if (CHECKBOX_MAP.get(sound) == id) {
+                currentSound = SOUNDS_MAP.get(sound);
+            }
         }
+
         // Change the text according to the text label
         if (currentSound != null) {
-            boolean isEnabled = ((CheckBox) view).isChecked();
-            CheckBox checkBox = ((CheckBox) view);
+            CheckBox checkBox = (CheckBox) view;
+            boolean isEnabled = checkBox.isChecked();
             if (checkBox.getText().toString().contains("Snoozed")) {
                 // If the sound is currently snoozed
                 int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
@@ -359,11 +219,9 @@ public class MainActivity extends AppCompatActivity
 //                checkBox.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             currentSound.isEnabled = isEnabled;
-            new sendSoundEnableMessageToWatchTask(currentSound).execute();
+            (new sendSoundEnableMessageToWatchTask(currentSound)).execute();
 
-        }
-        // Put current sound value into SharedPreference
-        if (currentSound != null) {
+            // Put current sound value into SharedPreference
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(currentSound.label, currentSound.isEnabled);
@@ -372,7 +230,6 @@ public class MainActivity extends AppCompatActivity
             editor.apply();
         }
     }
-
 
     public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
         private String data;
@@ -392,32 +249,6 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
     }
-
-//    private List<Short> soundBuffer = new ArrayList<>();
-
-    /**
-     * Memory-map the model file in Assets.
-     */
-    private static ByteBuffer loadModelFile(AssetManager assets, String modelFilename)
-            throws IOException {
-        AssetFileDescriptor fileDescriptor = assets.openFd(modelFilename);
-        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
-        FileChannel fileChannel = inputStream.getChannel();
-        long startOffset = fileDescriptor.getStartOffset();
-        long declaredLength = fileDescriptor.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
-    }
-
-//    private List<String> labels = new ArrayList<>();
-//
-//    int BytesPerElement = 2; // 2 bytes in 16bit format
-//
-//    private AudioRecord recorder = null;
-//    private Thread recordingThread = null;
-//    private boolean isRecording = false;
-//
-//    protected Python py;
-//    PyObject pythonModule;
 
     public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
     public static final String mBroadcastSnoozeSound = "com.wearable.sound.broadcast.snoozeSound";
@@ -460,10 +291,11 @@ public class MainActivity extends AppCompatActivity
         try {
             mSocket = IO.socket(SERVER_URL);
         } catch (URISyntaxException e) {
+            Log.e(TAG, String.valueOf(e));
         }
     }
 
-    private Emitter.Listener onNewMessage = args -> {
+    private final Emitter.Listener onNewMessage = args -> {
         Log.i(TAG, "Received socket event");
         JSONObject data = (JSONObject) args[0];
         String db;
@@ -485,7 +317,7 @@ public class MainActivity extends AppCompatActivity
         new SendAudioLabelToWearTask(audio_label, accuracy, db, recordTime).execute();
     };
 
-    private boolean checkPermissions() {
+    private void askPermissions() {
         int result;
         List<String> listPermissionsNeeded = new ArrayList<>();
         for (String p : permissions) {
@@ -495,10 +327,8 @@ public class MainActivity extends AppCompatActivity
             }
         }
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
-            return false;
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), 100);
         }
-        return true;
     }
 
     @Override
@@ -506,7 +336,7 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 100) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // do something
+                // do something?
                 return;
             }
         }
@@ -526,17 +356,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LOGD(TAG, "onCreate");
+        LogD(TAG, "onCreate");
 
-        //Ask permissions
-        checkPermissions();
+        // Ask permissions
+        askPermissions();
         if (ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE)) {
             mSocket.on("audio_label", onNewMessage);
             mSocket.connect();
             //            Toast.makeText(this, "socket connected", Toast.LENGTH_SHORT).show();
         }
 
-        mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
+        boolean mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
 
         // [START shared_app_measurement]
@@ -545,12 +375,12 @@ public class MainActivity extends AppCompatActivity
         // [END shared_app_measurement]
 
         // create Bottom Navigation View for switch between tabs
-        LOGD(TAG, "create BottomNavigationView");
+        LogD(TAG, "create BottomNavigationView");
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
         bottomNavView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // set Mode
-        setAccuracyMode(HIGH_ACCURACY_MODE);
+        // setAccuracyMode(HIGH_ACCURACY_MODE);
 
         // Stores DataItems received by the local broadcaster or from the paired watch.
 //        mDataItemListAdapter = new DataItemAdapter(this, android.R.layout.simple_list_item_1);
@@ -568,28 +398,24 @@ public class MainActivity extends AppCompatActivity
             Intent tutorial = new Intent(MainActivity.this, Tutorial.class);
             startActivity(tutorial);
             SharedPreferences.Editor editor = sharedPref.edit();
-            for (String sound : highAccSounds) {
+            for (String sound : sounds) {
                 editor.putBoolean(sound, true);
                 FirebaseLogging(sound, "T" + Instant.now().getEpochSecond(), "sound_type");
             }
             editor.apply();
         }
-        for (String sound : highAccSounds) {
+
+        for (String sound : sounds) {
             boolean isEnabled = sharedPref.getBoolean(sound, true);
             SoundNotification currentSound = new SoundNotification(sound, isEnabled, false);
             Log.e(TAG, currentSound.toString());
-            new sendSoundEnableMessageToWatchTask(currentSound).execute();
-            CheckBox checkBox = (CheckBox) findViewById(CHECKBOX_MAP.get(sound));
+            (new sendSoundEnableMessageToWatchTask(currentSound)).execute();
+            CheckBox checkBox = findViewById(CHECKBOX_MAP.get(sound));
             checkBox.setChecked(isEnabled);
             FirebaseLogging(sound, String.valueOf(isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
         }
 
-//        int defaultValue = getResources().getInteger(R.integer.saved_high_score_default_key);
-//        int highScore = sharedPref.getInt(getString(R.string.saved_high_score_key), defaultValue);
-
-
         // Create a SharedPreference for root_preferences to update and use value from the setting tab
-
         boolean isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
         Log.d(TAG, "isSleepModeOn1" + isSleepModeOn);
         if (!isSleepModeOn) {
@@ -599,11 +425,6 @@ public class MainActivity extends AppCompatActivity
             Wearable.getMessageClient(MainActivity.this)
                     .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_disabled".getBytes());
         }
-
-        // Turn this on to reset Preference every time the app open (1/2)
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.clear().apply();
-
 
         // // Turn this to true to reset Preference every time the app open (2/2)
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
@@ -748,7 +569,7 @@ public class MainActivity extends AppCompatActivity
         mSocket.off("audio_label", onNewMessage);
 
         // Logging
-        for (String sound : highAccSounds) {
+        for (String sound : sounds) {
             FirebaseLogging(sound, "F" + Instant.now().getEpochSecond(), "sound_type");
         }
     }
@@ -760,7 +581,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Receive message from watch on which sound to snooze, and watch status
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Objects.equals(intent.getAction(), mBroadcastSoundPrediction)) {
@@ -809,71 +630,9 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    // Get the Checkout given audio label
     public CheckBox getCheckboxFromAudioLabel(String audioLabel) {
-        switch (audioLabel) {
-            case SPEECH:
-                return (CheckBox) findViewById(R.id.speech);
-            case KNOCKING:
-                return (CheckBox) findViewById(R.id.knocking);
-//            case PHONE_RING:
-//                return (CheckBox) findViewById(R.id.phone_ring);
-            case UTENSILS_AND_CUTLERY:
-                return (CheckBox) findViewById(R.id.utensils_and_cutlery);
-            case CHOPPING:
-                return (CheckBox) findViewById(R.id.chopping);
-            case VEHICLE:
-                return (CheckBox) findViewById(R.id.vehicle);
-            case CAR_HONK:
-                return (CheckBox) findViewById(R.id.car_honk);
-            case FIRE_SMOKE_ALARM:
-                return (CheckBox) findViewById(R.id.fire_smoke_alarm);
-            case MICROWAVE:
-                return (CheckBox) findViewById(R.id.microwave);
-            case WATER_RUNNING:
-                return (CheckBox) findViewById(R.id.water_running);
-            case DOOR_IN_USE:
-                return (CheckBox) findViewById(R.id.door_in_use);
-//            case DISHWASHER:
-//                return (CheckBox) findViewById(R.id.dishwasher);
-            case LAUGHING:
-                return (CheckBox) findViewById(R.id.laughing);
-            case DOG_BARK:
-                return (CheckBox) findViewById(R.id.dog_bark);
-            case DRILL:
-                return (CheckBox) findViewById(R.id.drill);
-            case VACUUM:
-                return (CheckBox) findViewById(R.id.vacuum);
-            case BABY_CRY:
-                return (CheckBox) findViewById(R.id.baby_crying);
-            case SHAVER:
-                return (CheckBox) findViewById(R.id.shaver);
-            case TOOTHBRUSH:
-                return (CheckBox) findViewById(R.id.tooth_brush);
-//            case BLENDER:
-//                return (CheckBox) findViewById(R.id.blender);
-            case DOORBELL:
-                return (CheckBox) findViewById(R.id.door_bell);
-            case TOILET_FLUSH:
-                return (CheckBox) findViewById(R.id.toilet_flush);
-            case SNORING:
-                return (CheckBox) findViewById(R.id.snoring);
-            case HAMMERING:
-                return (CheckBox) findViewById(R.id.hammering);
-//            case SAW:
-//                return (CheckBox) findViewById(R.id.saw);
-            case CAT_MEOW:
-                return (CheckBox) findViewById(R.id.cat_meow);
-            case HAIR_DRYER:
-                return (CheckBox) findViewById(R.id.hair_dryer);
-            case ALARM_CLOCK:
-                return (CheckBox) findViewById(R.id.alarm_clock);
-            case COUGHING:
-                return (CheckBox) findViewById(R.id.coughing);
-            case TYPING:
-                return (CheckBox) findViewById(R.id.typing);
-            default:
-                return null;
-        }
+        return CHECKBOX_MAP.containsKey(audioLabel) ? findViewById(CHECKBOX_MAP.get(audioLabel)) : null;
     }
 
     @Override
@@ -900,7 +659,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCapabilityChanged(final CapabilityInfo capabilityInfo) {
-        LOGD(TAG, "onCapabilityChanged: " + capabilityInfo);
+        LogD(TAG, "onCapabilityChanged: " + capabilityInfo);
 
         mDataItemListAdapter.add(new Event("onCapabilityChanged", capabilityInfo.toString()));
     }
@@ -909,7 +668,7 @@ public class MainActivity extends AppCompatActivity
      * Sends an RPC to start a fullscreen Activity on the wearable.
      */
     public void onStartWearableActivityClick(View view) {
-        LOGD(TAG, "Generating RPC");
+        LogD(TAG, "Generating RPC");
         // Trigger an AsyncTask that will query for a list of connected nodes and send a
         // "start-activity" message to each connected node.
         new StartWearableActivityTask().execute();
@@ -929,7 +688,7 @@ public class MainActivity extends AppCompatActivity
             // Block on a task and get the result synchronously (because this is on a background
             // thread).
             Integer result = Tasks.await(sendMessageTask);
-            LOGD(TAG, "Message sent: " + result);
+            LogD(TAG, "Message sent: " + result);
 
         } catch (ExecutionException exception) {
             Log.e(TAG, "Task failed: " + exception);
@@ -949,7 +708,7 @@ public class MainActivity extends AppCompatActivity
             // Block on a task and get the result synchronously (because this is on a background
             // thread).
             Integer result = Tasks.await(sendMessageTask);
-            LOGD(TAG, "Message sent: " + result);
+            LogD(TAG, "Message sent: " + result);
 
         } catch (ExecutionException exception) {
             Log.e(TAG, "Task failed: " + exception);
@@ -1043,7 +802,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * As simple wrapper around Log.d
      */
-    private static void LOGD(final String tag, String message) {
+    private static void LogD(String tag, String message) {
         if (Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message);
         }
@@ -1065,7 +824,7 @@ public class MainActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
-                LOGD(TAG, "convertView is null");
+                LogD(TAG, "convertView is null");
                 holder = new ViewHolder();
                 LayoutInflater inflater =
                         (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1074,7 +833,7 @@ public class MainActivity extends AppCompatActivity
                 holder.text1 = (TextView) convertView.findViewById(android.R.id.text1);
                 holder.text2 = (TextView) convertView.findViewById(android.R.id.text2);
             } else {
-                LOGD(TAG, "convertView is " + convertView.getTag());
+                LogD(TAG, "convertView is " + convertView.getTag());
                 holder = (ViewHolder) convertView.getTag();
             }
             Event event = getItem(position);
@@ -1083,14 +842,13 @@ public class MainActivity extends AppCompatActivity
             return convertView;
         }
 
-        private class ViewHolder {
+        private static class ViewHolder {
             TextView text1;
             TextView text2;
         }
     }
 
-    private class Event {
-
+    private static class Event {
         String title;
         String text;
 
@@ -1101,7 +859,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private class StartWearableActivityTask extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
@@ -1137,41 +894,41 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * Generates a DataItem based on an incrementing count.
-     */
-    private class DataItemGenerator implements Runnable {
-
-        private int count = 0;
-
-        @Override
-        public void run() {
-            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
-            putDataMapRequest.getDataMap().putInt(COUNT_KEY, count++);
-
-            PutDataRequest request = putDataMapRequest.asPutDataRequest();
-            request.setUrgent();
-
-            LOGD(TAG, "Generating DataItem: " + request);
-
-            Task<DataItem> dataItemTask =
-                    Wearable.getDataClient(getApplicationContext()).putDataItem(request);
-
-            try {
-                // Block on a task and get the result synchronously (because this is on a background
-                // thread).
-                DataItem dataItem = Tasks.await(dataItemTask);
-
-                LOGD(TAG, "DataItem saved: " + dataItem);
-
-            } catch (ExecutionException exception) {
-                Log.e(TAG, "Task failed: " + exception);
-
-            } catch (InterruptedException exception) {
-                Log.e(TAG, "Interrupt occurred: " + exception);
-            }
-        }
-    }
+//    /**
+//     * Generates a DataItem based on an incrementing count.
+//     */
+//    private class DataItemGenerator implements Runnable {
+//
+//        private int count = 0;
+//
+//        @Override
+//        public void run() {
+//            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
+//            putDataMapRequest.getDataMap().putInt(COUNT_KEY, count++);
+//
+//            PutDataRequest request = putDataMapRequest.asPutDataRequest();
+//            request.setUrgent();
+//
+//            LogD(TAG, "Generating DataItem: " + request);
+//
+//            Task<DataItem> dataItemTask =
+//                    Wearable.getDataClient(getApplicationContext()).putDataItem(request);
+//
+//            try {
+//                // Block on a task and get the result synchronously (because this is on a background
+//                // thread).
+//                DataItem dataItem = Tasks.await(dataItemTask);
+//
+//                LogD(TAG, "DataItem saved: " + dataItem);
+//
+//            } catch (ExecutionException exception) {
+//                Log.e(TAG, "Task failed: " + exception);
+//
+//            } catch (InterruptedException exception) {
+//                Log.e(TAG, "Interrupt occurred: " + exception);
+//            }
+//        }
+//    }
 
 //        private void loadFragment(Fragment fragment) {
 //        // load fragment
@@ -1187,7 +944,7 @@ public class MainActivity extends AppCompatActivity
      * @param fragment a new fragment
      */
     private void loadFragment(Fragment fragment) {
-        //switching fragment
+        // switching fragment
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -1204,17 +961,17 @@ public class MainActivity extends AppCompatActivity
      *
      * @param mode 1 for high accuracy, 2 for low accuracy
      * */
-    private void setAccuracyMode(int mode) {
-        CheckBox checkBoxToDisable;
-        if (mode == HIGH_ACCURACY_MODE) {
-            for (Integer sound : lowAccuracyList) {
-                checkBoxToDisable = (CheckBox) findViewById(sound);
-                checkBoxToDisable.setVisibility(View.GONE);
-            }
-            // some config for padding
-            findViewById(R.id.category_5).setVisibility(View.GONE);
-            findViewById(R.id.padding_top).setPadding(0, 150, 0, 0);
-            findViewById(R.id.padding_bottom).setPadding(0, 0, 0, 80);
-        }
-    }
+//    private void setAccuracyMode(int mode) {
+//        CheckBox checkBoxToDisable;
+//        if (mode == HIGH_ACCURACY_MODE) {
+//            for (Integer sound : lowAccuracyList) {
+//                checkBoxToDisable = (CheckBox) findViewById(sound);
+//                checkBoxToDisable.setVisibility(View.GONE);
+//            }
+//            // some config for padding
+//            findViewById(R.id.category_5).setVisibility(View.GONE);
+//            findViewById(R.id.padding_top).setPadding(0, 150, 0, 0);
+//            findViewById(R.id.padding_bottom).setPadding(0, 0, 0, 80);
+//        }
+//    }
 }
