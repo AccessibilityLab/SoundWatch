@@ -392,21 +392,17 @@ public class SoundRecorder {
             final SoundRecorder soundRecorder = mSoundRecorderWeakReference.get();
             mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                     RECORDING_RATE, CHANNEL_IN, FORMAT, BUFFER_SIZE * 3);
-            BufferedOutputStream bufferedOutputStream = null;
             try {
-                bufferedOutputStream = new BufferedOutputStream(
-                        soundRecorder.mContext.openFileOutput(
-                                soundRecorder.mOutputFileName,
-                                Context.MODE_PRIVATE));
                 final byte[] buffer = new byte[BUFFER_SIZE];
                 mAudioRecord.startRecording();
                 while (!isCancelled()) {
                     int read = mAudioRecord.read(buffer, 0, buffer.length);
 //                    Log.i(DEBUG_TAG, read + ", " + buffer.length);
                     short[] shorts = convertByteArrayToShortArray(buffer);
-                    if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION)
-                            && (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE) || ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE))) {
-                        // For raw audio tranmission, we need to send the buffer all the time
+                    if (AUDIO_TRANMISSION_STYLE.equals(RAW_AUDIO_TRANSMISSION) &&
+                            (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE) ||
+                                    ARCHITECTURE.equals(PHONE_WATCH_SERVER_ARCHITECTURE))) {
+                        // For raw audio transmission, we need to send the buffer all the time
                         // Not waiting for the short buffer to build up
                         processAudioRecognition(null, buffer);
                     }
@@ -421,18 +417,10 @@ public class SoundRecorder {
                             soundRecorder.soundBuffer.add(num);
                         }
                     }
-                    bufferedOutputStream.write(buffer, 0, read);
                 }
-            } catch (IOException | NullPointerException | IndexOutOfBoundsException e) {
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
                 Log.e(TAG, "Failed to record data: " + e);
             } finally {
-                if (bufferedOutputStream != null) {
-                    try {
-                        bufferedOutputStream.close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                }
                 mAudioRecord.release();
                 mAudioRecord = null;
             }
