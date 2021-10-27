@@ -1,4 +1,5 @@
 # MFCC Spectrogram conversion code from VGGish, Google Inc.
+# Hyperparameters.
 # https://github.com/tensorflow/models/tree/master/research/audioset
 
 NUM_FRAMES = 32  # Frames in input mel-spectrogram patch.

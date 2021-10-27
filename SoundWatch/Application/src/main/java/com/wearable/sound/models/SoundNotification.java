@@ -1,5 +1,7 @@
 package com.wearable.sound.models;
 
+import androidx.annotation.NonNull;
+
 public class SoundNotification {
     public String label;
     public boolean isEnabled;
@@ -11,6 +13,7 @@ public class SoundNotification {
         this.isSnoozed = isSnoozed;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SoundNotification{" +

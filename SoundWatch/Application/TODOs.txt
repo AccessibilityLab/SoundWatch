@@ -1,0 +1,18 @@
+TODOs for new release of 330 models -- doing this in order:
+[x] Remove InstallTimePack
+[x] Testing if everything works ok so far
+[x] Update labels: remove speech, grouping notifications
+[x] Fix the bug on keep writing the memory if let the app open?
+[x] Refactor the code
+[x] Testing again
+[x] Push the code
+[x] Let Quan know and testing out
+
+====Phase 2
+[] Keep refactoring out the code for Application
+[] Access 'getNodes' statically? How to prevent memory leak
+[] Reconfig the reduce the app size (optional)
+[] Remove chaquopy code from Wearable app to reduce app size further
+[] Learn how to publish the app on Play Store
+[] Testing to make sure everything looks ok
+[] Publishing the new updates on AppStore
