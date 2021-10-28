@@ -112,12 +112,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     /**
      * Broadcast services
      */
-    public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
-    public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allsoundspredictions";
-    public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
-    public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningstatus";
-    private IntentFilter mIntentFilter;
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundPrediction";
+    public static final String mBroadcastAllSoundPredictions = "com.wearable.sound.broadcast.allSoundPredictions";
+    public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundService";
+    public static final String mBroadcastListeningStatus = "com.wearable.sound.broadcast.listeningStatus";
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received intent: "  + intent.getAction());
@@ -189,6 +188,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     };
 
     public List<SoundPrediction> parsePredictions(String soundPredictions) {
+        Log.i(TAG, "soundPredictions is " + soundPredictions);
         List<SoundPrediction> result = new ArrayList<>();
         // Split by _
         String[] soundsKvPairs = soundPredictions.split(",");
@@ -425,7 +425,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         //Enables Always-on - I don't need the foreground to be always on, I just need network access and the app to generate notification during doze.
         //setAmbientEnabled();
         checkPermissions();
-        mIntentFilter = new IntentFilter();
+        IntentFilter mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         mIntentFilter.addAction(mBroadcastAllSoundPredictions);
         mIntentFilter.addAction(mBroadcastForegroundService);

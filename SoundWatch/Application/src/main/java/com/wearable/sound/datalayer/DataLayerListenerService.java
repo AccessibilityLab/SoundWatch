@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -238,7 +239,7 @@ public class DataLayerListenerService extends WearableListenerService {
             Log.i(TAG, "Phone received Snooze Sound [" + soundLabel + "] from watch");
             if (MainActivity.SOUNDS_MAP.containsKey(soundLabel)) {
                 Log.i(TAG, "Setting is Snooze true");
-                MainActivity.SOUNDS_MAP.get(soundLabel).isSnoozed = true;
+                Objects.requireNonNull(MainActivity.SOUNDS_MAP.get(soundLabel)).isSnoozed = true;
                 // Display Snooze on Phone
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(MainActivity.mBroadcastSnoozeSound);
@@ -466,7 +467,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 }
 
                 // Get MFCC features
-                System.out.println("Sending to python an array length of " + sData.length);
+                Log.i(TAG,"Sending to python an array length of " + sData.length);
                 PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(sData));
 
                 Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
@@ -478,7 +479,6 @@ public class DataLayerListenerService extends WearableListenerService {
                 if (inputStringArr.length == 0) {
                     return null;
                 }
-//                System.out.println("=======inputStringArr length is " + inputStringArr.length);
 
                 for (int i = 0; i < result.length; i++) {
                     if (inputStringArr[i].isEmpty()) {
@@ -634,6 +634,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 count++;
             }
         }
+        Log.i(TAG, "Input3D is " + Arrays.deepToString(input3D));
         long startTime = 0;
         if (TEST_MODEL_LATENCY)
             startTime = System.currentTimeMillis();
@@ -641,6 +642,7 @@ public class DataLayerListenerService extends WearableListenerService {
         // Run inference
         float[][] output = new float[1][numLabels];
         tfLite.run(input3D, output);
+        Log.i(TAG, "output is " + Arrays.deepToString(output));
 
         if (TEST_MODEL_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - startTime;
@@ -651,7 +653,7 @@ public class DataLayerListenerService extends WearableListenerService {
             try {
                 Log.i(TAG, "Writing time to a file");
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("watch_model.txt", Context.MODE_APPEND));
-                outputStreamWriter.write(timeStamp + "," + Long.toString(elapsedTime) + "\n");
+                outputStreamWriter.write(timeStamp + "," + elapsedTime + "\n");
                 outputStreamWriter.close();
             } catch (IOException e) {
                 Log.e("Exception", "File write failed: " + e.toString());
@@ -665,18 +667,25 @@ public class DataLayerListenerService extends WearableListenerService {
             }
             // Sort the predictions by value in decreasing order
             predictions.sort(Collections.reverseOrder());
+            Log.i(TAG, "Predictions are " + predictions.toString());
+
             // Convert this map into a shape of sound=value_sound=value, only include sounds with
             //  accuracy >= threshold
             StringBuilder sb = new StringBuilder();
+            String separator = "";
             for (SoundPrediction soundPrediction : predictions) {
                 if (soundPrediction.getAccuracy() >= PREDICTION_THRES) {
-                    sb.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy()).append(",");
+                    sb.append(separator);
+                    sb.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getAccuracy());
+                    separator = ",";
                 }
             }
 
-            // Strip the last ","
-            sb.deleteCharAt(sb.length() - 1);
-            (new SendAllAudioPredictionsToWearTask(sb.toString(), db, recordTime)).execute();
+            // send the all predictions to the watch if any
+            if (sb.length() > 0) {
+                Log.i(TAG, "Final prediction string is " + sb.toString());
+                (new SendAllAudioPredictionsToWearTask(sb.toString(), db, recordTime)).execute();
+            }
             return sb.toString();
         } else {
             // Only use argmax
@@ -728,7 +737,7 @@ public class DataLayerListenerService extends WearableListenerService {
         for (int i = 0; i < soundBuffer.size(); i++) {
             sData[i] = soundBuffer.get(i);
         }
-        System.out.println("sData length is " + sData.length);
+        Log.i(TAG, "sData length is " + sData.length);
 
         double db = db(sData);
         Log.d(TAG, "2. DB of data: " + db + "| DB_thresh: " + DBLEVEL_THRES);
@@ -739,7 +748,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 Log.d(TAG, "Cannot extract features from raw audio");
                 return null;
             }
-            System.out.println("Input 1D is " + Arrays.toString(input1D));
+            Log.i(TAG,"Input1D is " + Arrays.toString(input1D));
 
             return predictSoundsFromAudioFeatures(input1D, db);
         }
