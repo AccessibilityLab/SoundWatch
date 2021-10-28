@@ -2,7 +2,8 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+//        jcenter()
     }
 
     dependencies {
@@ -13,22 +14,22 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.chaquo.python'
 
-
 repositories {
     google()
-    jcenter()
+    mavenCentral()
+//    jcenter()
 }
 
 dependencies {
 
-    implementation 'androidx.wear:wear:1.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.wear:wear:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
-    implementation 'com.google.gms:google-services:4.3.4'
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+    implementation 'com.google.gms:google-services:4.3.10'
+    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
 
 
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
