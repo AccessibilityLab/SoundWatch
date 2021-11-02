@@ -19,6 +19,7 @@ package com.wearable.sound.datalayer;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,25 +30,29 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.wearable.sound.ui.activity.MainActivity;
 import com.wearable.sound.application.MainApplication;
+
 import static com.wearable.sound.utils.Constants.*;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
-/** Listens to DataItems and Messages from the local node. */
+/**
+ * Listens to DataItems and Messages from the local node.
+ */
 public class DataLayerListenerService extends WearableListenerService {
 
     private static final String TAG = "DataLayerService";
-//    private static final String DEBUG_TAG = "FromSoftware";
+    private static final String DEBUG_TAG = "FromSoftware";
 
     @Override
-    public void onPeerConnected(Node node) {
+    public void onPeerConnected(@NonNull Node node) {
         super.onPeerConnected(node);
         Log.i(TAG, "onPeerConnected()");
-        List blockedSounds = ((MainApplication) this.getApplication()).getBlockedSounds();
-        Task<Integer> sendMessageTask =
-                Wearable.getMessageClient(this)
-                        .sendMessage(node.getId(), SEND_CURRENT_BLOCKED_SOUND_PATH,
-                                String.join(",", blockedSounds).getBytes());
+        List<Integer> blockedSounds = ((MainApplication) this.getApplication()).getBlockedSounds();
+        Wearable.getMessageClient(this)
+                .sendMessage(node.getId(), SEND_CURRENT_BLOCKED_SOUND_PATH,
+                        String.join(",", (CharSequence) blockedSounds).getBytes());
     }
 
     @Override
@@ -80,14 +85,11 @@ public class DataLayerListenerService extends WearableListenerService {
                                 .sendMessage(nodeId, DATA_ITEM_RECEIVED_PATH, payload);
 
                 sendMessageTask.addOnCompleteListener(
-                        new OnCompleteListener<Integer>() {
-                            @Override
-                            public void onComplete(Task<Integer> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "Message sent successfully");
-                                } else {
-                                    Log.d(TAG, "Message failed.");
-                                }
+                        task -> {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Message sent successfully");
+                            } else {
+                                Log.d(TAG, "Message failed.");
                             }
                         });
             }
@@ -103,8 +105,9 @@ public class DataLayerListenerService extends WearableListenerService {
             startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startIntent);
         } else if (messageEvent.getPath().equals(AUDIO_PREDICTION_PATH)) {
-            /** Display Snooze on Phone**/
+            /* Display Snooze on Phone */
             Log.i(TAG, "Sending label broadcast to MainActivity");
+
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MainActivity.mBroadcastSoundPrediction);
             broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
@@ -112,6 +115,7 @@ public class DataLayerListenerService extends WearableListenerService {
 //            createAudioLabelNotification(audioLabel);
         } else if (messageEvent.getPath().equals(SOUND_ENABLE_FROM_PHONE_PATH)) {
             Log.d(TAG, "Received sound enabled from phone: " + new String(messageEvent.getData()));
+
             handleEnableSoundNotification(new String(messageEvent.getData()));
         } else if (messageEvent.getPath().equals(SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH)) {
             Log.i(TAG, "Sending All sounds label to MainActivity");
@@ -122,7 +126,7 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
             sendBroadcast(broadcastIntent);
         } else if (messageEvent.getPath().equals(SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH)) {
-            Log.i(TAG, "Foreground Service status received: "+ new String(messageEvent.getData()) + "-> send to MainActivity");
+            Log.i(TAG, "Foreground Service status received: " + new String(messageEvent.getData()) + "-> send to MainActivity");
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MainActivity.mBroadcastForegroundService);
@@ -136,8 +140,7 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.setAction(MainActivity.mBroadcastListeningStatus);
             broadcastIntent.putExtra(WATCH_STATUS_LABEL, data);
             sendBroadcast(broadcastIntent);
-        }
-        else {
+        } else {
             Log.d(TAG, "Unrecognized message from phone. Check if this message is registered in AndroidManifest");
         }
     }
@@ -147,11 +150,12 @@ public class DataLayerListenerService extends WearableListenerService {
         if (parts.length != 3) {
             Log.i(TAG, "Malformed Sound Enabled notification " + message);
         }
+
         String soundLabel = parts[0];
         boolean isEnabled = Boolean.parseBoolean(parts[1]);
         boolean isSnoozed = Boolean.parseBoolean(parts[2]);
-        List<String> enabledSounds = ((MainApplication) this.getApplication()).enabledSounds;
-        Log.i(TAG, "handleEnableSoundNotificatioN()");
+        List<String> enabledSounds = ((MainApplication) this.getApplication()).getEnabledSounds();
+        Log.i(TAG, "handleEnableSoundNotification()");
 
         if (isEnabled) {
             Log.i(TAG, "Enabling sound ");
