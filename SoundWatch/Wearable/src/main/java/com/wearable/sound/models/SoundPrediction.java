@@ -1,6 +1,8 @@
 package com.wearable.sound.models;
 
-public class SoundPrediction implements Comparable<SoundPrediction>{
+import androidx.annotation.NonNull;
+
+public class SoundPrediction implements Comparable<SoundPrediction> {
     private String label;
     private float accuracy;
 
@@ -33,5 +35,11 @@ public class SoundPrediction implements Comparable<SoundPrediction>{
             return 1;
         }
         return 0;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.label + "_" + this.accuracy;
     }
 }

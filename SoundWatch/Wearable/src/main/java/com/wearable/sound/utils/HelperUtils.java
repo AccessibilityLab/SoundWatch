@@ -18,7 +18,7 @@ public class HelperUtils {
     public static long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.put(bytes);
-        buffer.flip();//need flip
+        buffer.flip();  // need flip
         return buffer.getLong();
     }
 
@@ -53,8 +53,8 @@ public class HelperUtils {
 
     /**
      *
-     * @param bytes
-     * @return
+     * @param bytes an array of byte
+     * @return an array of short
      */
     public static short[] convertByteArrayToShortArray(byte[] bytes) {
         short[] result = new short[bytes.length / 2];

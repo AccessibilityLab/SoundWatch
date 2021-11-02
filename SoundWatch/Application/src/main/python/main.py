@@ -12,7 +12,7 @@ def audio_samples(x):
     x = x.split(",")
     x = np.array(x)
     x = x.astype(np.float)
-    x = x / 32768.0 #Convert to [-1.0, +1.0]
+    x = x / 32768.0 # Convert to [-1.0, +1.0]
 
     # Calculate MFCC features
     x = waveform_to_examples(x, RATE)

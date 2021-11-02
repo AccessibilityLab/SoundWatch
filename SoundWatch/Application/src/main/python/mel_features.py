@@ -1,4 +1,5 @@
 # MFCC Spectrogram conversion code from VGGish, Google Inc.
+# Audio feature extraction helpers.
 # https://github.com/tensorflow/models/tree/master/research/audioset
 
 import numpy as np

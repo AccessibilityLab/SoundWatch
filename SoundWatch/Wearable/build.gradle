@@ -2,7 +2,8 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+//        jcenter()
     }
 
     dependencies {
@@ -11,24 +12,24 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.chaquo.python'
-
+//apply plugin: 'com.chaquo.python'
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
+//    jcenter()
 }
 
 dependencies {
 
-    implementation 'androidx.wear:wear:1.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.wear:wear:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
-    implementation 'com.google.gms:google-services:4.3.4'
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+    implementation 'com.google.gms:google-services:4.3.10'
+    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
 
 
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
@@ -72,14 +73,14 @@ android {
 
         multiDexEnabled true
 
-        python {
-            // If Chaquopy fails to find Python on your build machine, enable the following
-            // line and edit it to point to Python 3.4 or later.
-            buildPython "/usr/bin/python3"
-            pip {
-                install "numpy==1.17.4"
-            }
-        }
+//        python {
+//            // If Chaquopy fails to find Python on your build machine, enable the following
+//            // line and edit it to point to Python 3.4 or later.
+//            buildPython "/usr/bin/python3"
+//            pip {
+//                install "numpy==1.17.4"
+//            }
+//        }
         ndk {
             abiFilters 'armeabi-v7a', 'x86'
         }

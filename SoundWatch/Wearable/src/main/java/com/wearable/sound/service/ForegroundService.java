@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import androidx.core.app.NotificationCompat;
+
 import static com.wearable.sound.utils.Constants.*;
 
 public class ForegroundService extends Service {
@@ -28,12 +29,13 @@ public class ForegroundService extends Service {
 
     private SoundRecorder mSoundRecorder;
     private CountDownTimer mCountDownTimer;
-    private static Set<String> connectedHostIds = new HashSet<>();
+    private final Set<String> connectedHostIds = new HashSet<>();
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "onCreate");
-        mSoundRecorder = new SoundRecorder(this, VOICE_FILE_NAME);
+        mSoundRecorder = new SoundRecorder(this);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ForegroundService extends Service {
         String input = intent.getStringExtra("connectedHostIds");
         final Set<String> connectedHostIds = new HashSet<>(
                 Arrays.asList(
-                    input.split(",")
+                        input.split(",")
                 )
         );
         createNotificationChannel();
@@ -58,6 +60,7 @@ public class ForegroundService extends Service {
         Log.d(TAG, "Start Recording...");
         return START_NOT_STICKY;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -70,10 +73,12 @@ public class ForegroundService extends Service {
             mCountDownTimer.cancel();
         }
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(

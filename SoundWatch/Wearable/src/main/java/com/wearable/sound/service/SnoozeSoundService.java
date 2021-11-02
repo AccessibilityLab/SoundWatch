@@ -10,10 +10,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Wearable;
 import com.wearable.sound.utils.AlarmReceiver;
 import com.wearable.sound.application.MainApplication;
+
 import static com.wearable.sound.utils.Constants.*;
 
 import java.io.ByteArrayOutputStream;
@@ -41,33 +41,29 @@ public class SnoozeSoundService extends IntentService {
 
         if (intent != null) {
             String snoozeTime = "10 mins";
-            if (snoozeTime == null) {
-                return;
-            }
             final int blockedNotificationID = intent.getIntExtra(SOUND_ID, 0);
             final String soundLabel = intent.getStringExtra(SOUND_LABEL);
             String input = intent.getStringExtra(CONNECTED_HOST_IDS);
             if (input != null) {
                 // There is a connected phone
-                final Set<String> connectedHostIds = new HashSet<>(
+                this.connectedHostIds = new HashSet<>(
                         Arrays.asList(
                                 input.split(",")
                         )
                 );
-                this.connectedHostIds = connectedHostIds;
             }
             ((MainApplication) this.getApplication()).addBlockedSounds(blockedNotificationID);
             Log.i(TAG, "Add to list of blocked sounds " + blockedNotificationID);
 
             if (!snoozeTime.equals("Forever")) {
-                Intent alarmIntent = new Intent(this,  AlarmReceiver.class);
+                Intent alarmIntent = new Intent(this, AlarmReceiver.class);
                 alarmIntent.setAction("com.wearable.sound.almMgr");
                 alarmIntent.putExtra("blockedSoundId", blockedNotificationID);
                 alarmIntent.putExtra(SOUND_LABEL, soundLabel);
                 alarmIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
                 int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, uniqueInt, alarmIntent, 0);
-                AlarmManager alarmMgr = (AlarmManager)this.getSystemService(ALARM_SERVICE);
+                AlarmManager alarmMgr = (AlarmManager) this.getSystemService(ALARM_SERVICE);
                 alarmMgr.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 60 * 1000, pendingIntent);
             }
 
@@ -79,22 +75,20 @@ public class SnoozeSoundService extends IntentService {
 
             // Send a message to Phone to indicate this sound is blocked
             sendSnoozeSoundMessageToPhone(soundLabel);
-
         }
     }
 
     private void sendSnoozeSoundMessageToPhone(String soundLabel) {
-            ByteArrayOutputStream bas = new ByteArrayOutputStream();
-            DataOutputStream ds = new DataOutputStream(bas);
-            if (connectedHostIds == null) {
-                // No phone connected to send the message right now
-                return;
-            }
-            for (String connectedHostId : connectedHostIds) {
-                Log.d(TAG, "Sending snooze sound data to phone: " + soundLabel);
-                Task<Integer> sendMessageTask =
-                        Wearable.getMessageClient(this.getApplicationContext())
-                                .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
-            }
+        ByteArrayOutputStream bas = new ByteArrayOutputStream();
+        DataOutputStream ds = new DataOutputStream(bas);
+        if (connectedHostIds == null) {
+            // No phone connected to send the message right now
+            return;
+        }
+        for (String connectedHostId : connectedHostIds) {
+            Log.d(TAG, "Sending snooze sound data to phone: " + soundLabel);
+            Wearable.getMessageClient(this.getApplicationContext())
+                    .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
+        }
     }
 }

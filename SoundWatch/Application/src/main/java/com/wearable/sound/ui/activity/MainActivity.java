@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -57,7 +58,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -96,10 +100,10 @@ import static com.wearable.sound.utils.Constants.*;
  * the paired wearable.
  */
 public class MainActivity extends AppCompatActivity
-        implements
-        CapabilityClient.OnCapabilityChangedListener {
+        implements CapabilityClient.OnCapabilityChangedListener {
 
     private static final String TAG = "MainActivity";
+
     /**
      * The {@code FirebaseAnalytics} used to record screen views.
      */
@@ -195,8 +199,6 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Update when the check box gets clicked
-     *
-     * @param view
      */
     public void onCheckBoxClick(View view) {
         int id = view.getId();
@@ -231,30 +233,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
-        private String data;
-
-        public sendSoundEnableMessageToWatchTask(SoundNotification soundNotification) {
-            data = soundNotification.label + "," + soundNotification.isEnabled + "," + soundNotification.isSnoozed;
-        }
-
-        @Override
-        protected Void doInBackground(Void... args) {
-            Collection<String> nodes = getNodes();
-            Log.i(TAG, "Sending enabled data to watch " + nodes.size());
-            for (String node : nodes) {
-                Log.i(TAG, "Sending enabled data from phone: " + data);
-                sendMessageWithData(node, SOUND_ENABLE_FROM_PHONE_PATH, data.getBytes());
-            }
-            return null;
-        }
-    }
-
-    public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundprediction";
+    public static final String mBroadcastSoundPrediction = "com.wearable.sound.broadcast.soundPrediction";
     public static final String mBroadcastSnoozeSound = "com.wearable.sound.broadcast.snoozeSound";
     public static final String mBroadcastUnsnoozeSound = "com.wearable.sound.broadcast.unsnoozeSound";
-    public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundservice";
-    public static final String mBroadcastDisableForegroundService = "com.wearable.sound.broadcast.disableforegroundservice";
+    public static final String mBroadcastForegroundService = "com.wearable.sound.broadcast.foregroundService";
+    public static final String mBroadcastDisableForegroundService = "com.wearable.sound.broadcast.disableForegroundService";
 
     private IntentFilter mIntentFilter;
 
@@ -269,17 +252,14 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * SocketIO
-     *
-     * @return
      */
-
     public static Socket mSocket;
     //    private static final String SERVER_URL = "http://128.208.49.41:8787";
     private static final String TEST_E2E_LATENCY_SERVER = "http://128.208.49.41:8789";
     private static final String MODEL_LATENCY_SERVER = "http://128.208.49.41:8790";
     private static final String DEFAULT_SERVER = "http://128.208.49.41:8788";
 
-    {
+    static {
         String SERVER_URL;
         if (TEST_E2E_LATENCY) {
             SERVER_URL = TEST_E2E_LATENCY_SERVER;
@@ -332,7 +312,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -366,7 +347,7 @@ public class MainActivity extends AppCompatActivity
             //            Toast.makeText(this, "socket connected", Toast.LENGTH_SHORT).show();
         }
 
-        boolean mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
+//        boolean mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
 
         // [START shared_app_measurement]
@@ -428,7 +409,7 @@ public class MainActivity extends AppCompatActivity
 
         // // Turn this to true to reset Preference every time the app open (2/2)
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
-        isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
+//        isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
 
 //         Start the service once by default
         Log.i(TAG, "Starting foreground service first time");
@@ -700,7 +681,6 @@ public class MainActivity extends AppCompatActivity
 
     @WorkerThread
     private void sendStartActivityMessage(String node) {
-
         Task<Integer> sendMessageTask =
                 Wearable.getMessageClient(this).sendMessage(node, START_ACTIVITY_PATH, new byte[0]);
 
@@ -858,6 +838,48 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * loading fragment into FrameLayout
+     *
+     * @param fragment a new fragment
+     */
+    private void loadFragment(Fragment fragment) {
+        // switching fragment
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
+    }
+
+    /* -------------------------------------------------------------------------
+        Async Tasks
+       -----------------------------------------------------------------------*/
+
+    /**
+     * Sending enabled sounds set in phone to the wearable
+     */
+    public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
+        private String data;
+
+        public sendSoundEnableMessageToWatchTask(SoundNotification soundNotification) {
+            data = soundNotification.label + "," + soundNotification.isEnabled + "," + soundNotification.isSnoozed;
+        }
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            Collection<String> nodes = getNodes();
+            Log.i(TAG, "Sending enabled data to watch " + nodes.size());
+            for (String node : nodes) {
+                Log.i(TAG, "Sending enabled data from phone: " + data);
+                sendMessageWithData(node, SOUND_ENABLE_FROM_PHONE_PATH, data.getBytes());
+            }
+            return null;
+        }
+    }
+
+
     private class StartWearableActivityTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... args) {
@@ -869,6 +891,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * To send audio labels of predictions to the wearable
+     */
     public class SendAudioLabelToWearTask extends AsyncTask<Void, Void, Void> {
         private String prediction;
         private String confidence;
@@ -894,41 +919,41 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    /**
-//     * Generates a DataItem based on an incrementing count.
-//     */
-//    private class DataItemGenerator implements Runnable {
-//
-//        private int count = 0;
-//
-//        @Override
-//        public void run() {
-//            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
-//            putDataMapRequest.getDataMap().putInt(COUNT_KEY, count++);
-//
-//            PutDataRequest request = putDataMapRequest.asPutDataRequest();
-//            request.setUrgent();
-//
-//            LogD(TAG, "Generating DataItem: " + request);
-//
-//            Task<DataItem> dataItemTask =
-//                    Wearable.getDataClient(getApplicationContext()).putDataItem(request);
-//
-//            try {
-//                // Block on a task and get the result synchronously (because this is on a background
-//                // thread).
-//                DataItem dataItem = Tasks.await(dataItemTask);
-//
-//                LogD(TAG, "DataItem saved: " + dataItem);
-//
-//            } catch (ExecutionException exception) {
-//                Log.e(TAG, "Task failed: " + exception);
-//
-//            } catch (InterruptedException exception) {
-//                Log.e(TAG, "Interrupt occurred: " + exception);
-//            }
-//        }
-//    }
+    /**
+     * Generates a DataItem based on an incrementing count.
+     */
+    private class DataItemGenerator implements Runnable {
+
+        private int count = 0;
+
+        @Override
+        public void run() {
+            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
+            putDataMapRequest.getDataMap().putInt(COUNT_KEY, count++);
+
+            PutDataRequest request = putDataMapRequest.asPutDataRequest();
+            request.setUrgent();
+
+            LogD(TAG, "Generating DataItem: " + request);
+
+            Task<DataItem> dataItemTask =
+                    Wearable.getDataClient(getApplicationContext()).putDataItem(request);
+
+            try {
+                // Block on a task and get the result synchronously (because this is on a background
+                // thread).
+                DataItem dataItem = Tasks.await(dataItemTask);
+
+                LogD(TAG, "DataItem saved: " + dataItem);
+
+            } catch (ExecutionException exception) {
+                Log.e(TAG, "Task failed: " + exception);
+
+            } catch (InterruptedException exception) {
+                Log.e(TAG, "Interrupt occurred: " + exception);
+            }
+        }
+    }
 
 //        private void loadFragment(Fragment fragment) {
 //        // load fragment
@@ -937,21 +962,6 @@ public class MainActivity extends AppCompatActivity
 //        transaction.addToBackStack(null);
 //        transaction.commit();
 //    }
-
-    /**
-     * loading fragment into FrameLayout
-     *
-     * @param fragment a new fragment
-     */
-    private void loadFragment(Fragment fragment) {
-        // switching fragment
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .commit();
-        }
-    }
 
     /*
      * Set different mode based on user's preferences.
