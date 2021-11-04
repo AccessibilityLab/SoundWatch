@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
+        classpath 'com.android.tools.build:gradle:7.0.3'
     }
 }
 
@@ -56,9 +56,6 @@ android {
     }
 
     // Specify tflite file should not be compressed for the app apk
-    aaptOptions {
-        noCompress "tflite"
-    }
 }
 
 repositories {
@@ -154,5 +151,8 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    androidResources {
+        noCompress 'tflite'
     }
 }

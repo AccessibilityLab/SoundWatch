@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
+        classpath 'com.android.tools.build:gradle:7.0.3'
     }
 }
 
@@ -26,7 +26,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
 
     implementation 'com.google.gms:google-services:4.3.10'
     implementation 'com.google.android.gms:play-services-wearable:17.1.0'
@@ -59,9 +59,9 @@ List<String> dirs = [
 
 android {
 
-    compileSdkVersion 29
+    compileSdkVersion 31
 
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         versionCode 9
@@ -69,7 +69,7 @@ android {
         applicationId 'com.wearable.sound'
         minSdkVersion 28
 
-        targetSdkVersion 29
+        targetSdkVersion 31
 
         multiDexEnabled true
 
@@ -105,10 +105,10 @@ android {
     }
 
     // Specify tflite file should not be compressed for the app apk
-    aaptOptions {
-        noCompress "tflite"
-    }
     lintOptions {
         abortOnError false
+    }
+    androidResources {
+        noCompress 'tflite'
     }
 }

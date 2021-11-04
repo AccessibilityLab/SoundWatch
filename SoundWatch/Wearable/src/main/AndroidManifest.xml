@@ -51,8 +51,8 @@
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
 
-        <service
-                android:name=".datalayer.DataLayerListenerService" >
+        <service android:name=".datalayer.DataLayerListenerService"
+            android:exported="false">
             <intent-filter>
                 <!-- listeners receive events that match the action and data filters -->
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
@@ -87,7 +87,7 @@
         <service
             android:name=".service.ForegroundService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
         </service>
         <service
             android:name=".service.SnoozeSoundService"
@@ -97,7 +97,8 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -105,7 +106,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.AlarmReceiver">
+        <receiver android:name=".utils.AlarmReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.wearable.sound.almMgr" />
             </intent-filter>
