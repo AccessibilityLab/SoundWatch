@@ -28,5 +28,10 @@ For Watch App
 [] Testing to make sure everything looks ok
 
 ===== Phase 3
+Pay the tech debt:
+[] Upgrade backend -- data layer of phone app: remove sending data to server
+[] Upgrade backend -- phone app
+
+===== Phase 4
 [] Learn how to publish the app on Play Store
 [] Publishing the new updates on AppStore

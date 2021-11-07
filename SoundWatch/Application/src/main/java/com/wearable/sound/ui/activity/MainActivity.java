@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity
     private static final String SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH = "/SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH";
     private static final String SEND_LISTENING_STATUS_FROM_PHONE_PATH = "/SEND_LISTENING_STATUS_FROM_PHONE_PATH";
     private static final String COUNT_PATH = "/count";
-    private static final String IMAGE_PATH = "/image";
-    private static final String IMAGE_KEY = "photo";
     private static final String COUNT_KEY = "count";
     private static final String MY_PREF = "my_preferences";
 
@@ -414,7 +412,7 @@ public class MainActivity extends AppCompatActivity
 //         Start the service once by default
         Log.i(TAG, "Starting foreground service first time");
         Intent serviceIntent = new Intent(MainActivity.this, DataLayerListenerService.class);
-        serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        serviceIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
         ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
 
         // Add toggle to turn on/off foreground service
@@ -443,7 +441,7 @@ public class MainActivity extends AppCompatActivity
                             mSocket.on("audio_label", onNewMessage);
                             mSocket.connect();
 
-                            serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                            serviceIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
                             ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
 
                             Wearable.getMessageClient(MainActivity.this)
@@ -451,7 +449,7 @@ public class MainActivity extends AppCompatActivity
 //                          Toast.makeText(MainActivity.this, "Foreground service started.", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.i(TAG, "Stopping foreground service in main (Sleep Mode ON)");
-                            serviceIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+                            serviceIntent.setAction(Constants.ACTION.STOP_FOREGROUND_ACTION);
                             mSocket.disconnect();
                             mSocket.off("audio_label", onNewMessage);
 
@@ -645,19 +643,6 @@ public class MainActivity extends AppCompatActivity
         mDataItemListAdapter.add(new Event("onCapabilityChanged", capabilityInfo.toString()));
     }
 
-    /**
-     * Sends an RPC to start a fullscreen Activity on the wearable.
-     */
-    public void onStartWearableActivityClick(View view) {
-        LogD(TAG, "Generating RPC");
-        // Trigger an AsyncTask that will query for a list of connected nodes and send a
-        // "start-activity" message to each connected node.
-        new StartWearableActivityTask().execute();
-    }
-
-    public void onLocationAwarenessClick(View view) {
-    }
-
     @WorkerThread
     private void sendMessageWithData(String node, String title, byte[] data) {
         Log.i(TAG, "Node: " + node + "\n title: " + title + "\n data: " + Arrays.toString(data));
@@ -697,61 +682,6 @@ public class MainActivity extends AppCompatActivity
             Log.e(TAG, "Interrupt occurred: " + exception);
         }
     }
-
-//    /**
-//     * Dispatches an {@link Intent} to take a photo. Result will be returned back in
-//     * onActivityResult().
-//     */
-//    private void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
-//
-//    /**
-//     * Builds an {@link Asset} from a bitmap. The image that we get
-//     * back from the camera in "data" is a thumbnail size. Typically, your image should not exceed
-//     * 320x320 and if you want to have zoom and parallax effect in your app, limit the size of your
-//     * image to 640x400. Resize your image before transferring to your wearable device.
-//     */
-//    private static Asset toAsset(Bitmap bitmap) {
-//        ByteArrayOutputStream byteStream = null;
-//        try {
-//            byteStream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
-//            return Asset.createFromBytes(byteStream.toByteArray());
-//        } finally {
-//            if (null != byteStream) {
-//                try {
-//                    byteStream.close();
-//                } catch (IOException e) {
-//                    // ignore
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Sends the asset that was created from the photo we took by adding it to the Data Item store.
-//     */
-//    private void sendPhoto(Asset asset) {
-//        PutDataMapRequest dataMap = PutDataMapRequest.create(IMAGE_PATH);
-//        dataMap.getDataMap().putAsset(IMAGE_KEY, asset);
-//        dataMap.getDataMap().putLong("time", new Date().getTime());
-//        PutDataRequest request = dataMap.asPutDataRequest();
-//        request.setUrgent();
-//
-//        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
-//
-//        dataItemTask.addOnSuccessListener(
-//                new OnSuccessListener<DataItem>() {
-//                    @Override
-//                    public void onSuccess(DataItem dataItem) {
-//                        LOGD(TAG, "Sending image was successful: " + dataItem);
-//                    }
-//                });
-//    }
 
     @WorkerThread
     private Collection<String> getNodes() {

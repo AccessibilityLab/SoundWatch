@@ -9,8 +9,8 @@ public class Constants {
         String PREV_ACTION = "com.wearable.sound.utils.action.prev";
         String PLAY_ACTION = "com.wearable.sound.utils.action.play";
         String NEXT_ACTION = "com.wearable.sound.utils.action.next";
-        String STARTFOREGROUND_ACTION = "com.wearable.sound.utils.action.startforeground";
-        String STOPFOREGROUND_ACTION = "com.wearable.sound.utils.action.stopforeground";
+        String START_FOREGROUND_ACTION = "com.wearable.sound.utils.action.startforeground";
+        String STOP_FOREGROUND_ACTION = "com.wearable.sound.utils.action.stopforeground";
     }
 
     /**
