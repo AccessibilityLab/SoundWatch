@@ -64,6 +64,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -490,6 +491,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         super.onDestroy();
         mSocket.disconnect();
         mSocket.off("audio_label", onNewMessage);
+        unregisterReceiver(mReceiver);
     }
 
     private void startRecording(final Context main) {
@@ -1054,12 +1056,12 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         if (TEST_E2E_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
             Log.i(TAG, "Elapsed time: " + elapsedTime);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss", Locale.US);
             Date date = new Date(System.currentTimeMillis());
             String timeStamp = simpleDateFormat.format(date);
 
             try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + "_" + AUDIO_TRANMISSION_STYLE + ".txt", Context.MODE_APPEND));
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + "_" + AUDIO_TRANSMISSION_STYLE + ".txt", Context.MODE_APPEND));
                 outputStreamWriter.write(timeStamp + "," + Long.toString(elapsedTime) + "\n");
                 outputStreamWriter.close();
             } catch (IOException e) {

@@ -3,8 +3,8 @@ package com.wearable.sound.models;
 import androidx.annotation.NonNull;
 
 public class SoundPrediction implements Comparable<SoundPrediction> {
-    private String label;
-    private float accuracy;
+    private final String label;
+    private final float accuracy;
 
     public SoundPrediction(String label, float accuracy) {
         this.label = label;
@@ -15,16 +15,8 @@ public class SoundPrediction implements Comparable<SoundPrediction> {
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     public float getAccuracy() {
         return accuracy;
-    }
-
-    public void setAccuracy(float accuracy) {
-        this.accuracy = accuracy;
     }
 
     @Override

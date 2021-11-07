@@ -9,6 +9,7 @@ public class HelperUtils {
     public static double toDouble(byte[] bytes) {
         return ByteBuffer.wrap(bytes).getDouble();
     }
+
     public static byte[] longToBytes(long x) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(x);
@@ -47,12 +48,11 @@ public class HelperUtils {
             }
             rms += soundBuffer.get(i) * soundBuffer.get(i);
         }
-        rms = rms/dataLength;
+        rms = rms / dataLength;
         return 10 * Math.log10(rms);
     }
 
     /**
-     *
      * @param bytes an array of byte
      * @return an array of short
      */
@@ -64,7 +64,7 @@ public class HelperUtils {
 
     private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
         StringBuilder result = new StringBuilder();
-        for (String connectedHostId: connectedHostIds) {
+        for (String connectedHostId : connectedHostIds) {
             result.append(connectedHostId);
         }
         if (connectedHostIds.size() <= 1) {

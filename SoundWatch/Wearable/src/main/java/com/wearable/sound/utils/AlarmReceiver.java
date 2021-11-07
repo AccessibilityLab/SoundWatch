@@ -34,12 +34,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Log.i(TAG, "Connected host id: " + input);
         if (input != null) {
             // There is a connected phone
-            final Set<String> connectedHostIds = new HashSet<>(
+            this.connectedHostIds = new HashSet<>(
                     Arrays.asList(
                             input.split(",")
                     )
             );
-            this.connectedHostIds = connectedHostIds;
             sendUnSnoozeSoundMessageToPhone(context, soundLabel);
         }
     }
@@ -53,9 +52,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         }
         for (String connectedHostId : connectedHostIds) {
             Log.d(TAG, "Sending unsnooze sound data to phone:" + soundLabel);
-            Task<Integer> sendMessageTask =
-                    Wearable.getMessageClient(context)
-                            .sendMessage(connectedHostId, SOUND_UNSNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
+            Wearable.getMessageClient(context)
+                    .sendMessage(connectedHostId, SOUND_UNSNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
         }
     }
 }
