@@ -17,15 +17,8 @@
 package com.wearable.sound.utils;
 
 import static com.wearable.sound.utils.Constants.ARCHITECTURE;
-import static com.wearable.sound.utils.Constants.AUDIO_FEATURES_TRANSMISSION;
 import static com.wearable.sound.utils.Constants.AUDIO_TRANSMISSION_STYLE;
 import static com.wearable.sound.utils.Constants.PHONE_WATCH_ARCHITECTURE;
-import static com.wearable.sound.utils.Constants.PHONE_WATCH_SERVER_ARCHITECTURE;
-import static com.wearable.sound.utils.Constants.RAW_AUDIO_TRANSMISSION;
-import static com.wearable.sound.utils.Constants.TEST_E2E_LATENCY;
-import static com.wearable.sound.utils.Constants.WATCH_ONLY_ARCHITECTURE;
-import static com.wearable.sound.utils.Constants.WATCH_SERVER_ARCHITECTURE;
-import static com.wearable.sound.utils.HelperUtils.db;
 import static com.wearable.sound.utils.HelperUtils.longToBytes;
 
 import android.Manifest;
@@ -34,21 +27,12 @@ import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.wearable.Wearable;
-import com.wearable.sound.ui.activity.MainActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -58,13 +42,13 @@ import java.util.Set;
 public class SoundRecorder {
 
     private static final String TAG = "SoundRecorder";
+    public static final String AUDIO_MESSAGE_PATH = "/audio_message";
 
     private static final int RECORDING_RATE = 16000; // (Hz == number of sample per second) can go up to 44K, if needed
     private static final int CHANNEL_IN = AudioFormat.CHANNEL_IN_MONO;
     private static final int FORMAT = AudioFormat.ENCODING_PCM_16BIT;
-    // this might vary because it will optimize for difference device (should not make it fixed?)
-    private static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
-    public static final String AUDIO_MESSAGE_PATH = "/audio_message";
+    private static final int RECORDING_BUFFER_SIZE = AudioRecord.getMinBufferSize(RECORDING_RATE, CHANNEL_IN, FORMAT);
+    private static final int TRANSMISSION_SIZE_IN_BYTES = Math.max(5360, RECORDING_RATE * 330 / 10000) * 2;
 
     private final Context mContext;
     private State mState;
@@ -121,11 +105,11 @@ public class SoundRecorder {
         this.mAudioRecord = new AudioRecord.Builder()
                 .setAudioSource(MediaRecorder.AudioSource.MIC)
                 .setAudioFormat(new AudioFormat.Builder()
-                        .setEncoding(FORMAT)
                         .setSampleRate(RECORDING_RATE)
                         .setChannelMask(CHANNEL_IN)
+                        .setEncoding(FORMAT)
                         .build()
-                ).setBufferSizeInBytes(BUFFER_SIZE)
+                ).setBufferSizeInBytes(RECORDING_BUFFER_SIZE)
                 .build();
 
         if (this.mAudioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
@@ -157,14 +141,15 @@ public class SoundRecorder {
      * Called inside Runnable of recordingThread. Processing the audio data recorded
      */
     private void processAudioData() {
-        byte[] data = new byte[BUFFER_SIZE];
-        long recordTime = System.currentTimeMillis();
+        // buffer just enough bytes to for phone to make one prediction string
+        byte[] data = new byte[TRANSMISSION_SIZE_IN_BYTES];
         while (this.mState == State.RECORDING) {
+            long recordTime = System.currentTimeMillis();
             this.mAudioRecord.read(data, 0, data.length);
 
             // TODO: only having phone watch architecture for now
             if (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE)) {
-                // send raw bytes directly to phone
+                // send raw bytes directly to phone for now
                 Log.d(TAG, "Processing data for phone watch architecture...");
                 sendRawAudioToPhone(data, recordTime);
             }
@@ -184,21 +169,16 @@ public class SoundRecorder {
      * @param recordTime : timestamp
      */
     private void sendRawAudioToPhone(byte[] buffer, long recordTime) {
-        Log.d(TAG, "Sending this raw buffer array " + Arrays.toString(buffer));
-        if (TEST_E2E_LATENCY) {
-            byte[] currentTimeData = longToBytes(recordTime);
-            byte[] data = new byte[currentTimeData.length + buffer.length];
-            System.arraycopy(currentTimeData, 0, data, 0, currentTimeData.length);
-            System.arraycopy(buffer, 0, data, currentTimeData.length, buffer.length);
-            for (String connectedHostId : this.connectedHostIds) {
-                Wearable.getMessageClient(this.mContext)
-                        .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data);
-            }
-        } else {
-            for (String connectedHostId : this.connectedHostIds) {
-                Wearable.getMessageClient(this.mContext)
-                        .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, buffer);
-            }
+        Log.d(TAG, "Sending this raw buffer array with size of " + buffer.length);
+        // send the raw bytes to phone in this format:
+        //  [ --- record timestamp ---, --------- audio data --------- ]
+        byte[] timestampData = longToBytes(recordTime);
+        byte[] data = new byte[timestampData.length + buffer.length];
+        System.arraycopy(timestampData, 0, data, 0, timestampData.length);
+        System.arraycopy(buffer, 0, data, timestampData.length, buffer.length);
+        for (String connectedHostId : this.connectedHostIds) {
+            Wearable.getMessageClient(this.mContext)
+                    .sendMessage(connectedHostId, AUDIO_MESSAGE_PATH, data);
         }
     }
 }

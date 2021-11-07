@@ -4,26 +4,26 @@ import androidx.annotation.NonNull;
 
 public class SoundPrediction implements Comparable<SoundPrediction> {
     private final String label;
-    private final float accuracy;
+    private final float confidence;
 
-    public SoundPrediction(String label, float accuracy) {
+    public SoundPrediction(String label, float confidence) {
         this.label = label;
-        this.accuracy = accuracy;
+        this.confidence = confidence;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public float getAccuracy() {
-        return accuracy;
+    public float getConfidence() {
+        return confidence;
     }
 
     @Override
     public int compareTo(SoundPrediction o) {
-        if (this.accuracy < o.accuracy) {
+        if (this.confidence < o.confidence) {
             return -1;
-        } else if (this.accuracy > o.accuracy) {
+        } else if (this.confidence > o.confidence) {
             return 1;
         }
         return 0;
@@ -32,6 +32,6 @@ public class SoundPrediction implements Comparable<SoundPrediction> {
     @NonNull
     @Override
     public String toString() {
-        return this.label + "_" + this.accuracy;
+        return this.label + "_" + this.confidence;
     }
 }

@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
@@ -72,7 +71,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -228,11 +226,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (blockedSounds.contains(((MainApplication) getApplicationContext()).getIntegerValueOfSound(soundPrediction.getLabel()))) {
                 continue;
             }
-            if (soundPrediction.getAccuracy() < PREDICTION_THRES) {
+            if (soundPrediction.getConfidence() < PREDICTION_THRES) {
                 // this sound and all the sounds after it will be under allowed threshold
                 break;
             }
-            return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getAccuracy()), time, db, null);
+            return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getConfidence()), time, db, null);
         }
         return new AudioLabel("Unrecognized Sound", Float.toString(1.0f), time, db, null);
     }
@@ -1056,7 +1054,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         if (TEST_E2E_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
             Log.i(TAG, "Elapsed time: " + elapsedTime);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss", Locale.US);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss", Locale.getDefault());
             Date date = new Date(System.currentTimeMillis());
             String timeStamp = simpleDateFormat.format(date);
 
