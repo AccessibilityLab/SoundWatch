@@ -58,10 +58,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
-import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -85,11 +82,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.wearable.sound.utils.Constants.*;
 
@@ -165,9 +160,11 @@ public class MainActivity extends AppCompatActivity
     private View mStartActivityBtn;
     private DataItemAdapter mDataItemListAdapter;
 
-    // Send DataItem
-    private ScheduledExecutorService mGeneratorExecutor;
-    private ScheduledFuture<?> mDataItemGeneratorFuture;
+    /**
+     * Instead of deprecated AsyncTask API, use java.util.concurrent to run async tasks instead
+     * https://stackoverflow.com/questions/58767733/android-asynctask-api-deprecating-in-android-11-what-are-the-alternatives
+     */
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
     // List of all sounds with available notifications (no more high vs low accuracy)
@@ -219,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 //                checkBox.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             currentSound.isEnabled = isEnabled;
-            (new sendSoundEnableMessageToWatchTask(currentSound)).execute();
+            sendSoundEnableMessageToWatch(currentSound);
 
             // Put current sound value into SharedPreference
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -277,11 +274,11 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "Received socket event");
         JSONObject data = (JSONObject) args[0];
         String db;
-        String audio_label;
+        String audioLabel;
         String accuracy;
         String recordTime = "";
         try {
-            audio_label = data.getString("label");
+            audioLabel = data.getString("label");
             accuracy = data.getString("accuracy");
             db = data.getString("db");
             if (TEST_E2E_LATENCY) {
@@ -291,8 +288,8 @@ public class MainActivity extends AppCompatActivity
             Log.i(TAG, "JSON Exception failed: " + data.toString());
             return;
         }
-        Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy + ", " + db);
-        new SendAudioLabelToWearTask(audio_label, accuracy, db, recordTime).execute();
+        Log.i(TAG, "received sound label from Socket server: " + audioLabel + ", " + accuracy + ", " + db);
+        sendAudioLabelToWatch(audioLabel, accuracy, db, recordTime);
     };
 
     private void askPermissions() {
@@ -365,7 +362,7 @@ public class MainActivity extends AppCompatActivity
 //        mDataItemListAdapter = new DataItemAdapter(this, android.R.layout.simple_list_item_1);
 //        mDataItemList.setAdapter(mDataItemListAdapter);
 
-        mGeneratorExecutor = new ScheduledThreadPoolExecutor(1);
+//        mGeneratorExecutor = new ScheduledThreadPoolExecutor(1);
 
         SharedPreferences sharedPref = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -388,7 +385,7 @@ public class MainActivity extends AppCompatActivity
             boolean isEnabled = sharedPref.getBoolean(sound, true);
             SoundNotification currentSound = new SoundNotification(sound, isEnabled, false);
             Log.e(TAG, currentSound.toString());
-            (new sendSoundEnableMessageToWatchTask(currentSound)).execute();
+            sendSoundEnableMessageToWatch(currentSound);
             CheckBox checkBox = findViewById(CHECKBOX_MAP.get(sound));
             checkBox.setChecked(isEnabled);
             FirebaseLogging(sound, String.valueOf(isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
@@ -527,18 +524,6 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
-    private String convertSetToCommaSeparatedList(Set<String> connectedHostIds) {
-        StringBuilder result = new StringBuilder();
-        for (String connectedHostId : connectedHostIds) {
-            result.append(connectedHostId);
-        }
-        if (connectedHostIds.size() <= 1) {
-            return result.toString();
-        }
-        result.substring(0, result.length() - 1);
-        return result.toString();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -634,7 +619,6 @@ public class MainActivity extends AppCompatActivity
             mThumbView.setImageBitmap(mImageBitmap);
         }
     }
-
 
     @Override
     public void onCapabilityChanged(final CapabilityInfo capabilityInfo) {
@@ -784,134 +768,35 @@ public class MainActivity extends AppCompatActivity
     }
 
     /* -------------------------------------------------------------------------
-        Async Tasks
+        Asynchronous Tasks
        -----------------------------------------------------------------------*/
-
     /**
      * Sending enabled sounds set in phone to the wearable
      */
-    public class sendSoundEnableMessageToWatchTask extends AsyncTask<Void, Void, Void> {
-        private String data;
-
-        public sendSoundEnableMessageToWatchTask(SoundNotification soundNotification) {
-            data = soundNotification.label + "," + soundNotification.isEnabled + "," + soundNotification.isSnoozed;
-        }
-
-        @Override
-        protected Void doInBackground(Void... args) {
+    private void sendSoundEnableMessageToWatch(SoundNotification soundNotification) {
+        String data = soundNotification.label + "," + soundNotification.isEnabled + "," + soundNotification.isSnoozed;
+        executorService.execute(() -> {
             Collection<String> nodes = getNodes();
             Log.i(TAG, "Sending enabled data to watch " + nodes.size());
             for (String node : nodes) {
                 Log.i(TAG, "Sending enabled data from phone: " + data);
                 sendMessageWithData(node, SOUND_ENABLE_FROM_PHONE_PATH, data.getBytes());
             }
-            return null;
-        }
-    }
-
-
-    private class StartWearableActivityTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... args) {
-            Collection<String> nodes = getNodes();
-            for (String node : nodes) {
-                sendStartActivityMessage(node);
-            }
-            return null;
-        }
+        });
     }
 
     /**
      * To send audio labels of predictions to the wearable
      */
-    public class SendAudioLabelToWearTask extends AsyncTask<Void, Void, Void> {
-        private String prediction;
-        private String confidence;
-        private String db;
-        private String recordTime;
-
-        public SendAudioLabelToWearTask(String prediction, String confidence, String db, String recordTime) {
-            this.prediction = prediction;
-            this.confidence = confidence;
-            this.recordTime = recordTime;
-            this.db = db;
-        }
-
-        @Override
-        protected Void doInBackground(Void... args) {
+    private void sendAudioLabelToWatch(String prediction, String confidence, String db, String recordTime) {
+        executorService.execute(() -> {
             Collection<String> nodes = getNodes();
             String result = prediction + "," + confidence + "," + LocalTime.now() + "," + db + "," + recordTime;
+            Log.i(TAG, "Sending audio label to watch " + nodes.size());
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + result);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
             }
-            return null;
-        }
+        });
     }
-
-    /**
-     * Generates a DataItem based on an incrementing count.
-     */
-    private class DataItemGenerator implements Runnable {
-
-        private int count = 0;
-
-        @Override
-        public void run() {
-            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
-            putDataMapRequest.getDataMap().putInt(COUNT_KEY, count++);
-
-            PutDataRequest request = putDataMapRequest.asPutDataRequest();
-            request.setUrgent();
-
-            LogD(TAG, "Generating DataItem: " + request);
-
-            Task<DataItem> dataItemTask =
-                    Wearable.getDataClient(getApplicationContext()).putDataItem(request);
-
-            try {
-                // Block on a task and get the result synchronously (because this is on a background
-                // thread).
-                DataItem dataItem = Tasks.await(dataItemTask);
-
-                LogD(TAG, "DataItem saved: " + dataItem);
-
-            } catch (ExecutionException exception) {
-                Log.e(TAG, "Task failed: " + exception);
-
-            } catch (InterruptedException exception) {
-                Log.e(TAG, "Interrupt occurred: " + exception);
-            }
-        }
-    }
-
-//        private void loadFragment(Fragment fragment) {
-//        // load fragment
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.frame_container, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//    }
-
-    /*
-     * Set different mode based on user's preferences.
-     * Currently there are two modes:
-     *   1. High Accuracy Mode/ Less sounds recognized: 11 sounds available
-     *   2. Low Accuracy Mode/ More sounds recognized: 30 sounds available
-     *
-     * @param mode 1 for high accuracy, 2 for low accuracy
-     * */
-//    private void setAccuracyMode(int mode) {
-//        CheckBox checkBoxToDisable;
-//        if (mode == HIGH_ACCURACY_MODE) {
-//            for (Integer sound : lowAccuracyList) {
-//                checkBoxToDisable = (CheckBox) findViewById(sound);
-//                checkBoxToDisable.setVisibility(View.GONE);
-//            }
-//            // some config for padding
-//            findViewById(R.id.category_5).setVisibility(View.GONE);
-//            findViewById(R.id.padding_top).setPadding(0, 150, 0, 0);
-//            findViewById(R.id.padding_bottom).setPadding(0, 0, 0, 80);
-//        }
-//    }
 }
