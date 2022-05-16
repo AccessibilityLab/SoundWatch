@@ -99,9 +99,10 @@
     </string>
     <string name="feedback">Send us Feedback!</string>
     <string name="arrow">Arrow</string>
+
     <!-- Preference Titles -->
-    <string name="first_preference">Phone Setting</string>
-    <string name="second_preference">Watch Setting </string>
+    <string name="first_preference">Phone Settings</string>
+    <string name="second_preference">Field Study Settings </string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
@@ -114,6 +115,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="setting">Settings</string>
+
     <!-- Foreground Service Preferences -->
     <string name="foreground_title">Sleep Mode</string>
     <string name="foreground_summary_on"> Sleep Mode is ON.
@@ -125,4 +127,7 @@
     <string name="website">" " soundwatch.cs.washington.edu</string>
     <string name="version"><b>Version 1.05</b></string>
     <string name="db_threshold_description">You can adjust the base sound level by moving the button to the right.  This cuts the background noise in loud areas but some sounds of lower volume may not be recognized.</string>
+
+    <!-- Field Study Preferences -->
+    <string name="participant_id_description">Please enter your participant ID.</string>
 </resources>

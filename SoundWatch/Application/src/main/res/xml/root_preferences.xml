@@ -1,9 +1,8 @@
 <PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <PreferenceCategory app:title="@string/first_preference">
-
-
         <SwitchPreferenceCompat
             app:key="foreground_service"
             app:defaultValue="false"
@@ -26,7 +25,23 @@
             app:key="db_description"
             app:title=""
             app:summary="@string/db_threshold_description"/>
-        </PreferenceCategory>
+    </PreferenceCategory>
+
+    <!--For Field Study only-->
+    <PreferenceCategory app:title="@string/second_preference">
+        <EditTextPreference
+            app:key="participant_id"
+            app:title="Participant ID"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="N/A"
+            />
+        <Preference
+            app:key="participant_id_description"
+            app:title=""
+            app:summary="@string/participant_id_description"
+            />
+    </PreferenceCategory>
+
 <!--    enable this for Listening MODE: 3 out of 3-->
 <!--    <PreferenceCategory app:title="@string/second_preference">-->
 
