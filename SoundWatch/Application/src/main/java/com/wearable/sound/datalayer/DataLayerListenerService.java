@@ -289,8 +289,11 @@ public class DataLayerListenerService extends WearableListenerService {
             String input = intent.getStringExtra("connectedHostIds");
             createNotificationChannel();
             Intent notificationIntent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                    0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("SoundWatch is working")
                     .setContentText("Press the Mic button on your watch to begin listening")

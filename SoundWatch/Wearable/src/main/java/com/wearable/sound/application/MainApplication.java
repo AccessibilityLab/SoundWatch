@@ -42,7 +42,7 @@ public class MainApplication extends Application {
 
     public void removeBlockedSounds(int soundId) {
         if (blockedSounds.contains(soundId)) {
-            this.blockedSounds.remove(soundId);
+            this.blockedSounds.remove(new Integer(soundId));
         }
     }
 

@@ -16,6 +16,17 @@
 
 package com.wearable.sound.ui.activity;
 
+import static com.wearable.sound.utils.Constants.BABY_CRY;
+import static com.wearable.sound.utils.Constants.CAR_HONK;
+import static com.wearable.sound.utils.Constants.CAT_MEOW;
+import static com.wearable.sound.utils.Constants.DOG_BARK;
+import static com.wearable.sound.utils.Constants.DOOR_IN_USE;
+import static com.wearable.sound.utils.Constants.FIRE_SMOKE_ALARM;
+import static com.wearable.sound.utils.Constants.KNOCKING;
+import static com.wearable.sound.utils.Constants.MICROWAVE;
+import static com.wearable.sound.utils.Constants.VEHICLE;
+import static com.wearable.sound.utils.Constants.WATER_RUNNING;
+
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,7 +35,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +50,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +58,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -61,9 +69,10 @@ import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.wearable.sound.datalayer.DataLayerListenerService;
 import com.wearable.sound.R;
+import com.wearable.sound.datalayer.DataLayerListenerService;
 import com.wearable.sound.models.SoundNotification;
 import com.wearable.sound.utils.Constants;
 
@@ -73,7 +82,6 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -89,13 +97,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.wearable.sound.utils.Constants.*;
-
 
 /**
  * Receives its own events using a listener API designed for foreground activities. Updates a data
  * item every second while it is open. Also allows user to take a photo and send that as an asset to
- * the paired wearable.
+ * the paired wearable
  */
 public class MainActivity extends AppCompatActivity
         implements CapabilityClient.OnCapabilityChangedListener {
@@ -171,8 +177,18 @@ public class MainActivity extends AppCompatActivity
 
 
     // List of all sounds with available notifications (no more high vs low accuracy)
-    public List<String> sounds = Arrays.asList(CAT_MEOW, VEHICLE, CAR_HONK, DOG_BARK,
-            MICROWAVE, WATER_RUNNING, DOOR_IN_USE, BABY_CRY, FIRE_SMOKE_ALARM, KNOCKING);
+    public List<String> sounds = Arrays.asList(
+            CAT_MEOW,
+            VEHICLE,
+            CAR_HONK,
+            DOG_BARK,
+            MICROWAVE,
+            WATER_RUNNING,
+            DOOR_IN_USE,
+            BABY_CRY,
+            FIRE_SMOKE_ALARM,
+            KNOCKING
+    );
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<>();
     public static Map<String, Integer> CHECKBOX_MAP = new HashMap<>();
 
@@ -240,8 +256,8 @@ public class MainActivity extends AppCompatActivity
     private IntentFilter mIntentFilter;
 
     String[] permissions = new String[]{
-            //Manifest.permission.INTERNET,
-            //Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.INTERNET,
+            Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             //Manifest.permission.VIBRATE,
@@ -288,7 +304,7 @@ public class MainActivity extends AppCompatActivity
                 recordTime = data.getString("record_time");
             }
         } catch (JSONException e) {
-            Log.i(TAG, "JSON Exception failed: " + data.toString());
+            Log.i(TAG, "JSON Exception failed: " + data);
             return;
         }
         Log.i(TAG, "received sound label from Socket server: " + audioLabel + ", " + accuracy + ", " + db);
@@ -356,7 +372,7 @@ public class MainActivity extends AppCompatActivity
         // create Bottom Navigation View for switch between tabs
         LogD(TAG, "create BottomNavigationView");
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
-        bottomNavView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavView.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // set Mode
         // setAccuracyMode(HIGH_ACCURACY_MODE);
@@ -475,7 +491,7 @@ public class MainActivity extends AppCompatActivity
             };
 
     // Item Selected Listener for Bottom Navigation Bar
-    private final BottomNavigationView.OnNavigationItemSelectedListener
+    private final NavigationBarView.OnItemSelectedListener
             mOnNavigationItemSelectedListener =
             item -> {
                 TextView titleView = findViewById(R.id.title_text);
@@ -483,42 +499,39 @@ public class MainActivity extends AppCompatActivity
                 FrameLayout frameLayout = findViewById(R.id.fragment_container);
                 TextView instructionalView = findViewById(R.id.instruction_text);
                 Fragment fragment = null;
-                switch (item.getItemId()) {
-                    case R.id.bottom_navigation_item_home:
-                        titleView.setText(R.string.soundwatch);
-                        fragment = null;
-                        frameLayout.setVisibility(View.GONE);
-                        instructionalView.setVisibility(View.VISIBLE);
-                        scrollView.setVisibility(View.VISIBLE);
-                        break;
-                    case R.id.bottom_navigation_item_about:
-                        titleView.setText(R.string.about);
-                        fragment = new ScrollingFragment();
-                        frameLayout.setVisibility(View.VISIBLE);
-                        instructionalView.setVisibility(View.GONE);
-                        scrollView.setVisibility(View.GONE);
-                        break;
-                    case R.id.bottom_navigation_item_help:
-                        titleView.setText("");
-                        fragment = new HelpFragment();
-                        frameLayout.setVisibility(View.VISIBLE);
-                        instructionalView.setVisibility(View.GONE);
-                        scrollView.setVisibility(View.GONE);
-                        break;
-                    case R.id.bottom_navigation_item_setting:
-                        titleView.setText(R.string.setting);
-                        fragment = new SettingsFragment();
-                        frameLayout.setVisibility(View.VISIBLE);
-                        instructionalView.setVisibility(View.GONE);
-                        scrollView.setVisibility(View.GONE);
-                        break;
-                    default:
-                        break;
+                int itemId = item.getItemId();
+                if (itemId == R.id.bottom_navigation_item_home) {
+                    titleView.setText(R.string.soundwatch);
+                    fragment = null;
+                    frameLayout.setVisibility(View.GONE);
+                    instructionalView.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.VISIBLE);
+                } else if (itemId == R.id.bottom_navigation_item_about) {
+                    titleView.setText(R.string.about);
+                    fragment = new ScrollingFragment();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    instructionalView.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.GONE);
+                } else if (itemId == R.id.bottom_navigation_item_help) {
+                    titleView.setText("");
+                    fragment = new HelpFragment();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    instructionalView.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.GONE);
+                } else if (itemId == R.id.bottom_navigation_item_setting) {
+                    titleView.setText(R.string.setting);
+                    fragment = new SettingsFragment();
+                    frameLayout.setVisibility(View.VISIBLE);
+                    instructionalView.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.GONE);
                 }
                 loadFragment(fragment);
                 return true;
             };
 
+    /**
+     * To log with Firebase
+     */
     private void FirebaseLogging(String id, String name, String content_type) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
@@ -727,8 +740,8 @@ public class MainActivity extends AppCompatActivity
                         (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(android.R.layout.two_line_list_item, null);
                 convertView.setTag(holder);
-                holder.text1 = (TextView) convertView.findViewById(android.R.id.text1);
-                holder.text2 = (TextView) convertView.findViewById(android.R.id.text2);
+                holder.text1 = convertView.findViewById(android.R.id.text1);
+                holder.text2 = convertView.findViewById(android.R.id.text2);
             } else {
                 LogD(TAG, "convertView is " + convertView.getTag());
                 holder = (ViewHolder) convertView.getTag();
