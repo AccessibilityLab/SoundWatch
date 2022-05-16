@@ -73,7 +73,10 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity
     public static Map<String, SoundNotification> SOUNDS_MAP = new HashMap<>();
     public static Map<String, Integer> CHECKBOX_MAP = new HashMap<>();
 
-    public SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
+//    public SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
 
     {
         for (String sound : sounds) {
@@ -413,8 +416,8 @@ public class MainActivity extends AppCompatActivity
         ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
 
         // Add toggle to turn on/off foreground service
-        autoUpdate = mOnSharedPreferenceChangeListener;
-        sharedPref.registerOnSharedPreferenceChangeListener(autoUpdate);
+//        autoUpdate = mOnSharedPreferenceChangeListener;
+        sharedPref.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
 
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
@@ -779,7 +782,7 @@ public class MainActivity extends AppCompatActivity
             Collection<String> nodes = getNodes();
             Log.i(TAG, "Sending enabled data to watch " + nodes.size());
             for (String node : nodes) {
-                Log.i(TAG, "Sending enabled data from phone: " + data);
+                Log.i(TAG, ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME) + ":Sending enabled data from phone: " + data);
                 sendMessageWithData(node, SOUND_ENABLE_FROM_PHONE_PATH, data.getBytes());
             }
         });
