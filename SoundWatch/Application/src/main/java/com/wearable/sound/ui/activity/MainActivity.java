@@ -16,25 +16,18 @@
 
 package com.wearable.sound.ui.activity;
 
-import static com.wearable.sound.utils.Constants.BABY_CRY;
-import static com.wearable.sound.utils.Constants.CAR_HONK;
-import static com.wearable.sound.utils.Constants.CAT_MEOW;
-import static com.wearable.sound.utils.Constants.DOG_BARK;
-import static com.wearable.sound.utils.Constants.DOOR_IN_USE;
-import static com.wearable.sound.utils.Constants.FIRE_SMOKE_ALARM;
-import static com.wearable.sound.utils.Constants.KNOCKING;
-import static com.wearable.sound.utils.Constants.MICROWAVE;
-import static com.wearable.sound.utils.Constants.VEHICLE;
-import static com.wearable.sound.utils.Constants.WATER_RUNNING;
+import static com.wearable.sound.utils.Constants.*;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +45,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -81,7 +75,6 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
-import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -113,6 +106,7 @@ public class MainActivity extends AppCompatActivity
      */
     // [START declare_analytics]
     private FirebaseAnalytics mFirebaseAnalytics;
+
     // [END declare_analytics]
 
 //    /**
@@ -122,28 +116,6 @@ public class MainActivity extends AppCompatActivity
 
     public static final boolean TEST_MODEL_LATENCY = false;
     public static final boolean TEST_E2E_LATENCY = false;
-
-    /**
-     * Sound or sound features send configuration
-     */
-    public static final String RAW_AUDIO_TRANSMISSION = "RAW_AUDIO_TRANSMISSION";
-    public static final String AUDIO_FEATURES_TRANSMISSION = "AUDIO_FEATURES_TRANSMISSION";
-    public static final String AUDIO_TRANSMISSION_STYLE = RAW_AUDIO_TRANSMISSION;
-
-    /**
-     * Phone Watch Architecture configuration ONLY!!!
-     * [ EXPERIMENTAL ]
-     */
-    public static final boolean PREDICT_MULTIPLE_SOUNDS = true;
-
-    /**
-     * Architecture configurations
-     */
-    public static final String PHONE_WATCH_ARCHITECTURE = "PHONE_WATCH_ARCHITECTURE";
-    public static final String PHONE_WATCH_SERVER_ARCHITECTURE = "PHONE_WATCH_SERVER_ARCHITECTURE";
-    public static final String WATCH_ONLY_ARCHITECTURE = "WATCH_ONLY_ARCHITECTURE";
-    public static final String WATCH_SERVER_ARCHITECTURE = "WATCH_SERVER_ARCHITECTURE";
-    public static final String ARCHITECTURE = PHONE_WATCH_ARCHITECTURE;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -159,6 +131,7 @@ public class MainActivity extends AppCompatActivity
     public static final String AUDIO_LABEL = "AUDIO_LABEL";
     public static final String FOREGROUND_LABEL = "FOREGROUND_LABEL";
     public static final String WATCH_STATUS_LABEL = "WATCH_STATUS_LABEL";
+    public static final String SOUND_PREDICTION_LABEL = "SOUND_PREDICTION_LABEL";
 
     private ConstraintLayout tutorialLayout;
     private ListView mDataItemList;
@@ -195,6 +168,7 @@ public class MainActivity extends AppCompatActivity
 //    public SharedPreferences.OnSharedPreferenceChangeListener autoUpdate;
 
     {
+        // Default: every sound is enabled and not snoozed.
         for (String sound : sounds) {
             SOUNDS_MAP.put(sound, new SoundNotification(sound, true, false));
         }
@@ -241,7 +215,13 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(currentSound.label, currentSound.isEnabled);
-            FirebaseLogging(currentSound.label, String.valueOf(currentSound.isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+
+            // [FS-Logging]: Log user interaction with the sound checkbox list
+//            FirebaseLogging(currentSound.label, String.valueOf(currentSound.isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+            Bundle bundle = new Bundle();
+            bundle.putString(SINGLE_SOUND_PARAM, currentSound.label);
+            bundle.putBoolean(ENABLE_PARAM, isEnabled);
+            fsLogging(CHECKBOX_EVENT, bundle);
 
             editor.apply();
         }
@@ -351,7 +331,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogD(TAG, "onCreate");
+        logD(TAG, "onCreate");
 
         // Ask permissions
         askPermissions();
@@ -361,7 +341,6 @@ public class MainActivity extends AppCompatActivity
             //            Toast.makeText(this, "socket connected", Toast.LENGTH_SHORT).show();
         }
 
-//        boolean mCameraSupported = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         setContentView(R.layout.activity_main);
 
         // [START shared_app_measurement]
@@ -370,7 +349,8 @@ public class MainActivity extends AppCompatActivity
         // [END shared_app_measurement]
 
         // create Bottom Navigation View for switch between tabs
-        LogD(TAG, "create BottomNavigationView");
+
+        logD(TAG, "create BottomNavigationView");
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
         bottomNavView.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -395,11 +375,14 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor editor = sharedPref.edit();
             for (String sound : sounds) {
                 editor.putBoolean(sound, true);
-                FirebaseLogging(sound, "T" + Instant.now().getEpochSecond(), "sound_type");
+
+//                FirebaseLogging(sound, "T" + Instant.now().getEpochSecond(), "sound_type");
             }
             editor.apply();
         }
 
+        // Iterate through the sharedPref to retrieve the state of each sound
+        StringBuilder soundStatus = new StringBuilder();
         for (String sound : sounds) {
             boolean isEnabled = sharedPref.getBoolean(sound, true);
             SoundNotification currentSound = new SoundNotification(sound, isEnabled, false);
@@ -407,12 +390,14 @@ public class MainActivity extends AppCompatActivity
             sendSoundEnableMessageToWatch(currentSound);
             CheckBox checkBox = findViewById(CHECKBOX_MAP.get(sound));
             checkBox.setChecked(isEnabled);
-            FirebaseLogging(sound, String.valueOf(isEnabled).charAt(0) + String.valueOf(Instant.now().getEpochSecond()), "sound_type");
+
+            soundStatus.append(sound).append("-").append(isEnabled);
         }
 
         // Create a SharedPreference for root_preferences to update and use value from the setting tab
         boolean isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
         Log.d(TAG, "isSleepModeOn1" + isSleepModeOn);
+
         if (!isSleepModeOn) {
             Wearable.getMessageClient(MainActivity.this)
                     .sendMessage(FOREGROUND_LABEL, SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH, "foreground_enabled".getBytes());
@@ -425,22 +410,29 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 //        isSleepModeOn = sharedPref.getBoolean("foreground_service", false);
 
-//         Start the service once by default
+        // Start the service once by default
         Log.i(TAG, "Starting foreground service first time");
         Intent serviceIntent = new Intent(MainActivity.this, DataLayerListenerService.class);
-        serviceIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
+        serviceIntent.setAction(ACTION.START_FOREGROUND_ACTION);
         ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
 
         // Add toggle to turn on/off foreground service
 //        autoUpdate = mOnSharedPreferenceChangeListener;
         sharedPref.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
 
+        // Register the receiver
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(mBroadcastSoundPrediction);
         mIntentFilter.addAction(mBroadcastSnoozeSound);
         mIntentFilter.addAction(mBroadcastUnsnoozeSound);
         mIntentFilter.addAction(mBroadcastForegroundService);
         registerReceiver(mReceiver, mIntentFilter);
+
+        // [FS-Logging] Log the current settings when the app is first opened
+        Bundle bundle = new Bundle();
+        bundle.putString(ALL_SOUNDS_PARAM, soundStatus.toString());
+        bundle.putBoolean(SLEEP_MODE_PARAM, isSleepModeOn);
+        fsLogging("on_create_event", bundle);
     }
 
     // Preference Listener for Setting -> Foreground -> Enable/Disable Foreground Service
@@ -454,10 +446,12 @@ public class MainActivity extends AppCompatActivity
                         boolean isSleepModeOn = sharedPreferences.getBoolean("foreground_service", false);
                         if (!isSleepModeOn) {
                             Log.i(TAG, "Starting foreground service in main (Sleep Mode OFF)");
+                            // [FS-Logging] Starting foreground service in main
+
                             mSocket.on("audio_label", onNewMessage);
                             mSocket.connect();
 
-                            serviceIntent.setAction(Constants.ACTION.START_FOREGROUND_ACTION);
+                            serviceIntent.setAction(ACTION.START_FOREGROUND_ACTION);
                             ContextCompat.startForegroundService(MainActivity.this, serviceIntent);
 
                             Wearable.getMessageClient(MainActivity.this)
@@ -465,7 +459,9 @@ public class MainActivity extends AppCompatActivity
 //                          Toast.makeText(MainActivity.this, "Foreground service started.", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.i(TAG, "Stopping foreground service in main (Sleep Mode ON)");
-                            serviceIntent.setAction(Constants.ACTION.STOP_FOREGROUND_ACTION);
+                            // [FS-Logging] Stopping foreground service in main
+
+                            serviceIntent.setAction(ACTION.STOP_FOREGROUND_ACTION);
                             mSocket.disconnect();
                             mSocket.off("audio_label", onNewMessage);
 
@@ -529,16 +525,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
             };
 
-    /**
-     * To log with Firebase
-     */
-    private void FirebaseLogging(String id, String name, String content_type) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-    }
 
     @Override
     public void onDestroy() {
@@ -548,16 +534,22 @@ public class MainActivity extends AppCompatActivity
         mSocket.disconnect();
         mSocket.off("audio_label", onNewMessage);
 
-        // Logging
-        for (String sound : sounds) {
-            FirebaseLogging(sound, "F" + Instant.now().getEpochSecond(), "sound_type");
-        }
+        // [FS-Logging]: Log when the app shut off + all current settings
+        fsLogging("on_destroy", new Bundle());
+//        for (String sound : sounds) {
+//            FirebaseLogging(sound, "F" + Instant.now().getEpochSecond(), "sound_type");
+//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         registerReceiver(mReceiver, mIntentFilter);
+
+        askForParticipantId();
+
+        // [FS-Logging]: Log when the app is resumed + all current settings
+        fsLogging("on_resume_event", new Bundle());
     }
 
     // Receive message from watch on which sound to snooze, and watch status
@@ -565,32 +557,32 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Objects.equals(intent.getAction(), mBroadcastSoundPrediction)) {
-                mDataItemListAdapter.add(new Event("Sound prediction", intent.getStringExtra("Sound prediction")));
+                mDataItemListAdapter.add(new Event("Sound prediction", intent.getStringExtra(SOUND_PREDICTION_LABEL)));
             } else if (Objects.equals(intent.getAction(), mBroadcastSnoozeSound)) {
                 CheckBox checkBox = getCheckboxFromAudioLabel(Objects.requireNonNull(intent.getStringExtra(AUDIO_LABEL)));
                 Log.i(TAG, "Getting checkbox main: " + checkBox);
+
                 SoundNotification soundNotification = SOUNDS_MAP.get(intent.getStringExtra(AUDIO_LABEL));
-                if (soundNotification != null) {
-                    soundNotification.isSnoozed = true;
-                }
-                if (checkBox == null) {
-                    return;
-                }
+                if (soundNotification != null) { soundNotification.isSnoozed = true; }
+                if (checkBox == null) { return;}
                 if (!checkBox.getText().toString().contains("Snoozed")) {
                     checkBox.setText(MessageFormat.format("{0} (Snoozed)", checkBox.getText()));
                 }
                 checkBox.setChecked(false);
+
+                // [FS-Logging]: Snooze sound message from watch
+                Bundle bundle = new Bundle();
+                bundle.putString(SINGLE_SOUND_PARAM, intent.getStringExtra(AUDIO_LABEL));
+                bundle.putBoolean(SNOOZE_PARAM, true);
+                fsLogging(SNOOZE_EVENT, bundle);
+
 //                checkBox.setCompoundDrawablesWithIntrinsicBounds(0,0 , android.R.drawable.ic_lock_silent_mode, 0);
             } else if (intent.getAction().equals(mBroadcastUnsnoozeSound)) {
                 Log.i(TAG, "Phone received unsnoozed");
                 CheckBox checkBox = getCheckboxFromAudioLabel(Objects.requireNonNull(intent.getStringExtra(AUDIO_LABEL)));
                 SoundNotification soundNotification = SOUNDS_MAP.get(intent.getStringExtra(AUDIO_LABEL));
-                if (soundNotification != null) {
-                    soundNotification.isSnoozed = false;
-                }
-                if (checkBox == null) {
-                    return;
-                }
+                if (soundNotification != null) { soundNotification.isSnoozed = false; }
+                if (checkBox == null) { return; }
                 if (checkBox.getText().toString().contains("Snoozed")) {
                     // If the sound is currently snoozed
                     int snoozeTextIndex = checkBox.getText().toString().indexOf("(Snoozed)");
@@ -599,7 +591,15 @@ public class MainActivity extends AppCompatActivity
                     checkBox.setChecked(true);
 //                    checkBox.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
+                // [FS-Logging]: Unsnooze sound message from watch
+                Bundle bundle = new Bundle();
+                bundle.putString(SINGLE_SOUND_PARAM, intent.getStringExtra(AUDIO_LABEL));
+                bundle.putBoolean(SNOOZE_PARAM, false);
+                fsLogging(SNOOZE_EVENT, bundle);
+
             } else if (intent.getAction().equals(mBroadcastForegroundService)) {
+                // [FS-Logging]: foreground service message
+
                 Log.i(TAG, "Phone received Watch Status: " + intent.getStringExtra(FOREGROUND_LABEL));
                 if (intent.getStringExtra(FOREGROUND_LABEL).equals("watch_start_record")) {
                     Toast.makeText(MainActivity.this, "Smartwatch starts listening..", Toast.LENGTH_SHORT).show();
@@ -618,12 +618,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
+
+        // [FS-Logging]: Log if the app is put on paused
+        fsLogging("on_pause_event", new Bundle());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver(mReceiver);
+
+        // [FS-Logging]: Log if the app is put on stop
+        fsLogging("on_stop_event", new Bundle());
     }
 
     @Override
@@ -638,7 +644,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCapabilityChanged(final CapabilityInfo capabilityInfo) {
-        LogD(TAG, "onCapabilityChanged: " + capabilityInfo);
+        logD(TAG, "onCapabilityChanged: " + capabilityInfo);
+        // [FS-Logging] Log on capability change
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.VALUE, capabilityInfo.toString());
+        fsLogging("on_capability_changed", bundle);
 
         mDataItemListAdapter.add(new Event("onCapabilityChanged", capabilityInfo.toString()));
     }
@@ -646,6 +656,7 @@ public class MainActivity extends AppCompatActivity
     @WorkerThread
     private void sendMessageWithData(String node, String title, byte[] data) {
         Log.i(TAG, "Node: " + node + "\n title: " + title + "\n data: " + Arrays.toString(data));
+
         Task<Integer> sendMessageTask =
                 Wearable.getMessageClient(this)
                         .sendMessage(node, title, data);
@@ -654,8 +665,7 @@ public class MainActivity extends AppCompatActivity
             // Block on a task and get the result synchronously (because this is on a background
             // thread).
             Integer result = Tasks.await(sendMessageTask);
-            LogD(TAG, "Message sent: " + result);
-
+            logD(TAG, "Message sent: " + result);
         } catch (ExecutionException exception) {
             Log.e(TAG, "Task failed: " + exception);
 
@@ -673,7 +683,7 @@ public class MainActivity extends AppCompatActivity
             // Block on a task and get the result synchronously (because this is on a background
             // thread).
             Integer result = Tasks.await(sendMessageTask);
-            LogD(TAG, "Message sent: " + result);
+            logD(TAG, "Message sent: " + result);
 
         } catch (ExecutionException exception) {
             Log.e(TAG, "Task failed: " + exception);
@@ -709,14 +719,27 @@ public class MainActivity extends AppCompatActivity
         return results;
     }
 
-    /**
-     * As simple wrapper around Log.d
-     */
-    private static void LogD(String tag, String message) {
-        if (Log.isLoggable(tag, Log.DEBUG)) {
-            Log.d(tag, message);
+    public void askForParticipantId() {
+        SharedPreferences sharedPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        // Retrieve participant id from the settings
+        String pidKey = getResources().getString(R.string.pid_pref_key);
+        if (sharedPref.getString(pidKey, null) == null) {
+            // display a dialog to alert user to type in their participant id:
+            AlertDialog.Builder pIdDialog = new AlertDialog.Builder(MainActivity.this);
+            pIdDialog.setMessage("Please go to Settings tab and type in your participant ID.\n" +
+                            "If you have not received it, please contact SoundWatch team.")
+                    .setTitle("Participant ID Required!")
+                    .setPositiveButton("OK", (dialogInterface, i) -> {
+                        // simply dismiss
+                        dialogInterface.dismiss();
+                    })
+                    .create()
+                    .show();
         }
     }
+
 
     /**
      * A View Adapter for presenting the Event objects in a list
@@ -734,7 +757,7 @@ public class MainActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
-                LogD(TAG, "convertView is null");
+                logD(TAG, "convertView is null");
                 holder = new ViewHolder();
                 LayoutInflater inflater =
                         (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -743,7 +766,7 @@ public class MainActivity extends AppCompatActivity
                 holder.text1 = convertView.findViewById(android.R.id.text1);
                 holder.text2 = convertView.findViewById(android.R.id.text2);
             } else {
-                LogD(TAG, "convertView is " + convertView.getTag());
+                logD(TAG, "convertView is " + convertView.getTag());
                 holder = (ViewHolder) convertView.getTag();
             }
             Event event = getItem(position);
@@ -814,5 +837,52 @@ public class MainActivity extends AppCompatActivity
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, result.getBytes());
             }
         });
+    }
+
+
+    /* -------------------------------------------------------------------------
+        Logging
+       -----------------------------------------------------------------------*/
+
+    /**
+     * To log with Firebase
+     */
+//    private void FirebaseLogging(String id, String name, String content_type) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//    }
+
+    /**
+     * Take in a bundle and event type, log to Firebase and also write to external file
+     */
+    private void fsLogging(String eventName, Bundle bundle) {
+        SharedPreferences sharedPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        // always add participant id and current shard pref
+        String pidKey = getResources().getString(R.string.pid_pref_key);
+        bundle.putString(pidKey, sharedPref.getString(pidKey, Build.MODEL));
+        String dbLevelKey = getResources().getString(R.string.db_threshold_pref_key);
+        bundle.putInt(dbLevelKey, sharedPref.getInt(dbLevelKey, 40));
+        String fgPrefKey = getResources().getString(R.string.foreground_pref_key);
+        bundle.putBoolean(fgPrefKey, sharedPref.getBoolean(fgPrefKey, false));
+
+
+        // log with firebase
+        mFirebaseAnalytics.logEvent(eventName, bundle);
+
+        // write to external file
+    }
+
+    /**
+     * As simple wrapper around Log.d
+     */
+    private static void logD(String tag, String message) {
+        if (Log.isLoggable(tag, Log.DEBUG)) {
+            Log.d(tag, message);
+        }
     }
 }

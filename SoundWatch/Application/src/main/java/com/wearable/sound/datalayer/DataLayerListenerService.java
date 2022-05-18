@@ -2,11 +2,11 @@ package com.wearable.sound.datalayer;
 
 import static com.wearable.sound.ui.activity.MainActivity.AUDIO_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.FOREGROUND_LABEL;
-import static com.wearable.sound.ui.activity.MainActivity.PREDICT_MULTIPLE_SOUNDS;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
 import static com.wearable.sound.utils.HelperUtils.bytesToLong;
 import static com.wearable.sound.utils.HelperUtils.convertByteArrayToShortArray;
 import static com.wearable.sound.utils.HelperUtils.db;
+import static com.wearable.sound.utils.Constants.*;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.WorkerThread;
@@ -30,11 +31,11 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.wearable.sound.R;
 import com.wearable.sound.models.SoundPrediction;
 import com.wearable.sound.ui.activity.MainActivity;
 import com.wearable.sound.utils.AudioProcessors;
-import com.wearable.sound.utils.Constants;
 
 import java.time.LocalTime;
 import java.util.Collection;
@@ -77,21 +78,33 @@ public class DataLayerListenerService extends WearableListenerService {
      */
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+    // Firebase
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "Architecture: " + MainActivity.ARCHITECTURE);
-        Log.i(TAG, "Audio Transmission style: " + MainActivity.AUDIO_TRANSMISSION_STYLE);
+        Log.i(TAG, "Architecture: " + ARCHITECTURE);
+        Log.i(TAG, "Audio Transmission style: " + AUDIO_TRANSMISSION_STYLE);
+
+        // [FS-Logging] Log the when this first started up?
+        this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         this.audioProcessors = new AudioProcessors(this);
 
         SharedPreferences sharedPref = PreferenceManager
                 .getDefaultSharedPreferences(this);
         DBLEVEL_THRES = sharedPref.getInt("db_threshold", 40);
+
         // Add slider for adjusting db threshold
         sharedPref.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
             if (key.equals("db_threshold")) {
                 DBLEVEL_THRES = sharedPreferences.getInt(key, 40);
+
+                // [FS-Logging] Log that the user change the threshold
+                Bundle bundle = new Bundle();
+                bundle.putInt(DBLEVEL_PARAM, sharedPreferences.getInt(key, 40));
+                fsLogging("threshold_change", bundle);
             }
         });
     }
@@ -99,6 +112,8 @@ public class DataLayerListenerService extends WearableListenerService {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        fsLogging("on_destroy", new Bundle());
     }
 
     @Override
@@ -139,6 +154,8 @@ public class DataLayerListenerService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         Log.i(TAG, "Message received from Watch");
+        // [FS-Logging]: Receive message from watch
+//        fsLogging("message_received_from_watch", new Bundle());
 
         if (messageEvent.getPath().equals(SOUND_SNOOZE_FROM_WATCH_PATH)) {
             String soundLabel = (new String(messageEvent.getData())).split(",")[0];
@@ -194,34 +211,35 @@ public class DataLayerListenerService extends WearableListenerService {
 
         // Else, getting audio data from watch --> parsing data array from watch
         if (messageEvent.getPath().equals(AUDIO_MESSAGE_PATH)) {
-            processAudioRecognition(messageEvent.getData());
+             processAudioRecognition(messageEvent.getData());
         }
     }
 
     private void processAudioRecognition(byte[] data) {
         Log.i(TAG, "Processing audio recognition...");
+        // [FS-Logging]
+//        fsLogging("start_processing_audio", new Bundle());
 
-        switch (MainActivity.ARCHITECTURE) {
-            case MainActivity.WATCH_ONLY_ARCHITECTURE:
-            case MainActivity.WATCH_SERVER_ARCHITECTURE:
+        switch (ARCHITECTURE) {
+            case WATCH_ONLY_ARCHITECTURE:
+            case WATCH_SERVER_ARCHITECTURE:
                 Log.i(TAG, "Invalid architecture for phone");
                 break;
-            case MainActivity.PHONE_WATCH_ARCHITECTURE:
-                switch (MainActivity.AUDIO_TRANSMISSION_STYLE) {
-                    case MainActivity.AUDIO_FEATURES_TRANSMISSION:
+            case PHONE_WATCH_ARCHITECTURE:
+                switch (AUDIO_TRANSMISSION_STYLE) {
+                    case AUDIO_FEATURES_TRANSMISSION:
                         // Predict sound with audio features
                         // TODO: implement this later; for now, to reduce wearable app size,
                         //  we only send raw audio data directly to phone
                         break;
-                    case MainActivity.RAW_AUDIO_TRANSMISSION:
+                    case RAW_AUDIO_TRANSMISSION:
                         handleRawAudioTransmission(data);
-                        break;
                     default:
                         Log.i(TAG, "Invalid transmission architecture");
                         break;
                 }
                 break;
-            case MainActivity.PHONE_WATCH_SERVER_ARCHITECTURE:
+            case PHONE_WATCH_SERVER_ARCHITECTURE:
                 Log.i(TAG, "Server Not Used For Now");
                 break;
             default:
@@ -230,6 +248,11 @@ public class DataLayerListenerService extends WearableListenerService {
         }
     }
 
+    /**
+     * Process the raw byte of data and return the prediction string
+     * @param data
+     * @return
+     */
     private void handleRawAudioTransmission(byte[] data) {
         // the raw audio sent to phone is in this format:
         //  [ --- record timestamp ---, --------- audio data --------- ]
@@ -261,8 +284,8 @@ public class DataLayerListenerService extends WearableListenerService {
                 separator = ",";
             }
 
+            String predictionString = sb.toString();
             sendAllAudioPredictionsToWearTask(sb.toString(), db(sData), recordTimestamp);
-
         } else {
             SoundPrediction soundPrediction = predictionList.get(0);
             sendAudioLabelToWearTask(soundPrediction.getLabel(), soundPrediction.getLabel(), db(sData), recordTimestamp);
@@ -283,7 +306,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction() == null || intent.getAction().equals(Constants.ACTION.START_FOREGROUND_ACTION)) {
+        if (intent.getAction() == null || intent.getAction().equals(ACTION.START_FOREGROUND_ACTION)) {
             Log.i(TAG, "Received Start Foreground Intent ");
             // start service code
             String input = intent.getStringExtra("connectedHostIds");
@@ -302,7 +325,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     .build();
             startForeground(1, notification);
 
-        } else if (intent.getAction().equals(Constants.ACTION.STOP_FOREGROUND_ACTION)) {
+        } else if (intent.getAction().equals(ACTION.STOP_FOREGROUND_ACTION)) {
             Log.i(TAG, "Received Stop Foreground Intent");
             // stop service code
             stopForeground(true);
@@ -322,6 +345,12 @@ public class DataLayerListenerService extends WearableListenerService {
                 message = result + ";" + LocalTime.now() + ";" + db;
             }
             Log.i(TAG, "Number of connected devices:" + nodes.size());
+
+            // [FS-Logging]
+            Bundle bundle = new Bundle();
+            bundle.putString(SOUND_PREDICTION_MESSAGE, message);
+            fsLogging(PREDICTION_EVENT, bundle);
+
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + message);
                 sendMessageWithData(node, SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH, message.getBytes());
@@ -340,6 +369,13 @@ public class DataLayerListenerService extends WearableListenerService {
                 message = prediction + "," + confidence + "," + LocalTime.now() + "," + db;
             }
             Log.i(TAG, "Number of connected devices: " + nodes.size());
+
+            // [FS-Logging]
+            Bundle bundle = new Bundle();
+            bundle.putString(SOUND_PREDICTION_MESSAGE, message);
+            Log.i(TAG, "log with firebase: message is " + message);
+            fsLogging(PREDICTION_EVENT, bundle);
+
             for (String node : nodes) {
                 Log.i(TAG, "Sending sound prediction: " + message);
                 sendMessageWithData(node, AUDIO_PREDICTION_PATH, message.getBytes());
@@ -384,12 +420,31 @@ public class DataLayerListenerService extends WearableListenerService {
             // thread).
             Integer result = Tasks.await(sendMessageTask);
             Log.e(TAG, "Message sent: " + result);
-
         } catch (ExecutionException exception) {
             Log.e(TAG, "Task failed: " + exception);
-
         } catch (InterruptedException exception) {
             Log.e(TAG, "Interrupt occurred: " + exception);
         }
+    }
+
+    /**
+     * Take in a bundle and event type, log to Firebase and also write to external file
+     */
+    private void fsLogging(String eventName, Bundle bundle) {
+        SharedPreferences sharedPref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        // always add participant id and current shard pref
+        String pidKey = getResources().getString(R.string.pid_pref_key);
+        bundle.putString(pidKey, sharedPref.getString(pidKey, Build.MODEL));
+        String dbLevelKey = getResources().getString(R.string.db_threshold_pref_key);
+        bundle.putInt(dbLevelKey, sharedPref.getInt(dbLevelKey, (int) DBLEVEL_THRES));
+        String fgPrefKey = getResources().getString(R.string.foreground_pref_key);
+        bundle.putBoolean(fgPrefKey, sharedPref.getBoolean(fgPrefKey, false));
+
+        // log with firebase
+        mFirebaseAnalytics.logEvent(eventName, bundle);
+
+        // write to external file
     }
 }
