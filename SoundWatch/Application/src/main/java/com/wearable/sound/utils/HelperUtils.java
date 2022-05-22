@@ -30,7 +30,7 @@ public class HelperUtils {
             }
             return fArr;
         } catch (IOException e) {
-            Log.e(TAG, "ERROR parsing bytes array to float array");
+            if (Constants.DEBUG_LOG) Log.e(TAG, "ERROR parsing bytes array to float array");
         }
         return null;
     }

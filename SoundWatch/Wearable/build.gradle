@@ -59,8 +59,8 @@ android {
 
 
     defaultConfig {
-        versionCode 9
-        versionName "1.07"
+        versionCode 10
+        versionName "2.00"
         applicationId 'com.wearable.sound'
         minSdkVersion 28
 

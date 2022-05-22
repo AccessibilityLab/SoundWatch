@@ -1,5 +1,7 @@
 package com.wearable.sound.utils;
 
+import static com.wearable.sound.utils.Constants.DEBUG_LOG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -26,12 +28,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Log.d(MainActivity.TAG, "Alarm received");
+        if (DEBUG_LOG) Log.d(MainActivity.TAG, "Alarm received");
         int blockedNotificationID = intent.getIntExtra("blockedSoundId", 0);
         ((MainApplication) context.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
         final String soundLabel = intent.getStringExtra(SOUND_LABEL);
         String input = intent.getStringExtra(CONNECTED_HOST_IDS);
-        Log.i(TAG, "Connected host id: " + input);
+        if (DEBUG_LOG) Log.i(TAG, "Connected host id: " + input);
         if (input != null) {
             // There is a connected phone
             this.connectedHostIds = new HashSet<>(
@@ -51,7 +53,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
             return;
         }
         for (String connectedHostId : connectedHostIds) {
-            Log.d(TAG, "Sending unsnooze sound data to phone:" + soundLabel);
+            if (DEBUG_LOG) Log.d(TAG, "Sending unsnooze sound data to phone:" + soundLabel);
             Wearable.getMessageClient(context)
                     .sendMessage(connectedHostId, SOUND_UNSNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
         }

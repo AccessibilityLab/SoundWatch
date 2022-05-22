@@ -1,0 +1,45 @@
+Car Honk
+Car Alarm
+Car
+Car Passing By
+Police Car (Siren)
+Ambulance (Siren)
+Fire Engine/Fire Truck (Siren)
+Fire Alarm
+Alarm
+Alarm Clock
+Smoke Detector/Smoke Alarm
+Door In-Use
+Doorbell
+Sliding Door
+Ding-Dong
+Knocking
+Microwave
+Beep/Bleep
+Water
+Waterfall
+Raindrop
+Water Tap/Faucet
+Sink (Filling Or Washing)
+Bathtub (Filling Or Washing)
+Liquid
+Baby Cry
+Crying/Sobbing
+Laughter
+Baby Laughter
+Dog
+Dog Bark
+Cat
+Cat Meow
+Vehicle
+Motor Vehicle (Road)
+Emergency Vehicle
+Bird
+Bird Vocalization/Bird Call/Bird Song
+Boiling
+Walk/Footsteps
+Telephone
+Telephone Bell Ringing
+Telephone Dialing/Dtmf
+Music
+Musical Instrument

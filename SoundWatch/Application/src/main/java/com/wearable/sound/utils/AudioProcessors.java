@@ -26,7 +26,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Contains methods to extract audio features or make predictions based on either audio bytes or audio features
@@ -39,7 +41,9 @@ public class AudioProcessors {
     private final Interpreter tfLite;
     private static final String MODEL_FILENAME = "file:///android_asset/sw_model_v2.tflite";
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
+    private static final String INTERESTED_LABEL_FILENAME = "file:///android_asset/interested_labels.txt";
     private final List<String> labels;
+    private final Set<String> interestedLabels;
 
     private Python py;
     private PyObject pythonModule;
@@ -81,6 +85,19 @@ public class AudioProcessors {
             throw new RuntimeException(e);
         }
 
+        // load interested label filename
+        this.interestedLabels = new HashSet<>();
+        String actualInterestedLabelFilename = INTERESTED_LABEL_FILENAME.split("file:///android_asset/", -1)[1];
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(this.context.getAssets().open(actualInterestedLabelFilename)));
+            String line;
+            while ((line = br.readLine()) != null) {
+                this.interestedLabels.add(line);
+            }
+            br.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Problem reading label file of " + actualInterestedLabelFilename, e);
+        }
     }
 
     /**
@@ -92,10 +109,10 @@ public class AudioProcessors {
      * @return a list of sound predictions whose confidence >= threshold, sorted in decreasing order
      */
     public List<SoundPrediction> predictSoundsFromAudioFeatures(float[] input1D, double db, boolean multipleSounds) {
-        Log.i(TAG, "Predicting sounds from audio features");
+        if (Constants.DEBUG_LOG) Log.i(TAG, "Predicting sounds from audio features");
 
         if (db < DBLEVEL_THRES) {
-            Log.i(TAG, "Loudness < DBLEVEL_THRES");
+            if (Constants.DEBUG_LOG) Log.i(TAG, "Loudness < DBLEVEL_THRES");
             return null;
         }
 
@@ -109,19 +126,19 @@ public class AudioProcessors {
             }
         }
 
-        Log.d(TAG, "Input3D is " + Arrays.deepToString(input3D));
+        if (Constants.DEBUG_LOG) Log.d(TAG, "Input3D is " + Arrays.deepToString(input3D));
 
         // Run inference
         float[][] output = new float[1][this.labels.size()];
         tfLite.run(input3D, output);
-        Log.d(TAG, "Output running tflite is " + Arrays.deepToString(output));
+        if (Constants.DEBUG_LOG) Log.d(TAG, "Output running tflite is " + Arrays.deepToString(output));
 
         // TODO: re-implement test end-to-end latency
 
         List<SoundPrediction> predictions = new ArrayList<>();
         if (multipleSounds) {
             for (int i = 0; i < this.labels.size(); i++) {
-                if (output[0][i] >= PREDICTION_THRES) {
+                if (output[0][i] >= PREDICTION_THRES && this.interestedLabels.contains(labels.get(i))) {
                     predictions.add(new SoundPrediction(labels.get(i), output[0][i]));
                 }
             }
@@ -144,7 +161,7 @@ public class AudioProcessors {
             }
         }
 
-        Log.i(TAG, LocalTime.now() + "        " + ": Predictions are " + predictions.toString());
+        if (Constants.DEBUG_LOG) Log.i(TAG, LocalTime.now() + "        " + ": Predictions are " + predictions.toString());
         return predictions;
     }
 
@@ -158,28 +175,28 @@ public class AudioProcessors {
      * - null if something went wrong
      */
     public List<SoundPrediction> predictSoundFromRawAudio(short[] rawData, boolean multipleSounds) {
-        Log.i(TAG, "Predicting sounds from raw audio shorts");
+        if (Constants.DEBUG_LOG) Log.i(TAG, "Predicting sounds from raw audio shorts");
 
         if (rawData.length != BUFFER_SIZE) {
-            Log.d(TAG, "Invalid buffer size, not enough to make predictions");
+            if (Constants.DEBUG_LOG) Log.d(TAG, "Invalid buffer size, not enough to make predictions");
             return null;
         }
 
         double db = db(rawData);
-        Log.d(TAG, "DB of data: " + db + "| DB_thresh: " + DBLEVEL_THRES);
+        if (Constants.DEBUG_LOG) Log.d(TAG, "DB of data: " + db + "| DB_thresh: " + DBLEVEL_THRES);
         if (db >= DBLEVEL_THRES) {
             // extract audio features from raw bytes
             float[] input1D = extractAudioFeaturesRawAudio(rawData);
             if (input1D == null) {
-                Log.d(TAG, "Cannot extract features from raw audio");
+                if (Constants.DEBUG_LOG) Log.d(TAG, "Cannot extract features from raw audio");
                 return null;
             }
-            Log.d(TAG, "Input1D is " + Arrays.toString(input1D));
+            if (Constants.DEBUG_LOG) Log.d(TAG, "Input1D is " + Arrays.toString(input1D));
 
             return predictSoundsFromAudioFeatures(input1D, db, multipleSounds);
         }
 
-        Log.i(TAG, "Loudness < DBLEVEL_THRES");
+        if (Constants.DEBUG_LOG) Log.i(TAG, "Loudness < DBLEVEL_THRES");
         return null;
     }
 
@@ -192,13 +209,13 @@ public class AudioProcessors {
     public float[] extractAudioFeaturesRawAudio(short[] rawData) {
         if (rawData.length != BUFFER_SIZE) {
             // Sanity check, because sound has to be exactly bufferElements2Rec elements
-            Log.d(TAG, "Invalid buffer size: expect " + BUFFER_SIZE + "; given " + rawData.length);
+            if (Constants.DEBUG_LOG) Log.d(TAG, "Invalid buffer size: expect " + BUFFER_SIZE + "; given " + rawData.length);
             return null;
         }
 
         try {
             if (db(rawData) >= DBLEVEL_THRES) {
-                Log.d(TAG, "Within threshold.");
+                if (Constants.DEBUG_LOG) Log.d(TAG, "Within threshold.");
 
                 long startTimePython = System.currentTimeMillis();
                 if (py == null || pythonModule == null) {
@@ -208,14 +225,15 @@ public class AudioProcessors {
 
                     py = Python.getInstance();
                     pythonModule = py.getModule("main");
-                    Log.i(TAG, "Time elapsed after init Python modules: " + (System.currentTimeMillis() - startTimePython));
+                    if (Constants.DEBUG_LOG) Log.i(TAG, "Time elapsed after init Python modules: "
+                            + (System.currentTimeMillis() - startTimePython));
                 }
 
                 // Get MFCC features
-                Log.d(TAG, "Sending to python an array length of " + rawData.length);
+                if (Constants.DEBUG_LOG) Log.d(TAG, "Sending to python an array length of " + rawData.length);
                 PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(rawData));
 
-                Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
+                if (Constants.DEBUG_LOG) Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
 
                 // Parse features into a float array
                 String inputString = mfccFeatures.toString();
@@ -237,7 +255,7 @@ public class AudioProcessors {
 
             return null;
         } catch (PyException e) {
-            Log.i(TAG, "Something went wrong parsing to MFCC feature");
+            if (Constants.DEBUG_LOG) Log.i(TAG, "Something went wrong parsing to MFCC feature");
             return null;
         }
     }

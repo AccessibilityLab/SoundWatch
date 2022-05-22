@@ -37,7 +37,9 @@ public class SnoozeSoundService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.d(TAG, "onHandleIntent(): " + intent);
+        if (DEBUG_LOG) {
+            Log.d(TAG, "onHandleIntent(): " + intent);
+        }
 
         if (intent != null) {
             String snoozeTime = "10 mins";
@@ -53,7 +55,7 @@ public class SnoozeSoundService extends IntentService {
                 );
             }
             ((MainApplication) this.getApplication()).addBlockedSounds(blockedNotificationID);
-            Log.i(TAG, "Add to list of blocked sounds " + blockedNotificationID);
+            if (DEBUG_LOG) Log.i(TAG, "Add to list of blocked sounds " + blockedNotificationID);
 
             if (!snoozeTime.equals("Forever")) {
                 Intent alarmIntent = new Intent(this, AlarmReceiver.class);
@@ -71,7 +73,7 @@ public class SnoozeSoundService extends IntentService {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager.cancel(blockedNotificationID);
 
-            Log.i(TAG, "Successfully blocked sounds");
+            if (DEBUG_LOG) Log.i(TAG, "Successfully blocked sounds");
 
             // Send a message to Phone to indicate this sound is blocked
             sendSnoozeSoundMessageToPhone(soundLabel);
@@ -86,7 +88,7 @@ public class SnoozeSoundService extends IntentService {
             return;
         }
         for (String connectedHostId : connectedHostIds) {
-            Log.d(TAG, "Sending snooze sound data to phone: " + soundLabel);
+            if (DEBUG_LOG) Log.d(TAG, "Sending snooze sound data to phone: " + soundLabel);
             Wearable.getMessageClient(this.getApplicationContext())
                     .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
         }

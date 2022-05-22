@@ -1,9 +1,14 @@
 package com.wearable.sound.utils;
 
+import com.wearable.sound.BuildConfig;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
+
+    public static final boolean DEBUG_LOG = BuildConfig.DEBUG;
+
     /**
      * Data layer paths which is the data sent from watch
      */

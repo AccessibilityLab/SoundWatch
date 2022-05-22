@@ -18,6 +18,7 @@ package com.wearable.sound.utils;
 
 import static com.wearable.sound.utils.Constants.ARCHITECTURE;
 import static com.wearable.sound.utils.Constants.AUDIO_TRANSMISSION_STYLE;
+import static com.wearable.sound.utils.Constants.DEBUG_LOG;
 import static com.wearable.sound.utils.Constants.PHONE_WATCH_ARCHITECTURE;
 import static com.wearable.sound.utils.HelperUtils.longToBytes;
 
@@ -82,10 +83,10 @@ public class SoundRecorder {
      * @param connectedHostIds:
      */
     public void startRecording(Set<String> connectedHostIds) {
-        Log.i(TAG, "Current Architecture: " + ARCHITECTURE);
-        Log.i(TAG, "Transportation Mode: " + AUDIO_TRANSMISSION_STYLE);
+        if (DEBUG_LOG) Log.i(TAG, "Current Architecture: " + ARCHITECTURE);
+        if (DEBUG_LOG) Log.i(TAG, "Transportation Mode: " + AUDIO_TRANSMISSION_STYLE);
         if (mState != State.IDLE) {
-            Log.i(TAG, "Requesting to start recording while state was not IDLE");
+            if (DEBUG_LOG) Log.i(TAG, "Requesting to start recording while state was not IDLE");
             return;
         }
         this.connectedHostIds = connectedHostIds;
@@ -114,12 +115,12 @@ public class SoundRecorder {
 
         if (this.mAudioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
             // check for proper initialization
-            Log.e(TAG, "Error initializing AudioRecord");
+            if (DEBUG_LOG) Log.e(TAG, "Error initializing AudioRecord");
             return;
         }
 
         this.mAudioRecord.startRecording();
-        Log.d(TAG, "Recording started with AudioRecord");
+        if (DEBUG_LOG) Log.d(TAG, "Recording started with AudioRecord");
 
         this.mState = State.RECORDING;
 
@@ -150,7 +151,7 @@ public class SoundRecorder {
             // TODO: only having phone watch architecture for now
             if (ARCHITECTURE.equals(PHONE_WATCH_ARCHITECTURE)) {
                 // send raw bytes directly to phone for now
-                Log.d(TAG, "Processing data for phone watch architecture...");
+                if (DEBUG_LOG) Log.d(TAG, "Processing data for phone watch architecture...");
                 sendRawAudioToPhone(data, recordTime);
             }
         }
@@ -158,7 +159,7 @@ public class SoundRecorder {
         // cleaning up
         this.mAudioRecord.stop();
         this.mAudioRecord.release();
-        Log.d(TAG, "Stop recording. Cleaning up...");
+        if (DEBUG_LOG) Log.d(TAG, "Stop recording. Cleaning up...");
 
         this.mAudioRecord = null;
         this.recordingThread = null;
@@ -169,7 +170,7 @@ public class SoundRecorder {
      * @param recordTime : timestamp
      */
     private void sendRawAudioToPhone(byte[] buffer, long recordTime) {
-        Log.d(TAG, "Sending this raw buffer array with size of " + buffer.length);
+        if (DEBUG_LOG) Log.d(TAG, "Sending this raw buffer array with size of " + buffer.length);
         // send the raw bytes to phone in this format:
         //  [ --- record timestamp ---, --------- audio data --------- ]
         byte[] timestampData = longToBytes(recordTime);

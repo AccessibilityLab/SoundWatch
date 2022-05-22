@@ -1,6 +1,11 @@
 package com.wearable.sound.utils;
 
+import com.wearable.sound.BuildConfig;
+
 public class Constants {
+
+    public static final boolean DEBUG_LOG = BuildConfig.DEBUG;
+
     /*
      *  Foreground Service configurations
      * */
@@ -35,19 +40,17 @@ public class Constants {
      */
     public static final boolean PREDICT_MULTIPLE_SOUNDS = true;
 
-    /**
-     * 10 main sounds (new model)
-     */
+    // 10 main sounds (new model)
     public static final String KNOCKING = "Knocking";
     public static final String DOG_BARK = "Dog Bark";
-    public static final String CAT_MEOW= "Cat Meow";
+    public static final String CAT_MEOW = "Cat Meow";
     public static final String VEHICLE= "Vehicle";
     public static final String FIRE_SMOKE_ALARM = "Fire/Smoke Alarm";
     public static final String WATER_RUNNING = "Water Running";
     public static final String BABY_CRY = "Baby Cry";
     public static final String DOOR_IN_USE = "Door In-Use";
-    public static final String CAR_HONK= "Car Honk";
-    public static final String MICROWAVE= "Microwave";
+    public static final String CAR_HONK = "Car Honk";
+    public static final String MICROWAVE = "Microwave";
 
     /**
      * For Firebase Analytics

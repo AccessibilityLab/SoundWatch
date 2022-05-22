@@ -34,7 +34,7 @@ public class ForegroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onCreate");
+        if (Constants.DEBUG_LOG) Log.i(TAG, "onCreate");
         mSoundRecorder = new SoundRecorder(this);
     }
 
@@ -57,16 +57,16 @@ public class ForegroundService extends Service {
                 .build();
         startForeground(2, notification);
         mSoundRecorder.startRecording(connectedHostIds);
-        Log.d(TAG, "Start Recording...");
+        if (Constants.DEBUG_LOG) Log.d(TAG, "Start Recording...");
         return START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "Stopping foreground services");
+        if (Constants.DEBUG_LOG) Log.i(TAG, "Stopping foreground services");
         if (mSoundRecorder != null) {
-            Log.i(TAG, "Stop recorder");
+            if (Constants.DEBUG_LOG) Log.i(TAG, "Stop recorder");
             mSoundRecorder.stopRecording();
         }
         if (mCountDownTimer != null) {

@@ -19,8 +19,8 @@ android {
         applicationId 'com.wearable.sound'
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 14
-        versionName "1.07"
+        versionCode 15
+        versionName "2.00"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         python {
             // If Chaquopy fails to find Python on your build machine, enable the following
