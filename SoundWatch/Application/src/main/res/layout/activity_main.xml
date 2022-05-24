@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.activity.MainActivity"
     android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:background="#000000"
-    android:textColor="@color/colorTextDefault">
+    android:orientation="vertical"
+    android:textColor="@color/colorTextDefault"
+    tools:context=".ui.activity.MainActivity">
 
     <LinearLayout
         android:id="@+id/title"
@@ -26,22 +26,39 @@
             android:textSize="@dimen/_25ssp"
             android:textStyle="bold" />
 
-<!--        <Button-->
-<!--            android:id="@+id/aaaaa"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:text="Button"/>-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <!--    <Button-->
-        <!--        android:id="@+id/button"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:background="@drawable/rounablebutton"-->
-        <!--        android:padding="10sp"-->
-        <!--        android:textColor="#008ad3"-->
-        <!--        android:text="Favourite Places"-->
-        <!--        android:layout_gravity="top|right"/>-->
+        <ImageButton
+            android:id="@+id/feedback_button"
+            android:layout_width="@dimen/_30ssp"
+            android:layout_height="@dimen/_30ssp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/ic_baseline_rate_review_24"
+            android:backgroundTint="@color/colorAccent"
+            android:contentDescription="@string/feedback_button_desc"
+            android:onClick="onFeedbackButtonClick"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:theme="@android:style/ThemeOverlay.Material.Dark"
+            />
+
+        <!--        <Button-->
+        <!--            android:id="@+id/feedback_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginEnd="@dimen/_10ssp"-->
+        <!--            android:layout_gravity="bottom"-->
+        <!--            android:text="@string/feedback_button_desc"-->
+        <!--            android:textColor="@color/colorTextDefault"-->
+        <!--            android:textSize="@dimen/_8ssp"-->
+        <!--            android:background="@android:color/transparent"-->
+        <!--            android:drawableTop="@drawable/ic_baseline_rate_review_24"-->
+        <!--            android:drawableTint="@color/colorAccent"-->
+        <!--            />-->
 
     </LinearLayout>
 
@@ -61,44 +78,45 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title"
-        android:layout_above="@+id/bottom_nav_view"/>
+        android:layout_above="@+id/bottom_nav_view"
+        android:layout_below="@+id/title" />
 
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="false"
-        android:overScrollMode="always"
+        android:layout_above="@+id/bottom_nav_view"
         android:layout_below="@+id/instruction_text"
-        android:layout_above="@+id/bottom_nav_view">
+        android:fillViewport="false"
+        android:overScrollMode="always">
 
         <LinearLayout
             android:id="@+id/checkbox_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:scaleX="1.25"
-            android:scaleY="1.25"
-            android:paddingBottom="@dimen/_20sdp"
             android:paddingStart="@dimen/_15sdp"
-            android:paddingEnd="@dimen/_15sdp">
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_20sdp"
+            android:scaleX="1.25"
+            android:scaleY="1.25">
 
             <TextView
                 android:id="@+id/padding_top"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/_50sdp"/>
+                android:paddingTop="@dimen/_66sdp" />
 
             <TextView
                 android:id="@+id/category_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/category_1"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/category_1"
                 android:textColor="@color/colorTextDefault"
-                android:textSize="@dimen/_12ssp"/>
+                android:textSize="@dimen/_12ssp" />
+
             <CheckBox
                 android:id="@+id/car_honk"
                 android:layout_width="match_parent"
@@ -125,15 +143,28 @@
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
+            <CheckBox
+                android:id="@+id/emergency_vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/emergency_vehicle"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
             <TextView
                 android:id="@+id/category_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/category_2"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/category_2"
                 android:textColor="@color/colorTextDefault"
-                android:textSize="@dimen/_12ssp"/>
+                android:textSize="@dimen/_12ssp" />
 
             <CheckBox
                 android:id="@+id/door_in_use"
@@ -145,6 +176,19 @@
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
                 android:text="@string/door_in_use"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+            <CheckBox
+                android:id="@+id/telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/telephone"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
@@ -175,6 +219,20 @@
                 android:textSize="@dimen/_10ssp" />
 
             <CheckBox
+                android:id="@+id/walk_footsteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/walk_footsteps"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+
+            <CheckBox
                 android:id="@+id/water_running"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,17 +245,8 @@
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
-            <TextView
-                android:id="@+id/category_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/category_3"
-                android:layout_marginStart="@dimen/_28sdp"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:textColor="@color/colorTextDefault"
-                android:textSize="@dimen/_12ssp"/>
             <CheckBox
-                android:id="@+id/baby_crying"
+                android:id="@+id/door_bell"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_35sdp"
@@ -205,9 +254,86 @@
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:onClick="onCheckBoxClick"
-                android:text="@string/baby_cry"
+                android:text="@string/door_bell"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
+
+            <CheckBox
+                android:id="@+id/cutlery_silverware"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/cutlery_silverware"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+            <CheckBox
+                android:id="@+id/chopping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/chopping"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/category_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_28sdp"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/category_3"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_12ssp" />
+
+            <CheckBox
+                android:id="@+id/crying"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/crying"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+            <CheckBox
+                android:id="@+id/yelling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/yelling"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+
+            <CheckBox
+                android:id="@+id/laughter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/laughter"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
             <CheckBox
                 android:id="@+id/dog_bark"
                 android:layout_width="match_parent"
@@ -220,6 +346,7 @@
                 android:text="@string/dog_bark"
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
+
             <CheckBox
                 android:id="@+id/cat_meow"
                 android:layout_width="match_parent"
@@ -233,15 +360,42 @@
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
+            <CheckBox
+                android:id="@+id/bird"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/bird"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+            <CheckBox
+                android:id="@+id/duck_goose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:buttonTint="@color/colorPrimary"
+                android:checked="true"
+                android:onClick="onCheckBoxClick"
+                android:text="@string/duck_goose"
+                android:textColor="@color/colorTextDefault"
+                android:textSize="@dimen/_10ssp" />
+
+
             <TextView
                 android:id="@+id/category_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/category_4"
                 android:layout_marginStart="@dimen/_28sdp"
                 android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/category_4"
                 android:textColor="@color/colorTextDefault"
-                android:textSize="@dimen/_12ssp"/>
+                android:textSize="@dimen/_12ssp" />
 
             <CheckBox
                 android:id="@+id/vehicle"
@@ -260,24 +414,23 @@
                 android:id="@+id/padding_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="@dimen/_50sdp"/>
+                android:paddingBottom="@dimen/_60sdp" />
         </LinearLayout>
     </ScrollView>
 
-<!--    <androidx.viewpager.widget.ViewPager-->
-<!--        android:id="@+id/view_pager"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"/>-->
+    <!--    <androidx.viewpager.widget.ViewPager-->
+    <!--        android:id="@+id/view_pager"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1"/>-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:backgroundTint="@color/colorNavBar"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_view_menu"
         app:itemIconTint="@drawable/selector_bottom_navigation"
         app:itemTextColor="@drawable/selector_bottom_navigation"
-        />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_view_menu" />
 </RelativeLayout>

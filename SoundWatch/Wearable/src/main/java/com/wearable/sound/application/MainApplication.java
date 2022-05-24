@@ -17,7 +17,17 @@ public class MainApplication extends Application {
             "Cat Meow",
             "Car Honk",
             "Vehicle",
-            "Baby Cry"
+            "Crying",
+            "Emergency Vehicle",
+            "Doorbell",
+            "Phone",
+            "Cutlery/Silverware",
+            "Chopping",
+            "Laughter",
+            "Yelling",
+            "Bird",
+            "Walk/Footsteps",
+            "Duck/Goose"
     ));
     private final List<Integer> blockedSounds = new ArrayList<>();
     private boolean appInForeground = false;

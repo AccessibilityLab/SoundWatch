@@ -3,10 +3,23 @@ package com.wearable.sound.datalayer;
 import static com.wearable.sound.ui.activity.MainActivity.AUDIO_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.FOREGROUND_LABEL;
 import static com.wearable.sound.ui.activity.MainActivity.TEST_E2E_LATENCY;
+import static com.wearable.sound.utils.Constants.ACTION;
+import static com.wearable.sound.utils.Constants.ARCHITECTURE;
+import static com.wearable.sound.utils.Constants.AUDIO_FEATURES_TRANSMISSION;
+import static com.wearable.sound.utils.Constants.AUDIO_TRANSMISSION_STYLE;
+import static com.wearable.sound.utils.Constants.DBLEVEL_PARAM;
+import static com.wearable.sound.utils.Constants.DEBUG_LOG;
+import static com.wearable.sound.utils.Constants.PHONE_WATCH_ARCHITECTURE;
+import static com.wearable.sound.utils.Constants.PHONE_WATCH_SERVER_ARCHITECTURE;
+import static com.wearable.sound.utils.Constants.PREDICTION_EVENT;
+import static com.wearable.sound.utils.Constants.PREDICT_MULTIPLE_SOUNDS;
+import static com.wearable.sound.utils.Constants.RAW_AUDIO_TRANSMISSION;
+import static com.wearable.sound.utils.Constants.SOUND_PREDICTION_MESSAGE;
+import static com.wearable.sound.utils.Constants.WATCH_ONLY_ARCHITECTURE;
+import static com.wearable.sound.utils.Constants.WATCH_SERVER_ARCHITECTURE;
 import static com.wearable.sound.utils.HelperUtils.bytesToLong;
 import static com.wearable.sound.utils.HelperUtils.convertByteArrayToShortArray;
 import static com.wearable.sound.utils.HelperUtils.db;
-import static com.wearable.sound.utils.Constants.*;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -38,15 +51,11 @@ import com.wearable.sound.ui.activity.MainActivity;
 import com.wearable.sound.utils.AudioProcessors;
 import com.wearable.sound.utils.Logger;
 
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +65,7 @@ import java.util.concurrent.Executors;
  * Make predictions based on the audio data.
  */
 public class DataLayerListenerService extends WearableListenerService {
-    private static final String TAG = "Phone/DataLayerService";
+    public static final String TAG = "Phone/DataLayerService";
 //    private static final String UNIDENTIFIED_SOUND = "Unidentified Sound";
 
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
@@ -171,7 +180,8 @@ public class DataLayerListenerService extends WearableListenerService {
 
         if (messageEvent.getPath().equals(SOUND_SNOOZE_FROM_WATCH_PATH)) {
             String soundLabel = (new String(messageEvent.getData())).split(",")[0];
-            if (DEBUG_LOG) Log.i(TAG, "Phone received Snooze Sound [" + soundLabel + "] from watch");
+            if (DEBUG_LOG)
+                Log.i(TAG, "Phone received Snooze Sound [" + soundLabel + "] from watch");
             if (MainActivity.SOUNDS_MAP.containsKey(soundLabel)) {
                 if (DEBUG_LOG) Log.i(TAG, "Setting is Snooze true");
                 Objects.requireNonNull(MainActivity.SOUNDS_MAP.get(soundLabel)).isSnoozed = true;
@@ -199,7 +209,8 @@ public class DataLayerListenerService extends WearableListenerService {
 
         if (messageEvent.getPath().equals(SEND_CURRENT_BLOCKED_SOUND_PATH)) {
             String blockedSoundsStr = new String(messageEvent.getData());
-            if (DEBUG_LOG) Log.i(TAG, "Phone received Snoozed list on connected from watch: " + blockedSoundsStr);
+            if (DEBUG_LOG)
+                Log.i(TAG, "Phone received Snoozed list on connected from watch: " + blockedSoundsStr);
             String[] blockedSounds = blockedSoundsStr.split(",");
             for (String blockedSound : blockedSounds) {
                 if (MainActivity.SOUNDS_MAP.containsKey(blockedSound)) {
@@ -223,7 +234,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
         // Else, getting audio data from watch --> parsing data array from watch
         if (messageEvent.getPath().equals(AUDIO_MESSAGE_PATH)) {
-             processAudioRecognition(messageEvent.getData());
+            processAudioRecognition(messageEvent.getData());
         }
     }
 
@@ -262,6 +273,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     /**
      * Process the raw byte of data and return the prediction string
+     *
      * @param data
      * @return
      */
@@ -275,8 +287,9 @@ public class DataLayerListenerService extends WearableListenerService {
         long recordTimestamp = bytesToLong(timestampData);
         short[] sData = convertByteArrayToShortArray(audioData);
 
-        if (DEBUG_LOG) Log.d(TAG, "Handling raw audio transmission: record timestamp is " + recordTimestamp +
-                "; the array of audio shorts has a length of " + sData.length);
+        if (DEBUG_LOG)
+            Log.d(TAG, "Handling raw audio transmission: record timestamp is " + recordTimestamp +
+                    "; the array of audio shorts has a length of " + sData.length);
 
         List<SoundPrediction> predictionList = this.audioProcessors.predictSoundFromRawAudio(sData, PREDICT_MULTIPLE_SOUNDS);
         if (predictionList == null || predictionList.isEmpty()) {
@@ -293,13 +306,14 @@ public class DataLayerListenerService extends WearableListenerService {
             for (SoundPrediction soundPrediction : predictionList) {
                 // Only include the label in available labels
                 sb.append(separator);
-                sb.append(soundPrediction.getLabel()).append("_").append(soundPrediction.getConfidence());
+                sb.append(soundPrediction.toString());
                 separator = ",";
             }
 
             if (sb.length() > 0) {
                 String predictionString = sb.toString();
-                if (DEBUG_LOG) Log.i(TAG, "Prediction string before sending is " + predictionString);
+                if (DEBUG_LOG)
+                    Log.i(TAG, "Prediction string before sending is " + predictionString);
                 sendAllAudioPredictionsToWearTask(sb.toString(), db(sData), recordTimestamp);
             }
         } else {
@@ -356,22 +370,22 @@ public class DataLayerListenerService extends WearableListenerService {
             Collection<String> nodes = getNodes();
             String message;
             if (TEST_E2E_LATENCY) {
-                message = result + ";" + LocalTime.now() + ";" + db + ";" + recordTime;
+                message = result + ";" + ZonedDateTime.now() + ";" + db + ";" + recordTime;
             } else {
-                message = result + ";" + LocalTime.now() + ";" + db;
+                message = result + ";" + ZonedDateTime.now() + ";" + db;
             }
             if (DEBUG_LOG) Log.i(TAG, "Number of connected devices:" + nodes.size());
+
+            for (String node : nodes) {
+                if (DEBUG_LOG) Log.i(TAG, "Sending sound prediction: " + message);
+                sendMessageWithData(node, SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH, message.getBytes());
+            }
 
             // [FS-Logging]
             Bundle bundle = new Bundle();
             bundle.putString(SOUND_PREDICTION_MESSAGE, message);
             this.fsLogging(PREDICTION_EVENT, bundle,
                     ZonedDateTime.now().toString());
-
-            for (String node : nodes) {
-                if (DEBUG_LOG) Log.i(TAG, "Sending sound prediction: " + message);
-                sendMessageWithData(node, SEND_ALL_AUDIO_PREDICTIONS_FROM_PHONE_PATH, message.getBytes());
-            }
         });
     }
 
@@ -381,11 +395,16 @@ public class DataLayerListenerService extends WearableListenerService {
             Collection<String> nodes = getNodes();
             String message;
             if (TEST_E2E_LATENCY) {
-                message = prediction + "," + confidence + "," + LocalTime.now() + "," + db + "," + recordTime;
+                message = prediction + "," + confidence + "," + ZonedDateTime.now() + "," + db + "," + recordTime;
             } else {
-                message = prediction + "," + confidence + "," + LocalTime.now() + "," + db;
+                message = prediction + "," + confidence + "," + ZonedDateTime.now() + "," + db;
             }
             if (DEBUG_LOG) Log.i(TAG, "Number of connected devices: " + nodes.size());
+
+            for (String node : nodes) {
+                if (DEBUG_LOG) Log.i(TAG, "Sending sound prediction: " + message);
+                sendMessageWithData(node, AUDIO_PREDICTION_PATH, message.getBytes());
+            }
 
             // [FS-Logging]
             Bundle bundle = new Bundle();
@@ -393,11 +412,6 @@ public class DataLayerListenerService extends WearableListenerService {
             if (DEBUG_LOG) Log.i(TAG, "log with firebase: message is " + message);
             this.fsLogging(PREDICTION_EVENT, bundle,
                     ZonedDateTime.now().toString());
-
-            for (String node : nodes) {
-                if (DEBUG_LOG) Log.i(TAG, "Sending sound prediction: " + message);
-                sendMessageWithData(node, AUDIO_PREDICTION_PATH, message.getBytes());
-            }
         });
     }
 

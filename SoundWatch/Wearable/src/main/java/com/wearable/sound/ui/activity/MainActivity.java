@@ -1,5 +1,26 @@
 package com.wearable.sound.ui.activity;
 
+import static com.wearable.sound.utils.Constants.ARCHITECTURE;
+import static com.wearable.sound.utils.Constants.AUDIO_LABEL;
+import static com.wearable.sound.utils.Constants.AUDIO_TRANSMISSION_STYLE;
+import static com.wearable.sound.utils.Constants.CONNECTED_HOST_IDS;
+import static com.wearable.sound.utils.Constants.DEBUG_LOG;
+import static com.wearable.sound.utils.Constants.DEFAULT_SERVER;
+import static com.wearable.sound.utils.Constants.FOREGROUND_LABEL;
+import static com.wearable.sound.utils.Constants.HIGH_ACCURACY_SLOW_MODE;
+import static com.wearable.sound.utils.Constants.LOW_ACCURACY_FAST_MODE;
+import static com.wearable.sound.utils.Constants.MODE;
+import static com.wearable.sound.utils.Constants.NORMAL_MODE;
+import static com.wearable.sound.utils.Constants.SOUND_ID;
+import static com.wearable.sound.utils.Constants.SOUND_LABEL;
+import static com.wearable.sound.utils.Constants.SOUND_SNOOZE_FROM_WATCH_PATH;
+import static com.wearable.sound.utils.Constants.TEST_E2E_LATENCY;
+import static com.wearable.sound.utils.Constants.TEST_E2E_LATENCY_SERVER;
+import static com.wearable.sound.utils.Constants.TEST_MODEL_LATENCY;
+import static com.wearable.sound.utils.Constants.TEST_MODEL_LATENCY_SERVER;
+import static com.wearable.sound.utils.Constants.WATCH_CONNECT_STATUS;
+import static com.wearable.sound.utils.Constants.WATCH_STATUS_LABEL;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -28,16 +49,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
-
-import com.google.android.gms.tasks.Task;
 import com.kuassivi.component.RipplePulseRelativeLayout;
 import com.wearable.sound.R;
 import com.wearable.sound.application.MainApplication;
@@ -70,13 +95,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
-
-import static com.wearable.sound.utils.Constants.*;
 
 public class MainActivity extends WearableActivity implements WearableListView.ClickListener, WearableListView.OnCentralPositionChangedListener {
     /**
@@ -198,8 +216,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             // Split by "_"
             String[] parts = soundKvPair.split("_");
             String label = parts[0];
-            String accuracy = parts[1];
-            result.add(new SoundPrediction(remapSoundLabel(label), Float.parseFloat(accuracy)));
+            String subLabel = parts[1];
+            String accuracy = parts[2];
+            result.add(new SoundPrediction(label, subLabel, Float.parseFloat(accuracy)));
         }
         return result;
     }
@@ -233,34 +252,6 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getConfidence()), time, db, null);
         }
         return new AudioLabel("Unrecognized Sound", Float.toString(1.0f), time, db, null);
-    }
-
-    /**
-     * Remapping the original label string to the one compatible with SW (v2)
-     * For example: Fire Alarm --> Fire/Smoke Alarm or Smoke Alarm --> Fire/Smoke Alarm
-     * Must update this when changing the model or label file
-     *
-     * @param label : the label for a prediction
-     * @return the transformed label
-     */
-    private String remapSoundLabel(String label) {
-        switch (label) {
-            case "Fire Alarm":
-            case "Smoke Detector/Smoke Alarm":
-                return "Fire/Smoke Alarm";
-            case "Water":
-            case "Pour":
-                return "Water Running";
-            case "Dog":
-                return "Dog Bark";
-            case "Cat":
-                return "Cat Meow";
-            case "Motor Vehicle (Road)":
-                return "Vehicle";
-        }
-
-        // else, keep it the same
-        return label;
     }
 
     /**
@@ -307,10 +298,10 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         if (DEBUG_LOG) Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy);
         AudioLabel audioLabel;
         if (TEST_E2E_LATENCY) {
-            audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db,
+            audioLabel = new AudioLabel(audio_label, accuracy, java.time.ZonedDateTime.now().toString(), db,
                     record_time);
         } else {
-            audioLabel = new AudioLabel(audio_label, accuracy, java.time.LocalTime.now().toString(), db,
+            audioLabel = new AudioLabel(audio_label, accuracy, java.time.ZonedDateTime.now().toString(), db,
                     null);
         }
 
