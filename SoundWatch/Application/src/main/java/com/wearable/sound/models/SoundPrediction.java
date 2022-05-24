@@ -2,36 +2,32 @@ package com.wearable.sound.models;
 
 import androidx.annotation.NonNull;
 
-public class SoundPrediction implements Comparable<SoundPrediction>{
-    private String label;
-    private float accuracy;
+public class SoundPrediction implements Comparable<SoundPrediction> {
+    private final String label;     // a more general group label
+    private final String subLabel;  // a more specific label
+    private final float confidence;
 
-    public SoundPrediction(String label, float accuracy) {
+    public SoundPrediction(String label, String subLabel, float confidence) {
         this.label = label;
-        this.accuracy = accuracy;
+        this.subLabel = subLabel;
+        this.confidence = confidence;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+    public String getSubLabel() { return subLabel; }
 
-    public float getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(float accuracy) {
-        this.accuracy = accuracy;
+    public float getConfidence() {
+        return confidence;
     }
 
     @Override
     public int compareTo(SoundPrediction o) {
-        if (this.accuracy < o.accuracy) {
+        if (this.confidence < o.confidence) {
             return -1;
-        } else if (this.accuracy > o.accuracy) {
+        } else if (this.confidence > o.confidence) {
             return 1;
         }
         return 0;
@@ -40,6 +36,6 @@ public class SoundPrediction implements Comparable<SoundPrediction>{
     @NonNull
     @Override
     public String toString() {
-        return this.label + "_" + this.accuracy;
+        return this.label + "_" + this.subLabel + "_" + this.confidence;
     }
 }

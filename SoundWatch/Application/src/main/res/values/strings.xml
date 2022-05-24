@@ -29,32 +29,40 @@
     <string name="water_running">Water Running</string>
     <string name="microwave">Microwave</string>
     <string name="dishwasher">Dishwasher</string>
-    <string name="laughing">Laughter</string>
+    <string name="laughter">Laughter</string>
     <string name="car_honk">Car Honk</string>
     <string name="vehicle">Vehicle</string>
     <string name="dog_bark">Dog Barking</string>
     <string name="test">test</string>
     <string name="soundwatch">SoundWatch</string>
+    <string name="feedback_button_desc">Quick Feedback</string>
     <string name="drill">Drilling</string>
     <string name="vacuum">Vacuum</string>
-    <string name="baby_cry">Baby Cry</string>
-    <string name="chopping">Chopping</string>
+    <string name="crying">Crying</string>
     <string name="shaver">Shaver</string>
     <string name="tooth_brush">Tooth Brush</string>
     <string name="blender">Blender</string>
-    <string name="door_bell">Door Bell</string>
     <string name="toilet_flush">Toilet Flush</string>
     <string name="hair_dryer">Hair Dryer</string>
     <string name="snoring">Snoring</string>
     <string name="hammering">Hammering</string>
     <string name="cat_meow">Cat Meowing</string>
     <string name="alarm_clock">Alarm Clock</string>
-    <string name="utensils_and_cutlery">Utensils and Cutlery</string>
     <string name="saw">Sawing</string>
-    <string name="category_1">Emergency</string>
+    <string name="emergency_vehicle">Emergency Vehicle</string>
+    <string name="bird">Bird</string>
+    <string name="duck_goose">Duck/Goose</string>
+    <string name="walk_footsteps">Walk/Footsteps</string>
+    <string name="telephone">Phone</string>
+    <string name="music">Music</string>
+    <string name="door_bell">Door Bell</string>
+    <string name="cutlery_silverware">Cutlery/Silverware</string>
+    <string name="yelling">Yelling</string>
+    <string name="chopping">Chopping</string>
+    <string name="category_1">Safety-Related</string>
     <string name="category_2">Home</string>
     <string name="category_3">Human/Animal</string>
-    <string name="category_4">Outdoor</string>
+    <string name="category_4">Outdoors</string>
     <string name="category_5">Tools</string>
     <string name="instruction">Select the sounds you want to recognize</string>
     <string name="about">About</string>
@@ -99,13 +107,20 @@
     </string>
     <string name="feedback">Send us Feedback!</string>
     <string name="arrow">Arrow</string>
+
     <!-- Preference Titles -->
-    <string name="first_preference">Phone Setting</string>
-    <string name="second_preference">Watch Setting </string>
+    <string name="first_preference">Phone Settings</string>
+    <string name="second_preference">Field Study Settings </string>
+
+    <!-- Pereferences Title name-->
+    <string name="foreground_pref_key">foreground_service</string>
+    <string name="db_threshold_pref_key">db_threshold</string>
+    <string name="pid_pref_key">participant_id</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
+
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
@@ -114,6 +129,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="setting">Settings</string>
+
     <!-- Foreground Service Preferences -->
     <string name="foreground_title">Sleep Mode</string>
     <string name="foreground_summary_on"> Sleep Mode is ON.
@@ -123,6 +139,9 @@
     <string name="sleep_mode_description">Sleep Mode will put the application into sleep, which effectively stop listening (if turned ON) and disable Listening Mode on the watch</string>
     <string name="email">" " soundwatch@cs.uw.edu</string>
     <string name="website">" " soundwatch.cs.washington.edu</string>
-    <string name="version"><b>Version 1.05</b></string>
+    <string name="version"><b>Version 2.00</b></string>
     <string name="db_threshold_description">You can adjust the base sound level by moving the button to the right.  This cuts the background noise in loud areas but some sounds of lower volume may not be recognized.</string>
+
+    <!-- Field Study Preferences -->
+    <string name="participant_id_description">Enter your participant ID. After that, please do not change it throughout the whole study.</string>
 </resources>

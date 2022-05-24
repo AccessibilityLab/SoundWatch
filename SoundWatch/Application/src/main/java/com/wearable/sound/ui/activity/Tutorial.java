@@ -8,13 +8,14 @@ import android.view.View;
 import com.hololo.tutorial.library.Step;
 import com.hololo.tutorial.library.TutorialActivity;
 import com.wearable.sound.R;
+import com.wearable.sound.utils.Constants;
 
 public class Tutorial extends TutorialActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TutorialActivity", "onCreated called");
+        if (Constants.DEBUG_LOG) Log.d("TutorialActivity", "onCreated called");
 
         addFragment(new Step.Builder().setTitle("INSTRUCTIONS")
                 .setBackgroundColor(Color.parseColor("#000000"))
@@ -69,7 +70,7 @@ public class Tutorial extends TutorialActivity {
     }
     @Override
     public void onClick(View v) {
-        Log.d("TutorialActivity", "onClick called");
+        if (Constants.DEBUG_LOG) Log.d("TutorialActivity", "onClick called");
         super.onClick(v);
         switch (v.getId()) {
             case R.id.prev:

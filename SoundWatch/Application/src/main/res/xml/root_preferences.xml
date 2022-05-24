@@ -1,11 +1,10 @@
 <PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <PreferenceCategory app:title="@string/first_preference">
-
-
         <SwitchPreferenceCompat
-            app:key="foreground_service"
+            app:key="@string/foreground_pref_key"
             app:defaultValue="false"
             app:summaryOff="@string/foreground_summary_off"
             app:summaryOn="@string/foreground_summary_on"
@@ -15,7 +14,7 @@
             app:title=""
             app:summary="@string/sleep_mode_description"/>
         <SeekBarPreference
-            app:key="db_threshold"
+            app:key="@string/db_threshold_pref_key"
             app:title="Base Sound Level"
             app:summary=""
             app:defaultValue="@integer/seek_bar_default"
@@ -26,7 +25,22 @@
             app:key="db_description"
             app:title=""
             app:summary="@string/db_threshold_description"/>
-        </PreferenceCategory>
+    </PreferenceCategory>
+
+    <!--For Field Study only-->
+    <PreferenceCategory app:title="@string/second_preference">
+        <EditTextPreference
+            app:key="@string/pid_pref_key"
+            app:title="Participant ID"
+            app:useSimpleSummaryProvider="true"
+            />
+        <Preference
+            app:key="participant_id_description"
+            app:title=""
+            app:summary="@string/participant_id_description"
+            />
+    </PreferenceCategory>
+
 <!--    enable this for Listening MODE: 3 out of 3-->
 <!--    <PreferenceCategory app:title="@string/second_preference">-->
 
