@@ -130,6 +130,7 @@ How do I see notifications if they aren’t popping up?
 ## Support ##
 -------
 - Developed with [Dhruv Jain](https://homes.cs.washington.edu/~djain/) and collaborators at [MakeabilityLab](https://makeabilitylab.cs.washington.edu/)
+- Contact [Hang Do](https://www.linkedin.com/in/doh25/) @MakeabilityLab through email `doh25` at cs.washington.edu
 - Contact [Khoa Nguyen](https://www.linkedin.com/in/akka/) @MakeabilityLab through email `akhoa99` at cs.washington.edu
 - Contact [Hung V Ngo](www.hungvngo.com) @MakeabilityLab through email `hvn297` at cs.washington.edu
 
