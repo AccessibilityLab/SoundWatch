@@ -22,17 +22,18 @@ public class MainApplication extends Application {
             "Doorbell",
             "Phone",
             "Cutlery/Silverware",
-            "Chopping",
             "Laughter",
             "Yelling",
             "Bird",
             "Walk/Footsteps",
             "Duck/Goose"
-    ));
+                                                                            ));
     private final List<Integer> blockedSounds = new ArrayList<>();
     private boolean appInForeground = false;
 
-    public List<String> getEnabledSounds() { return this.enabledSounds; }
+    public List<String> getEnabledSounds() {
+        return this.enabledSounds;
+    }
 
     public void addEnabledSound(String sound) {
         if (!this.enabledSounds.contains(sound)) {
@@ -44,7 +45,9 @@ public class MainApplication extends Application {
         this.enabledSounds.remove(sound);
     }
 
-    public List<Integer> getBlockedSounds() { return blockedSounds; }
+    public List<Integer> getBlockedSounds() {
+        return blockedSounds;
+    }
 
     public void addBlockedSounds(int soundId) {
         this.blockedSounds.add(soundId);

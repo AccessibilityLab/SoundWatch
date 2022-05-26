@@ -271,19 +271,6 @@
                 android:textColor="@color/colorTextDefault"
                 android:textSize="@dimen/_10ssp" />
 
-            <CheckBox
-                android:id="@+id/chopping"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_35sdp"
-                android:layout_marginTop="@dimen/margin_tiny"
-                android:buttonTint="@color/colorPrimary"
-                android:checked="true"
-                android:onClick="onCheckBoxClick"
-                android:text="@string/chopping"
-                android:textColor="@color/colorTextDefault"
-                android:textSize="@dimen/_10ssp" />
-
             <TextView
                 android:id="@+id/category_3"
                 android:layout_width="match_parent"

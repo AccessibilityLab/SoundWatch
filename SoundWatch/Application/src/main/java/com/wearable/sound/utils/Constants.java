@@ -70,7 +70,6 @@ public class Constants {
     public static final String DOORBELL = "Doorbell";
     public static final String CUTLERY_SILVERWARE = "Cutlery/Silverware";
     public static final String YELLING = "Yelling";
-    public static final String CHOPPING = "Chopping";
     // Mapping each group label above to specific labels output by the model (e.g labels.txt)
     // E.g: Car Honk and Car Alarm predictions will be grouped into Car Honk
     public static Map<String, Set<String>> groupToLabels;
@@ -114,8 +113,6 @@ public class Constants {
                 new HashSet<>(Arrays.asList("Cutlery/Silverware")));
         groupToLabels.put(YELLING,
                 new HashSet<>(Arrays.asList("Shout", "Yell", "Battle Cry", "Children Shouting", "Screaming")));
-        groupToLabels.put(CHOPPING,
-                new HashSet<>(Arrays.asList("Chopping (Food)")));
     }
 
     ;

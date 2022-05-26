@@ -62,7 +62,8 @@ public class Logger {
         String filenameExternal = "SWFS22-" + participantId + "-" + tag + "Log.txt";
         filenameExternal = filenameExternal.replace("/", "-");
         String relativeDir = Environment.DIRECTORY_DOCUMENTS + "/SoundWatch/";
-        Uri fileUri = HelperUtils.getExternalStorageFile(context, relativeDir, filenameExternal, true);
+        Uri fileUri = HelperUtils.getExternalStorageFile(context, relativeDir, filenameExternal,
+                                                         true);
         OutputStream outputStream = null;
         try {
             outputStream = context.getContentResolver().openOutputStream(fileUri, "wa");
@@ -138,7 +139,7 @@ public class Logger {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         char separator = ' ';
-        for (String key: bundle.keySet()) {
+        for (String key : bundle.keySet()) {
             sb.append(separator).append(key).append("=").append(bundle.get(key));
             separator = ',';
         }

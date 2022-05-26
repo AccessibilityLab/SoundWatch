@@ -51,7 +51,7 @@ public class DataLayerListenerService extends WearableListenerService {
         List<Integer> blockedSounds = ((MainApplication) this.getApplication()).getBlockedSounds();
         Wearable.getMessageClient(this)
                 .sendMessage(node.getId(), SEND_CURRENT_BLOCKED_SOUND_PATH,
-                        String.join(",", (CharSequence) blockedSounds).getBytes());
+                             String.join(",", (CharSequence) blockedSounds).getBytes());
     }
 
     @Override
@@ -123,7 +123,8 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.putExtra(AUDIO_LABEL, new String(messageEvent.getData()));
             sendBroadcast(broadcastIntent);
         } else if (messageEvent.getPath().equals(SEND_FOREGROUND_SERVICE_STATUS_FROM_PHONE_PATH)) {
-            Log.i(TAG, "Foreground Service status received: " + new String(messageEvent.getData()) + "-> send to MainActivity");
+            Log.i(TAG, "Foreground Service status received: " + new String(
+                    messageEvent.getData()) + "-> send to MainActivity");
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MainActivity.mBroadcastForegroundService);
@@ -138,7 +139,8 @@ public class DataLayerListenerService extends WearableListenerService {
             broadcastIntent.putExtra(WATCH_STATUS_LABEL, data);
             sendBroadcast(broadcastIntent);
         } else {
-            Log.d(TAG, "Unrecognized message from phone. Check if this message is registered in AndroidManifest");
+            Log.d(TAG,
+                  "Unrecognized message from phone. Check if this message is registered in AndroidManifest");
         }
     }
 
@@ -157,8 +159,10 @@ public class DataLayerListenerService extends WearableListenerService {
         if (isEnabled) {
             Log.i(TAG, "Enabling sound ");
             // If it is currently snoozed, unsnooze it
-            final int blockedNotificationID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(soundLabel);
-            ((MainApplication) this.getApplicationContext()).removeBlockedSounds(blockedNotificationID);
+            final int blockedNotificationID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(
+                    soundLabel);
+            ((MainApplication) this.getApplicationContext()).removeBlockedSounds(
+                    blockedNotificationID);
             if (!enabledSounds.contains(soundLabel)) {
                 Log.i(TAG, "Remove from list of blocked sounds " + soundLabel);
                 ((MainApplication) this.getApplication()).addEnabledSound(soundLabel);

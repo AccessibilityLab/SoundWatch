@@ -63,7 +63,8 @@ public class AudioProcessors {
         this.labels = new ArrayList<>();
         String actualLabelFilename = LABEL_FILENAME.split("file:///android_asset/", -1)[1];
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(this.context.getAssets().open(actualLabelFilename)));
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(this.context.getAssets().open(actualLabelFilename)));
             String line;
             while ((line = br.readLine()) != null) {
                 this.labels.add(line);
@@ -76,7 +77,8 @@ public class AudioProcessors {
         // Load tflite model
         String actualModelFilename = MODEL_FILENAME.split("file:///android_asset/", -1)[1];
         try {
-            this.tfLite = new Interpreter(loadModelFile(this.context.getAssets(), actualModelFilename));
+            this.tfLite = new Interpreter(
+                    loadModelFile(this.context.getAssets(), actualModelFilename));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -90,7 +92,8 @@ public class AudioProcessors {
      * @param multipleSounds : true if want to return a list of sound predictions; false otherwise
      * @return a list of sound predictions whose confidence >= threshold, sorted in decreasing order
      */
-    public List<SoundPrediction> predictSoundsFromAudioFeatures(float[] input1D, double db, boolean multipleSounds) {
+    public List<SoundPrediction> predictSoundsFromAudioFeatures(float[] input1D, double db,
+                                                                boolean multipleSounds) {
         if (Constants.DEBUG_LOG) Log.i(TAG, "Predicting sounds from audio features");
 
         if (db < DBLEVEL_THRES) {
@@ -124,7 +127,7 @@ public class AudioProcessors {
                 // Only return labels of interest
                 if (output[0][i] >= PREDICTION_THRES) {
                     String subLabel = labels.get(i);
-                    String label =remapSoundLabel(subLabel);
+                    String label = remapSoundLabel(subLabel);
                     if (label != null) {
                         predictions.add(new SoundPrediction(label, subLabel, output[0][i]));
                     }
@@ -207,7 +210,8 @@ public class AudioProcessors {
         if (rawData.length != BUFFER_SIZE) {
             // Sanity check, because sound has to be exactly bufferElements2Rec elements
             if (Constants.DEBUG_LOG)
-                Log.d(TAG, "Invalid buffer size: expect " + BUFFER_SIZE + "; given " + rawData.length);
+                Log.d(TAG,
+                      "Invalid buffer size: expect " + BUFFER_SIZE + "; given " + rawData.length);
             return null;
         }
 
@@ -230,10 +234,12 @@ public class AudioProcessors {
                 // Get MFCC features
                 if (Constants.DEBUG_LOG)
                     Log.d(TAG, "Sending to python an array length of " + rawData.length);
-                PyObject mfccFeatures = pythonModule.callAttr("audio_samples", Arrays.toString(rawData));
+                PyObject mfccFeatures = pythonModule.callAttr("audio_samples",
+                                                              Arrays.toString(rawData));
 
                 if (Constants.DEBUG_LOG)
-                    Log.i(TAG, "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
+                    Log.i(TAG,
+                          "Time elapsed after running Python " + (System.currentTimeMillis() - startTimePython));
 
                 // Parse features into a float array
                 String inputString = mfccFeatures.toString();

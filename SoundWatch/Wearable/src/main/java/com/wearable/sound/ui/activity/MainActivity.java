@@ -146,7 +146,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         String time = parts[2];
                         String db = parts[3];
                         String recordTime = parts[4];
-                        createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, recordTime));
+                        createAudioLabelNotification(
+                                new AudioLabel(prediction, confidence, time, db, recordTime));
                     }
                 } else {
                     if (parts.length == 4) {
@@ -154,7 +155,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         String confidence = parts[1];
                         String time = parts[2];
                         String db = parts[3];
-                        createAudioLabelNotification(new AudioLabel(prediction, confidence, time, db, null));
+                        createAudioLabelNotification(
+                                new AudioLabel(prediction, confidence, time, db, null));
                     }
                 }
             } else if (intent.getAction().equals(mBroadcastAllSoundPredictions)) {
@@ -204,6 +206,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
     /**
      * Parse through the given string and to get all the sound predictions; then return that list
+     *
      * @param soundPredictions: a string containing all predictions with their accuracies, comma separated
      * @return a list of sound predictions
      */
@@ -226,13 +229,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
     /**
      * Traversal through the list of sound predictions and pick the one with highest accuracy, and
      * create an AudioLabel for it.
+     *
      * @param soundPredictions: list of sound predictions sorted by decreasing order of accuracy/confidence
-     * @param time: the timestamp of when the predictions was made
-     * @param db: loudness of the sound
+     * @param time:             the timestamp of when the predictions was made
+     * @param db:               loudness of the sound
      * @return an AudioLabel of the top sound if its accuracy is greater than the threshold; otherwise,
-     *  return an audio label representing 'unrecognized sound'
+     * return an audio label representing 'unrecognized sound'
      */
-    private AudioLabel filterTopSoundLabel(List<SoundPrediction> soundPredictions, String time, String db) {
+    private AudioLabel filterTopSoundLabel(List<SoundPrediction> soundPredictions, String time,
+                                           String db) {
         List<String> enabledSounds = ((MainApplication) getApplicationContext()).getEnabledSounds();
         List<Integer> blockedSounds = ((MainApplication) getApplicationContext()).getBlockedSounds();
 
@@ -242,14 +247,17 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (!enabledSounds.contains(soundPrediction.getLabel())) {
                 continue;
             }
-            if (blockedSounds.contains(((MainApplication) getApplicationContext()).getIntegerValueOfSound(soundPrediction.getLabel()))) {
+            if (blockedSounds.contains(
+                    ((MainApplication) getApplicationContext()).getIntegerValueOfSound(
+                            soundPrediction.getLabel()))) {
                 continue;
             }
             if (soundPrediction.getConfidence() < PREDICTION_THRES) {
                 // this sound and all the sounds after it will be under allowed threshold
                 break;
             }
-            return new AudioLabel(soundPrediction.getLabel(), Float.toString(soundPrediction.getConfidence()), time, db, null);
+            return new AudioLabel(soundPrediction.getLabel(),
+                                  Float.toString(soundPrediction.getConfidence()), time, db, null);
         }
         return new AudioLabel("Unrecognized Sound", Float.toString(1.0f), time, db, null);
     }
@@ -295,14 +303,17 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             return;
         }
 
-        if (DEBUG_LOG) Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy);
+        if (DEBUG_LOG)
+            Log.i(TAG, "received sound label from Socket server: " + audio_label + ", " + accuracy);
         AudioLabel audioLabel;
         if (TEST_E2E_LATENCY) {
-            audioLabel = new AudioLabel(audio_label, accuracy, java.time.ZonedDateTime.now().toString(), db,
-                    record_time);
+            audioLabel = new AudioLabel(audio_label, accuracy,
+                                        java.time.ZonedDateTime.now().toString(), db,
+                                        record_time);
         } else {
-            audioLabel = new AudioLabel(audio_label, accuracy, java.time.ZonedDateTime.now().toString(), db,
-                    null);
+            audioLabel = new AudioLabel(audio_label, accuracy,
+                                        java.time.ZonedDateTime.now().toString(), db,
+                                        null);
         }
 
         createAudioLabelNotification(audioLabel);
@@ -318,7 +329,7 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         == PackageManager.PERMISSION_GRANTED;
         if (!recordAudioPermissionGranted) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    PERMISSIONS_REQUEST_CODE);
+                                              PERMISSIONS_REQUEST_CODE);
         }
 
     }
@@ -332,7 +343,9 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 // user and explain why this permission is needed and direct him to go to the
                 // Permissions settings for the app in the System settings. For this sample, we
                 // simply exit to get to the important part.
-                Toast.makeText(this, "Need Audio access to start streaming and recognizing surrounding voices", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                               "Need Audio access to start streaming and recognizing surrounding voices",
+                               Toast.LENGTH_LONG).show();
                 finish();
             }
         }
@@ -343,7 +356,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID, importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_ID,
+                                                                  importance);
             channel.setDescription(CHANNEL_ID);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -509,7 +523,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                         return;
                     }
                     Intent serviceIntent = new Intent(main, ForegroundService.class);
-                    serviceIntent.putExtra("connectedHostIds", convertSetToCommaSeparatedList(connectedHostIds));
+                    serviceIntent.putExtra("connectedHostIds",
+                                           convertSetToCommaSeparatedList(connectedHostIds));
                     ContextCompat.startForegroundService(main, serviceIntent);
                 });
 
@@ -545,7 +560,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // add ripple effect for better readability
         RipplePulseRelativeLayout pulseLayout = findViewById(R.id.pulseLayout);
         if (isForegroundDisabled) {
-            imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_grey, null));
+            imageView.setBackground(
+                    getResources().getDrawable(R.drawable.rounded_background_grey, null));
             imageView.setImageResource(R.drawable.ic_baseline_mic_off_48);
             locationTextView.setText("");
             soundTextView.setText("Sleep Mode is ON");
@@ -558,7 +574,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         } else {
             if (!isRecording) {
                 startRecording(this);
-                imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_red, null));
+                imageView.setBackground(
+                        getResources().getDrawable(R.drawable.rounded_background_red, null));
                 // change the instructional text based on the the number of device connect
                 if (connectedHostIds.isEmpty()) {
                     imageView.setImageResource(R.drawable.ic_full_cancel);
@@ -575,7 +592,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 // Change the instruction text
                 IS_RECORDING = true;
             } else {
-                imageView.setBackground(getResources().getDrawable(R.drawable.rounded_background_blue, null));
+                imageView.setBackground(
+                        getResources().getDrawable(R.drawable.rounded_background_blue, null));
                 imageView.setImageResource(R.drawable.ic_mic_32dp);
                 pulseLayout.stopPulse();
                 IS_RECORDING = false;
@@ -655,7 +673,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (DEBUG_LOG) Log.d(TAG, "Sending snooze sound data to phone:" + soundLabel);
             Task<Integer> sendMessageTask =
                     Wearable.getMessageClient(this.getApplicationContext())
-                            .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH, soundLabel.getBytes());
+                            .sendMessage(connectedHostId, SOUND_SNOOZE_FROM_WATCH_PATH,
+                                         soundLabel.getBytes());
         }
     }
 
@@ -669,7 +688,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (DEBUG_LOG) Log.d(TAG, "Sending connected signal to phone:" + connectStatus);
             Task<Integer> sendMessageTask =
                     Wearable.getMessageClient(this.getApplicationContext())
-                            .sendMessage(connectedHostId, WATCH_CONNECT_STATUS, connectStatus.getBytes());
+                            .sendMessage(connectedHostId, WATCH_CONNECT_STATUS,
+                                         connectStatus.getBytes());
         }
     }
 
@@ -687,9 +707,11 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         if (tag <= elementsInSec.length)     //Just an extra check
         {
-            final int blockedNotificationID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel);
+            final int blockedNotificationID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(
+                    audioLabel);
 
-            if ((((MainApplication) this.getApplication()).getBlockedSounds()).contains(blockedNotificationID)) {         //Just in case the sound is already blocked and user comes to it again.
+            if ((((MainApplication) this.getApplication()).getBlockedSounds()).contains(
+                    blockedNotificationID)) {         //Just in case the sound is already blocked and user comes to it again.
                 (findViewById(R.id.wearable_list_layout)).setVisibility(View.GONE);
                 pulseLayout.setVisibility(View.VISIBLE);
                 dontShowLayout.setVisibility(View.VISIBLE);
@@ -728,11 +750,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 alarmIntent.setAction("com.wearable.sound.almMgr");
                 alarmIntent.putExtra("blockedSoundId", blockedNotificationID);
                 alarmIntent.putExtra(SOUND_LABEL, audioLabel);
-                alarmIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
+                alarmIntent.putExtra(CONNECTED_HOST_IDS,
+                                     convertSetToCommaSeparatedList(connectedHostIds));
                 int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, uniqueInt, alarmIntent, 0);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, uniqueInt,
+                                                                         alarmIntent, 0);
                 AlarmManager alarmMgr = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + elementsInSec[tag] * 1000, pendingIntent);
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                                                   SystemClock.elapsedRealtime() + elementsInSec[tag] * 1000,
+                                                   pendingIntent);
             }
 
             //Remove all notifications of this sound in the list
@@ -755,7 +781,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             if (elements[tag].equals("Cancel")) {
                 fTextView.setText(MessageFormat.format("\"{0}\" is not snoozed.", audioLabel));
             } else {
-                fTextView.setText(MessageFormat.format("\"{0}\" is snoozed \n for {1}.", audioLabel, elements[tag]));
+                fTextView.setText(MessageFormat.format("\"{0}\" is snoozed \n for {1}.", audioLabel,
+                                                       elements[tag]));
             }
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -772,7 +799,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                                 fTextView.setText("Press Side Button and wait for notifications");
                             } else if (IS_FOREGROUND_DISABLED) {
                                 soundDisplay.setText("Sleep Mode is ON");
-                                fTextView.setText("Turn off Sleep Mode on \n phone to enable listening");
+                                fTextView.setText(
+                                        "Turn off Sleep Mode on \n phone to enable listening");
 
                             } else {
                                 soundDisplay.setText("");
@@ -920,7 +948,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         // For testing purposes
         if (MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
             if (System.currentTimeMillis() <= absoluteLastTime + 7 * 1000) { //multiply by 1000 to get milliseconds
-                if (DEBUG_LOG) Log.i(TAG, "A sound appear in less than 7 seconds of previous sound");
+                if (DEBUG_LOG)
+                    Log.i(TAG, "A sound appear in less than 7 seconds of previous sound");
                 return;
             }
             absoluteLastTime = System.currentTimeMillis();
@@ -936,7 +965,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 }
                 break;
             case LOW_ACCURACY_FAST_MODE:
-                int number_of_labels = ((MainApplication) getApplicationContext()).getEnabledSounds().size();
+                int number_of_labels = ((MainApplication) getApplicationContext()).getEnabledSounds()
+                                                                                  .size();
                 // Generate random label
                 double probToGiveCorrectOutput = Math.random();
                 if (probToGiveCorrectOutput < 0.4) {
@@ -945,7 +975,8 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 } else {
                     // Random label
                     int labelIndex = new Random().nextInt(number_of_labels);
-                    audioLabel.label = ((MainApplication) getApplicationContext()).getEnabledSounds().get(labelIndex);
+                    audioLabel.label = ((MainApplication) getApplicationContext()).getEnabledSounds()
+                                                                                  .get(labelIndex);
                     break;
                 }
         }
@@ -965,11 +996,13 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         } */
 
         // Unique notification for each kind of sound
-        final int NOTIFICATION_ID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(audioLabel.label);
+        final int NOTIFICATION_ID = ((MainApplication) getApplicationContext()).getIntegerValueOfSound(
+                audioLabel.label);
 
         // Disable same sound for 5 seconds
         if (soundLastTime.containsKey(audioLabel.label) && !MODE.equals(HIGH_ACCURACY_SLOW_MODE)) {
-            if (System.currentTimeMillis() <= (soundLastTime.get(audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
+            if (System.currentTimeMillis() <= (soundLastTime.get(
+                    audioLabel.label) + 5 * 1000)) { //multiply by 1000 to get milliseconds
                 if (DEBUG_LOG) Log.i(TAG, "Same sound appear in less than 5 seconds");
                 return; // stop sending notification if less than 10 second
             }
@@ -978,11 +1011,16 @@ public class MainActivity extends WearableActivity implements WearableListView.C
 
         //If it's blocked or app in foreground (to not irritate user), return
         if ((((MainApplication) this.getApplication()).getBlockedSounds()).contains(NOTIFICATION_ID)
-                || !((MainApplication) this.getApplication()).getEnabledSounds().contains(audioLabel.label)
+                || !((MainApplication) this.getApplication()).getEnabledSounds()
+                                                             .contains(audioLabel.label)
                 || ((MainApplication) this.getApplication()).isAppInForeground()) {
-            if (DEBUG_LOG) Log.i(TAG, "Sound noti is blocked for current sound" + (((MainApplication) this.getApplication()).getBlockedSounds()).contains(NOTIFICATION_ID)
-                    + !((MainApplication) this.getApplication()).getEnabledSounds().contains(audioLabel.label)
-                    + ((MainApplication) this.getApplication()).isAppInForeground());
+            if (DEBUG_LOG) Log.i(TAG,
+                                 "Sound noti is blocked for current sound" + (((MainApplication) this.getApplication()).getBlockedSounds()).contains(
+                                         NOTIFICATION_ID)
+                                         + !((MainApplication) this.getApplication()).getEnabledSounds()
+                                                                                     .contains(
+                                                                                             audioLabel.label)
+                                         + ((MainApplication) this.getApplication()).isAppInForeground());
             return;
         }
 
@@ -1004,22 +1042,27 @@ public class MainActivity extends WearableActivity implements WearableListView.C
             db = "Soft, " + db;
 
 
-        Intent intent = new Intent(this, MainActivity.class);       //Just go the MainActivity for now. Replace with other activity if you want more actions.
-        String[] dataPassed = {audioLabel.label, Double.toString(audioLabel.confidence), audioLabel.time, audioLabel.db};         //Adding data to be passed back to the main activity
+        Intent intent = new Intent(this,
+                                   MainActivity.class);       //Just go the MainActivity for now. Replace with other activity if you want more actions.
+        String[] dataPassed = {audioLabel.label, Double.toString(
+                audioLabel.confidence), audioLabel.time, audioLabel.db};         //Adding data to be passed back to the main activity
         intent.putExtra("audio_label", dataPassed);
         intent.setAction(Long.toString(System.currentTimeMillis()));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, uniqueInt, intent,
+                                                                PendingIntent.FLAG_UPDATE_CURRENT);
         Intent snoozeIntent = new Intent(this, SnoozeSoundService.class);
         snoozeIntent.putExtra(SOUND_ID, NOTIFICATION_ID);
         snoozeIntent.putExtra(SOUND_LABEL, audioLabel.label);
         snoozeIntent.putExtra(CONNECTED_HOST_IDS, convertSetToCommaSeparatedList(connectedHostIds));
         //snoozeIntent.putExtra(SnoozeSoundService.SNOOZE_TIME, 10 * 60 * 1000);
-        PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent snoozeSoundPendingIntent = PendingIntent.getService(this, 0, snoozeIntent,
+                                                                          PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(
+                getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_surround_sound_24)
 //                .setContentTitle(audioLabel.label + ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
                 .setContentTitle(audioLabel.label)
@@ -1028,14 +1071,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("")
+                                  .bigText("")
 //                        .bigText(audioLabel.label+ ", " + (int) Math.round(audioLabel.confidence * 100) + "%")
 //                        .setBigContentTitle("Nearby Sound")
-                        .setSummaryText(""))
-                .setAutoCancel(true) //Remove notification from the list after the user has tapped it
+                                  .setSummaryText(""))
+                .setAutoCancel(
+                        true) //Remove notification from the list after the user has tapped it
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.ic_full_cancel,
-                        "Snooze 10 mins", snoozeSoundPendingIntent);
+                           "Snooze 10 mins", snoozeSoundPendingIntent);
 
         //NOTIFICATION ID depends on the sound and the location so a particular sound in a particular location is only notified once until dismissed
         if (DEBUG_LOG) Log.d(TAG, "Notification Id: " + NOTIFICATION_ID);
@@ -1045,12 +1089,15 @@ public class MainActivity extends WearableActivity implements WearableListView.C
         if (TEST_E2E_LATENCY) {
             long elapsedTime = System.currentTimeMillis() - Long.parseLong(audioLabel.recordTime);
             if (DEBUG_LOG) Log.i(TAG, "Elapsed time: " + elapsedTime);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss",
+                                                                     Locale.getDefault());
             Date date = new Date(System.currentTimeMillis());
             String timeStamp = simpleDateFormat.format(date);
 
             try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("e2e_latency" + ARCHITECTURE + "_" + AUDIO_TRANSMISSION_STYLE + ".txt", Context.MODE_APPEND));
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput(
+                        "e2e_latency" + ARCHITECTURE + "_" + AUDIO_TRANSMISSION_STYLE + ".txt",
+                        Context.MODE_APPEND));
                 outputStreamWriter.write(timeStamp + "," + Long.toString(elapsedTime) + "\n");
                 outputStreamWriter.close();
             } catch (IOException e) {
