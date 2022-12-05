@@ -109,7 +109,7 @@ Above $300
 
 ## Licensing ##
 -------
-The `Chaquopy` SDK (SoundWatch uses this to include Python components in the Android app) requires a proper license to work. Please contact [Hung V Ngo](www.hungvngo.com) or [Dhruv Jain](https://homes.cs.washington.edu/~djain/) for more information.
+The `Chaquopy` SDK (SoundWatch uses this to include Python components in the Android app) requires a proper license to work. Please contact Hang Do (doh25@cs.washington.edu) or [Dhruv Jain](https://homes.cs.washington.edu/~djain/) for more information.
 
 ## Frequently Asked Questions ##
 -------
