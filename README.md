@@ -107,6 +107,10 @@ Under $300
 Above $300
 - Suunto 7
 
+## Licensing ##
+-------
+The `Chaquopy` SDK (SoundWatch uses this to include Python components in the Android app) requires a proper license to work. Please contact [Hung V Ngo](www.hungvngo.com) or [Dhruv Jain](https://homes.cs.washington.edu/~djain/) for more information.
+
 ## Frequently Asked Questions ##
 -------
 My phone and watch have become unpaired. How do I fix this?
