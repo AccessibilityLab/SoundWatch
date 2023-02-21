@@ -76,22 +76,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     // "SWFS22-<string of 4 characters such as their sum ascii value % 127 == 79>
     // eg: SWFS22-Xcxg
     public static boolean isValidParticipantId(String participantId) {
-        if (participantId.length() != idLen) {
-            return false;
-        } else if (!participantId.startsWith(PREFIX)) {
-            return false;
-        }
+//        if (participantId.length() != idLen) {
+//            return false;
+//        } else if (!participantId.startsWith(PREFIX)) {
+//            return false;
+//        }
+//
+//        String randomString = participantId.substring(PREFIX.length() + 1);
+//        int sum = 0;
+//        for (char ch : randomString.toCharArray()) {
+//            if (!Character.isLetterOrDigit(ch)) {
+//                return false;
+//            }
+//            sum += (int) ch;
+//        }
+//
+//        return sum % 127 == 29;
 
-        String randomString = participantId.substring(PREFIX.length() + 1);
-        int sum = 0;
-        for (char ch : randomString.toCharArray()) {
-            if (!Character.isLetterOrDigit(ch)) {
-                return false;
-            }
-            sum += (int) ch;
-        }
-
-        return sum % 127 == 29;
+        return true;
     }
 
     @Nullable

@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity
             String participantId = sharedPref.getString(pidKey, Build.MODEL);
 
             // Some basic text for the email
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"djain@cs.washington.edu"});
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"zjhuang@umich.edu"});
             emailIntent.putExtra(Intent.EXTRA_SUBJECT,
                                  "[SoundWatch Field Study][PID:" + participantId +
                                          "] Quick Feedback " + ZonedDateTime.now());

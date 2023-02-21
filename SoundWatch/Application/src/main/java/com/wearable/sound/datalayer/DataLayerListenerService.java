@@ -346,7 +346,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     this,
                     0,
                     notificationIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_IMMUTABLE);
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("SoundWatch is working")
                     .setContentText("Press the Mic button on your watch to begin listening")
