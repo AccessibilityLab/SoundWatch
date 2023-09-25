@@ -146,6 +146,7 @@ Drop us a note if you are using or plan to use SoundWatch for research purposes.
 - The Android watch was built based on the [Data layer sample](https://github.com/android/wear-os-samples/tree/master/DataLayer) from Google Android repo to establish connection between phone and watch.
 - Python server is created with [Socket.io](https://socket.io/blog/native-socket-io-and-android/)
 - The ML model depends on the Python module to convert raw audio sounds to MFCC features through a Python-Android bridge with [Chaquopy](https://chaquo.com/chaquopy/)
+- This work was supported by NSF grant [IIS-1763199](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1763199)
 
 ## Related work ##
 --------
